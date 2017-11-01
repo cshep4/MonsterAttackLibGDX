@@ -138,7 +138,9 @@ public class GameScreen implements Screen {
         //------------------------------------------------------------------------------------------
 
         //---------------------------------DRAW OBJECT
-
+//			player.drawObject(paint, canvas);
+//			shootButton.drawButton(canvas);
+//			pauseButton.drawButton(canvas);
         //--------------------------------------------
 
         game.batch.end();
@@ -161,6 +163,8 @@ public class GameScreen implements Screen {
     }
 
     public void updateEverything(){
-
+//        player.update();
+//		  updateEnemies(canvas);
+//        updateBullets(canvas);
     }
 }

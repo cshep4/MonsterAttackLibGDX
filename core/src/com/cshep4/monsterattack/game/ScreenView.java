@@ -137,7 +137,7 @@ public class ScreenView /*extends SurfaceView implements Runnable*/ {
 //                            continue;
 //                        }
 //                    }
-//                    if (collision.bulletCollision(enemyBullets.get(bulletLoop),player)){
+//                    if (Collision.bulletCollision(enemyBullets.get(bulletLoop),player)){
 //                        Log.v("Death", "SHOT!");
 //                        player.setHealth(player.getHealth()-100);
 //                        enemyBullets.get(bulletLoop).collisionSound();
@@ -241,7 +241,7 @@ public class ScreenView /*extends SurfaceView implements Runnable*/ {
 //		if (enemies != null) {
 //			for (int enemyLoop =0; enemyLoop < enemies.size(); enemyLoop++){
 //				if (enemies.get(enemyLoop) != null) {
-//					if (collision.bulletCollision(aBullet,enemies.get(enemyLoop))){
+//					if (Collision.bulletCollision(aBullet,enemies.get(enemyLoop))){
 //						if (!enemies.get(enemyLoop).sheilded) {
 //                            enemies.get(enemyLoop).setHealth(enemies.get(enemyLoop).getHealth()-100);
 //						}
@@ -260,7 +260,7 @@ public class ScreenView /*extends SurfaceView implements Runnable*/ {
 //		if (producerEnemies != null) {
 //			for (int enemyLoop =0; enemyLoop < producerEnemies.size(); enemyLoop++){
 //				if (producerEnemies.get(enemyLoop) != null) {
-//					if (collision.bulletCollision(aBullet,producerEnemies.get(enemyLoop))){
+//					if (Collision.bulletCollision(aBullet,producerEnemies.get(enemyLoop))){
 //                        producerEnemies.get(enemyLoop).setHealth(producerEnemies.get(enemyLoop).getHealth()-100);
 //						if (producerEnemies.get(enemyLoop).getHealth()<=0) {
 //							sound.playEnemyDie();
@@ -282,7 +282,7 @@ public class ScreenView /*extends SurfaceView implements Runnable*/ {
 //		if (enemies != null) {
 //			for (int enemyLoop =0; enemyLoop < enemies.size(); enemyLoop++){
 //				if (enemies.get(enemyLoop) != null) {
-//					if (collision.objectCollision(enemies.get(enemyLoop), player)) {
+//					if (Collision.objectCollision(enemies.get(enemyLoop), player)) {
 //                        Log.v("Death", "COLLIDED!");
 //						player.setHealth(player.getHealth()-100);
 //					}
@@ -299,7 +299,7 @@ public class ScreenView /*extends SurfaceView implements Runnable*/ {
 //		if (producerEnemies != null) {
 //			for (int enemyLoop =0; enemyLoop < producerEnemies.size(); enemyLoop++){
 //				if (producerEnemies.get(enemyLoop) != null) {
-//					if (collision.objectCollision(producerEnemies.get(enemyLoop), player)) {
+//					if (Collision.objectCollision(producerEnemies.get(enemyLoop), player)) {
 //                        Log.v("Death", "COLLIDED!");
 //						player.setHealth(player.getHealth()-100);
 //					}

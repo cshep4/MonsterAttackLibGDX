@@ -1,8 +1,8 @@
 package com.cshep4.monsterattack.game;
 
-public class Constants {
+public final class Constants {
 
-	private Constants() { }
+	private Constants() {}
 
 	public static final int LEFT = 0;
 	public static final int RIGHT = 1;
@@ -47,4 +47,47 @@ public class Constants {
 
 	//Define the frame rate
 	public static final int FRAME_RATE = 60;
+
+	// --------------------------------------Sprites
+	// Enemies
+//	public static final String S1_SPRITE_IDLE = "";
+//	public static final String S2_SPRITE_IDLE = "";
+//	public static final String S3_SPRITE_IDLE = "";
+//	public static final String S4_SPRITE_IDLE = "";
+	public static final String SP_SPRITE_IDLE = "sp_idle.png";
+//	public static final String B1_SPRITE_IDLE = "";
+//	public static final String B2_SPRITE_IDLE = "";
+//	public static final String B3_SPRITE_IDLE = "";
+//	public static final String B4_SPRITE_IDLE = "";
+	public static final String BP_SPRITE_IDLE = "bp_idle.png";
+	public static final String S1_SPRITE_MOVE = "s1_move.png";
+	public static final String S2_SPRITE_MOVE = "s2_move.png";
+	public static final String S3_SPRITE_MOVE = "s3_move.png";
+	public static final String S4_SPRITE_MOVE = "s4_move.png";
+	public static final String SP_SPRITE_PRODUCE = "sp_produce.png";
+	public static final String B1_SPRITE_MOVE = "b1_move.png";
+	public static final String B2_SPRITE_MOVE = "b2_move.png";
+	public static final String B3_SPRITE_MOVE = "b3_move.png";
+	public static final String B4_SPRITE_MOVE = "b4_move.png";
+	public static final String BP_SPRITE_PRODUCE = "bp_produce.png";
+	public static final String S1_SPRITE_HIT = "s1_gothit.png";
+	public static final String S2_SPRITE_HIT = "s2_gothit.png";
+	public static final String S3_SPRITE_HIT = "s3_gothit.png";
+	public static final String S4_SPRITE_HIT = "s4_gothit.png";
+//	public static final String SP_SPRITE_HIT = "";
+	public static final String B1_SPRITE_HIT = "b1_gothit.png";
+	public static final String B2_SPRITE_HIT = "b2_gothit.png";
+	public static final String B3_SPRITE_HIT = "b3_gothit.png";
+	public static final String B4_SPRITE_HIT = "b4_gothit.png";
+//	public static final String BP_SPRITE_HIT = "";
+
+	// Character
+	public static final String CHARACTER_IDLE = "idle.png";
+	public static final String CHARACTER_MOVE = "character_running.png";
+	public static final String CHARACTER_HIT = "gothit.png";
+
+	// Misc.
+	public static final String BACKGROUND = "background_small.png";
+	public static final String PAUSE_BUTTON = "pause_button.png";
+	public static final String SHOOT_BUTTON = "shoot_button.png";
 }

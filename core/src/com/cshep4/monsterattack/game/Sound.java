@@ -3,6 +3,8 @@ package com.cshep4.monsterattack.game;
 import android.app.Application;
 //import android.media.AudioManager;
 import android.media.MediaPlayer;
+
+import static com.badlogic.gdx.Input.Keys.R;
 //import android.media.SoundPool;
 
 public class Sound {

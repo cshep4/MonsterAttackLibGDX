@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 public interface ai {
 	
-	void decisionTree(Player aPlayer, ArrayList<Bullet> aPlayerBullets, ArrayList<Bullet> aEnemyBullets);
+	void decisionTree(Player player, ArrayList<Bullet> playerBullets, ArrayList<Bullet> enemyBullets);
 	
-	boolean checkBulletClose(ArrayList<Bullet> aPlayerBullets);
-	boolean checkEnemyInLineOfBullet(ArrayList<Bullet> aPlayerBullets);
-	boolean checkPlayerInLineOfSight(Player aPlayer);
+	boolean checkBulletClose(ArrayList<Bullet> playerBullets);
+	boolean checkEnemyInLineOfBullet(ArrayList<Bullet> playerBullets);
+	boolean checkPlayerInLineOfSight(Player player);
 }

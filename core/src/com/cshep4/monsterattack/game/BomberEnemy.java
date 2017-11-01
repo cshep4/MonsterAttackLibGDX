@@ -2,48 +2,50 @@ package com.cshep4.monsterattack.game;
 
 import java.util.ArrayList;
 
-import android.util.Log;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Rectangle;
 
 public class BomberEnemy extends Enemy {
 	
 	//collision handling
-	private Collision collision = new Collision();
+//	private Collision collision = new Collision();
 	
-	public BomberEnemy() {
-		super();
+	public BomberEnemy(Rectangle rectangle, Texture texture) {
+		super(rectangle, texture);
 	}
 	
 	@Override
-	public void decisionTree(Player aPlayer, ArrayList<Bullet> aPlayerBullets, ArrayList<Bullet> aEnemyBullets) {
-		super.decisionTree(aPlayer, aPlayerBullets, aEnemyBullets);
-		if (this.checkPlayerClose(aPlayer)) {
-			Log.v("AI", "Explode");
-			this.explode(aPlayer);
+	public void decisionTree(Player player, ArrayList<Bullet> playerBullets, ArrayList<Bullet> enemyBullets) {
+		super.decisionTree(player, playerBullets, enemyBullets);
+		if (this.checkPlayerClose(player)) {
+			Gdx.app.log("AI", "Explode");
+			this.explode(player);
 		}
 	}
 
-	public void explode(Player aPlayer) {
+	public void explode(Player player) {
 		Sound sound = new Sound();
 		sound.playExplode();
 		MyApp myApp = MyApp.getInstance();
-		this.width = myApp.getScreenWidth() / Constants.CHARACTER_WIDTH_DIVIDER *2;
-		this.height = myApp.getScreenWidth() / Constants.CHARACTER_WIDTH_DIVIDER *2;
-		this.setNewBitmap(myApp.explosion, 1);
-		Log.v("Death", "BOMBED!");
-		aPlayer.setHealth(0);
+		this.getRectangle().setWidth(myApp.getScreenWidth() / Constants.CHARACTER_WIDTH_DIVIDER *2);
+		this.getRectangle().setHeight(myApp.getScreenWidth() / Constants.CHARACTER_WIDTH_DIVIDER *2);
+//		this.setNewBitmap(myApp.explosion, 1);
+		Gdx.app.log("Death", "BOMBED!");
+		player.setHealth(0);
 	}
 	
-	public boolean checkPlayerClose(Player aPlayer) {
-		GameObject explosion = new GameObject();
+	public boolean checkPlayerClose(Player player) {
+		Rectangle explosion = new Rectangle();
 		MyApp myApp = MyApp.getInstance();
-		explosion.setNewBitmap(myApp.explosion,1);		
+//		explosion.setNewBitmap(myApp.explosion,1);
 		
-		explosion.setXPos(this.xPos - this.width/2);
-		explosion.setYPos(this.yPos - this.height/2);
-	    explosion.setWidth(this.width*2);
-	    explosion.setHeight(this.width*2);
-	    explosion.setObjectRect(explosion.getXPos(),explosion.getYPos(),explosion.getXPos()+explosion.getWidth(),explosion.getYPos()+explosion.getHeight());
+		explosion.setX(this.getRectangle().getX() - this.getRectangle().getWidth()/2);
+		explosion.setY(this.getRectangle().getY() - this.getRectangle().getHeight()/2);
+	    explosion.setWidth(this.getRectangle().getWidth()*2);
+	    explosion.setHeight(this.getRectangle().getHeight()*2);
+//	    explosion.setObjectRect(explosion.getXPos(),explosion.getYPos(),explosion.getXPos()+explosion.getWidth(),explosion.getYPos()+explosion.getHeight());
 
-        return collision.objectCollision(aPlayer, explosion);
+        return explosion.overlaps(player.getRectangle());
 	}
 }

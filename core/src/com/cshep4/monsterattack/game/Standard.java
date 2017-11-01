@@ -1,11 +1,14 @@
 package com.cshep4.monsterattack.game;
 
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Rectangle;
+
 public class Standard extends Enemy {
 	MyApp myApp = MyApp.getInstance();
 	
-	public Standard(int aXPos, int aYPos, int aType) {
-		super();////////////////////////////////////////////////////////////////////////////////If type ==
+	public Standard(Rectangle rectangle, Texture texture, int aType) {
+		super(rectangle, texture);
 		type = aType;
 		if (type == 1) {
 			canShoot = false;
@@ -29,10 +32,10 @@ public class Standard extends Enemy {
 			canShootBombs = false;
 		}
 		
-		xPos = aXPos;
-		yPos = aYPos;
-	    width = myApp.getScreenWidth() / Constants.CHARACTER_WIDTH_DIVIDER;
-	    height = myApp.getScreenWidth() / Constants.CHARACTER_HEIGHT_DIVIDER;
-	    setNewBitmap(myApp.standardMoveIdle[aType-1], Constants.S_MOVE_DIVIDER);
+//		xPos = aXPos;
+//		yPos = aYPos;
+//	    width = myApp.getScreenWidth() / Constants.CHARACTER_WIDTH_DIVIDER;
+//	    height = myApp.getScreenWidth() / Constants.CHARACTER_HEIGHT_DIVIDER;
+//	    setNewBitmap(myApp.standardMoveIdle[aType-1], Constants.S_MOVE_DIVIDER);
 	}
 }
