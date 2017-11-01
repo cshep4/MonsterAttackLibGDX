@@ -1,6 +1,12 @@
 package com.cshep4.monsterattack.game;
 
-public class Player extends GameObject {
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Rectangle;
+
+import static com.cshep4.monsterattack.game.Constants.CHARACTER_IDLE;
+
+public class Player extends Character {
 	private int destX;
 	private int destY;
 
@@ -9,17 +15,16 @@ public class Player extends GameObject {
 
 	MyApp myApp = MyApp.getInstance();
 	
-	public Player(int aXPos, int aYPos, int aWidth, int aHeight) {	
-		super();
-		xPos = aXPos;
-		yPos = aYPos;
-		destX = xPos;
-		destY = yPos;
-		width = aWidth;
-		height = aHeight;
+	public Player(Rectangle rectangle, Texture texture) {
+		super(rectangle, texture);
+//		xPos = aXPos;
+//		yPos = aYPos;
+//		destX = xPos;
+//		destY = yPos;
+//		width = aWidth;
+//		height = aHeight;
 		this.directionFacing = Constants.RIGHT;
-		MyApp myApp = MyApp.getInstance();
-		setNewBitmap(myApp.playerIdle, Constants.CHARACTER_IDLE_DIVIDER);
+//		setNewBitmap(myApp.playerIdle, Constants.CHARACTER_IDLE_DIVIDER);
 	}
 	
 	public void setDestX(int aDestX){

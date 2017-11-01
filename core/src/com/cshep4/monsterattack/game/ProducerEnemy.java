@@ -1,6 +1,6 @@
 package com.cshep4.monsterattack.game;
 
-import android.util.Log;
+import com.badlogic.gdx.Gdx;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -48,7 +48,7 @@ public class ProducerEnemy extends Enemy {
         int W = myApp.getScreenWidth() / Constants.CHARACTER_WIDTH_DIVIDER;
         int x = this.xPos - W;
         int y = this.yPos;
-        Log.v("AI", "Produce");
+        Gdx.app.log("AI", "Produce");
 
         this.xVel = 0;
         this.yVel = 0;

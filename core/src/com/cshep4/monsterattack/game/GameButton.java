@@ -12,14 +12,14 @@ public class GameButton {
 	private int width;
 	private int height;	
 	
-	public GameButton(int aWidth, int aHeight, Resources aRes, int aXPos, int aYPos, int aButton) {
-		Bitmap bitmap = BitmapFactory.decodeResource(aRes, aButton);		
-		bitmap = resizeImage(bitmap, aWidth, aHeight);	
-		bmp = bitmap;
-		xPos = aXPos;
-		yPos = aYPos;
-		width = aWidth;
-		height = aHeight;
+	public GameButton(int width, int height, Resources res, int x, int y, int button) {
+		Bitmap bitmap = BitmapFactory.decodeResource(res, button);
+		bitmap = resizeImage(bitmap, width, height);
+		this.bmp = bitmap;
+		this.xPos = x;
+		this.yPos = y;
+		this.width = width;
+		this.height = height;
 	}
 	
 	private Bitmap resizeImage(Bitmap image,int maxWidth, int maxHeight)
@@ -66,13 +66,13 @@ public class GameButton {
 	}
 	
 	//Set the x of the button
-	public void setXPos(int xIn){
-		this.xPos = xIn;
+	public void setXPos(int x){
+		this.xPos = x;
 	}
 	
 	//Set the y of the button
-	public void setYPos(int yIn){
-		this.yPos = yIn;
+	public void setYPos(int y){
+		this.yPos = y;
 	}
 	
 	//Get the x of the button
@@ -86,13 +86,13 @@ public class GameButton {
 	}	
 	
 	//Set the x of the button
-	public void setWidth(int aWidth){
-		this.width = aWidth;
+	public void setWidth(int width){
+		this.width = width;
 	}
 	
 	//Set the y of the button
-	public void setHeight(int aHeight){
-		this.height = aHeight;
+	public void setHeight(int height){
+		this.height = height;
 	}
 	
 	//Get the x of the button

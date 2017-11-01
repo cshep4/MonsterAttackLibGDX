@@ -13,11 +13,11 @@ public class Bullet {
 	protected int height;	
 	protected Rect bullet = new Rect();
 	
-	public Bullet(int aXPos, int aYPos, int aWidth, int aHeight){
-		xPos = aXPos;
-		yPos = aYPos;
-		width = aWidth;
-		height = aHeight;
+	public Bullet(int x, int y, int width, int height){
+		xPos = x;
+		yPos = y;
+		this.width = width;
+		this.height = height;
 		xVel = Constants.BULLET_SPEED;
 	}
 	
@@ -34,13 +34,13 @@ public class Bullet {
 	}	
 	
 	//Set the x of the rectangle
-	public void setXPos(int xIn){
-		this.xPos = xIn;
+	public void setXPos(int x){
+		this.xPos = x;
 	}
 	
 	//Set the y of the rectangle
-	public void setYPos(int yIn){
-		this.yPos = yIn;
+	public void setYPos(int y){
+		this.yPos = y;
 	}
 	
 	//Get the x of the rectangle
@@ -63,8 +63,8 @@ public class Bullet {
     	this.xPos += this.xVel;
 	}
 	
-	public void setXVel(int aXVel){
-		this.xVel = aXVel;
+	public void setXVel(int xVel){
+		this.xVel = xVel;
 	}
 	
 	public int getXVel() {
@@ -72,13 +72,13 @@ public class Bullet {
 	}	
 	
 	//Set the width of the rectangle
-	public void setWidth (int widthIn){
-		this.width = widthIn;
+	public void setWidth (int width){
+		this.width = width;
 	}
 	
 	//Set the height of the rectangle
-	public void setHeight (int heightIn){
-		this.height = heightIn;
+	public void setHeight (int height){
+		this.height = height;
 	}	
 	
 	//Get the width of the rectangle

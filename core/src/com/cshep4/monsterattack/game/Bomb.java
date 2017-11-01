@@ -7,9 +7,8 @@ import static com.badlogic.gdx.graphics.g3d.particles.ParticleChannels.Color;
 
 public class Bomb extends Bullet {
 
-	public Bomb(int aXPos, int aYPos, int aWidth, int aHeight) {
-		super(aXPos, aYPos, aWidth, aHeight);
-		// TODO Auto-generated constructor stub
+	public Bomb(int x, int y, int width, int height) {
+		super(x, y, width, height);
 	}
 	
 	//Method to draw a rectangle on the screen
