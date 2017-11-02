@@ -64,6 +64,7 @@ public final class Constants {
 	public static final String S2_SPRITE_MOVE = "s2_move.png";
 	public static final String S3_SPRITE_MOVE = "s3_move.png";
 	public static final String S4_SPRITE_MOVE = "s4_move.png";
+	public static final String S4_SPRITE_SHIELD = "s4_shield.png";
 	public static final String SP_SPRITE_PRODUCE = "sp_produce.png";
 	public static final String B1_SPRITE_MOVE = "b1_move.png";
 	public static final String B2_SPRITE_MOVE = "b2_move.png";

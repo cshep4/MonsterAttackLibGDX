@@ -2,19 +2,17 @@ package com.cshep4.monsterattack.game;
 
 import java.util.ArrayList;
 
-import android.util.Log;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 
-public class Enemy extends Character implements ai {
+public abstract class Enemy extends Character implements ai {
 	protected boolean canShoot;
 	protected boolean canDodge;
 	protected boolean canShield;
 	protected boolean canShootBombs;
 	protected boolean sheilded;
-	private int bulletY;
+	private float bulletY;
 	private long shootTime = System.currentTimeMillis();
 	protected MyApp myApp = MyApp.getInstance();
 	protected int type;
@@ -41,26 +39,24 @@ public class Enemy extends Character implements ai {
 	}	
 	
 	public Bullet shoot(){
-		// cast libGDX values to original
-		int width = (int) getRectangle().getWidth();
-		int height = (int) getRectangle().getHeight();
-		int xPos = (int) getRectangle().getX();
-		int yPos = (int) getRectangle().getY();
-
 		// create and return a bullet
 		this.sheilded = false;
 		shootTime = System.currentTimeMillis();
 		Bullet bullet;
 		if (this.canShootBombs) {	
-			int W = width/ Constants.BULLET_SIZE_DIVIDER *6;
-			int H = height/ Constants.BULLET_SIZE_DIVIDER *6;
-			int x = xPos +(width/2)-W/2;
-			int y = yPos +(height/2)-H/2;
-			bullet = new Bomb(x, y, W, H);
+			float w = getRectangle().getWidth()/ Constants.BULLET_SIZE_DIVIDER *6;
+			float h = getRectangle().getHeight()/ Constants.BULLET_SIZE_DIVIDER *6;
+			float x = getRectangle().getX() +(getRectangle().getWidth()/2)-w/2;
+			float y = getRectangle().getY() +(getRectangle().getHeight()/2)-h/2;
+			bullet = Create.bomb(x, y, w, h);
 			Gdx.app.log("AI","Shoot Bomb!");
 		}
 		else {
-			bullet = new Bullet(xPos+(width /2), yPos+(height /2), height / Constants.BULLET_SIZE_DIVIDER, width / Constants.BULLET_SIZE_DIVIDER);
+			float x = getRectangle().getX()+(getRectangle().getWidth() /2);
+			float y = getRectangle().getY()+(getRectangle().getHeight() /2);
+			float w = getRectangle().getWidth() / Constants.BULLET_SIZE_DIVIDER;
+			float h = getRectangle().getHeight() / Constants.BULLET_SIZE_DIVIDER;
+			bullet = Create.bullet(x, y, w, h);
 			Gdx.app.log("AI","Shoot Bullet");
 		}
 		bullet.setXVel(-bullet.getXVel());
@@ -75,12 +71,6 @@ public class Enemy extends Character implements ai {
 	}
 	
 	public void dodge() {
-		// cast libGDX values to original
-		int width = (int) getRectangle().getWidth();
-		int height = (int) getRectangle().getHeight();
-		int xPos = (int) getRectangle().getX();
-		int yPos = (int) getRectangle().getY();
-
 		Gdx.app.log("AI","Dodge");
 		//String string = "BulletY: " + Integer.toString(bulletY);
 		//Log.v("BulletPos",string);
@@ -90,14 +80,14 @@ public class Enemy extends Character implements ai {
 			xVel = Constants.ENEMY_SPEED;
 			this.directionFacing = Constants.RIGHT;
 		}
-		 if (this.directionFacing == Constants.RIGHT) {
+		if (this.directionFacing == Constants.RIGHT) {
 			// this.setNewBitmap(myApp.standardMoveIdleLeft[this.type-1], Constants.S_MOVE_DIVIDER);
-		 } else {
+		} else {
 			 //this.setNewBitmap(myApp.standardMoveIdle[this.type-1], Constants.S_MOVE_DIVIDER);
-		 }		
+		}
 		//IF THE BULLET IS LOW MOVE UP, ELSE MOVE DOWN
-		if ((bulletY != 0) && ((yPos+height/2) < bulletY)) {
-			if (yPos < 0) {
+		if ((bulletY != 0) && ((getRectangle().getY()+getRectangle().getHeight()/2) < bulletY)) {
+			if (getRectangle().getY() < 0) {
 				this.yVel = Constants.ENEMY_SPEED;
 			} else {
 				if (yVel == 0) {
@@ -106,7 +96,7 @@ public class Enemy extends Character implements ai {
 			}
 		}
 		else {
-			if (yPos > myApp.getScreenHeight() - height) {
+			if (getRectangle().getY() > myApp.getScreenHeight() - getRectangle().getHeight()) {
 				yVel = -Constants.ENEMY_SPEED;
 			} else {
 				if (yVel == 0) {
@@ -118,12 +108,6 @@ public class Enemy extends Character implements ai {
 	}	
 	
 	public void moveForward() {
-		// cast libGDX values to original
-		int width = (int) getRectangle().getWidth();
-		int height = (int) getRectangle().getHeight();
-		int xPos = (int) getRectangle().getX();
-		int yPos = (int) getRectangle().getY();
-
 		Gdx.app.log("AI","Move Forward");
 		if (this.canDodge) {
 			if (this.directionFacing == Constants.RIGHT) {
@@ -136,12 +120,12 @@ public class Enemy extends Character implements ai {
 		this.xVel = -Constants.ENEMY_SPEED;
 //		this.yVel = 0;
 
-		if (yPos < 0) {
+		if (getRectangle().getY() < 0) {
 			this.yVel = Constants.ENEMY_SPEED;
 		} else {
 			this.yVel = 0;
 		}
-		if (yPos > myApp.getScreenHeight() - height) {
+		if (getRectangle().getY() > myApp.getScreenHeight() - getRectangle().getHeight()) {
 			yVel = -Constants.ENEMY_SPEED;
 		} else {
 			this.yVel = 0;
@@ -188,7 +172,7 @@ public class Enemy extends Character implements ai {
 		if (playerBullets != null) {
 			for (int bulletLoop =0; bulletLoop < playerBullets.size(); bulletLoop++){
 				if (playerBullets.get(bulletLoop) != null) {
-					if 	(Math.abs(this.getRectangle().getX()-playerBullets.get(bulletLoop).getXPos())<100 &&
+					if 	(Math.abs(this.getRectangle().getX()-playerBullets.get(bulletLoop).getRectangle().getX())<100 &&
 						checkEnemyInLineOfBullet(playerBullets)) {
 						return true;
 					}
@@ -202,10 +186,16 @@ public class Enemy extends Character implements ai {
 		if (playerBullets != null) {
 			for (int bulletLoop =0; bulletLoop < playerBullets.size(); bulletLoop++){
 				if (playerBullets.get(bulletLoop) != null) {
-					if 	(playerBullets.get(bulletLoop).getRect().top < this.getRect().bottom &&
-						playerBullets.get(bulletLoop).getRect().bottom > this.getRect().top &&
-						playerBullets.get(bulletLoop).getRect().right < this.getRect().left) {
-						bulletY = playerBullets.get(bulletLoop).getYPos();
+					float bulletTop = playerBullets.get(bulletLoop).getRectangle().getY() + playerBullets.get(bulletLoop).getRectangle().getHeight();
+					float bulletBottom = playerBullets.get(bulletLoop).getRectangle().getY();
+					float top = this.getRectangle().getY() + this.getRectangle().getHeight();
+					float bottom = this.getRectangle().getY();
+
+					float bulletRight = playerBullets.get(bulletLoop).getRectangle().getX() + playerBullets.get(bulletLoop).getRectangle().getWidth();
+					float left = this.getRectangle().getX() + this.getRectangle().getWidth();
+
+					if 	(bulletTop > bottom && bulletBottom < top && bulletRight < left) {
+						bulletY = playerBullets.get(bulletLoop).getRectangle().getY();
 						return true;
 					}
 				}		
@@ -215,16 +205,23 @@ public class Enemy extends Character implements ai {
 	}	
 	
 	public boolean checkPlayerInLineOfSight(Player player) {
-		return player.getRect().top < this.getRect().bottom &&
-				player.getRect().bottom > this.getRect().top;
+		float playerTop = player.getRectangle().getY() + player.getRectangle().getHeight();
+		float playerBottom = player.getRectangle().getY();
+		float top = this.getRectangle().getY() + this.getRectangle().getHeight();
+		float bottom = this.getRectangle().getY();
+
+		float playerRight = player.getRectangle().getX() + player.getRectangle().getWidth();
+		float left = this.getRectangle().getX() + this.getRectangle().getWidth();
+
+		return playerTop > bottom && playerBottom < top && playerRight < left;
 	}
 	
 	private boolean checkShootDelay() {
 		return System.currentTimeMillis() - shootTime > Constants.SHOOT_DELAY;
 	}
 
-	public void setType(int aType){
-		type = aType;
+	public void setType(int type){
+		this.type = type;
 	}
 
 	public int getType() {

@@ -3,21 +3,11 @@ package com.cshep4.monsterattack.game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 
-public class ShootButton extends GameObject {
-
-	public ShootButton(Rectangle rectangle, Texture texture) {
+public class PauseButton extends GameObject {
+	
+	public PauseButton(Rectangle rectangle, Texture texture) {
 		super(rectangle, texture);
 	}
-
-//	public ShootButton(int aWidth, int aHeight, Resources aRes, int aXPos, int aYPos) {
-//		Bitmap bitmap = BitmapFactory.decodeResource(aRes, R.drawable.shoot_button);
-//		bitmap = resizeImage(bitmap, aWidth, aHeight);
-//		bmp = bitmap;
-//		xPos = aXPos;
-//		yPos = aYPos;
-//		width = aWidth;
-//		height = aHeight;
-//	}
 	
 //	private Bitmap resizeImage(Bitmap image,int maxWidth, int maxHeight)
 //	{
@@ -57,19 +47,19 @@ public class ShootButton extends GameObject {
 //	    }
 //	    return resizedImage;
 //	}
-	
+//
 //	public void drawButton(Canvas canvas){
 //		canvas.drawBitmap(this.bmp,this.xPos,this.yPos,null);
 //	}
-	
+//
 //	//Set the x of the button
-//	public void setXPos(int xIn){
-//		this.xPos = xIn;
+//	public void setXPos(int x){
+//		this.xPos = x;
 //	}
 //
 //	//Set the y of the button
-//	public void setYPos(int yIn){
-//		this.yPos = yIn;
+//	public void setYPos(int y){
+//		this.yPos = y;
 //	}
 //
 //	//Get the x of the button

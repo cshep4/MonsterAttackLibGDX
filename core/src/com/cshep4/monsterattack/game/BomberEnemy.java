@@ -6,7 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 
-public class BomberEnemy extends Enemy {
+public abstract class BomberEnemy extends Enemy {
 	
 	//collision handling
 //	private Collision collision = new Collision();
@@ -25,8 +25,7 @@ public class BomberEnemy extends Enemy {
 	}
 
 	public void explode(Player player) {
-		Sound sound = new Sound();
-		sound.playExplode();
+		Sounds.playExplode();
 		MyApp myApp = MyApp.getInstance();
 		this.getRectangle().setWidth(myApp.getScreenWidth() / Constants.CHARACTER_WIDTH_DIVIDER *2);
 		this.getRectangle().setHeight(myApp.getScreenWidth() / Constants.CHARACTER_WIDTH_DIVIDER *2);
