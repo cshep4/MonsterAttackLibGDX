@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 
 
-public class Character extends GameObject {
+public abstract class Character extends GameObject {
     protected int health;
     protected int xVel;
     protected int yVel;
@@ -40,19 +40,19 @@ public class Character extends GameObject {
         this.health = health;
     }
 
-    public int getxVel() {
+    public int getXVel() {
         return xVel;
     }
 
-    public void setxVel(int xVel) {
+    public void setXVel(int xVel) {
         this.xVel = xVel;
     }
 
-    public int getyVel() {
+    public int getYVel() {
         return yVel;
     }
 
-    public void setyVel(int yVel) {
+    public void setYVel(int yVel) {
         this.yVel = yVel;
     }
 
