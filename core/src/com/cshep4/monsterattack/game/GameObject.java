@@ -3,7 +3,7 @@ package com.cshep4.monsterattack.game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 
-public class GameObject {
+public abstract class GameObject {
     private Rectangle rectangle;
     private Texture texture;
 
@@ -23,4 +23,5 @@ public class GameObject {
     public void setTexture(Texture texture) {
         this.texture = texture;
     }
+
 }

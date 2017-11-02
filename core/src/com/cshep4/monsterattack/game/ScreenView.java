@@ -42,8 +42,8 @@ public class ScreenView /*extends SurfaceView implements Runnable*/ {
 //    private ArrayList<ProducerEnemy> producerEnemies = new ArrayList<ProducerEnemy>();
 //
 //
-//	public static GameButton shootButton;
-//	public static GameButton pauseButton;
+//	public static PauseButton shootButton;
+//	public static PauseButton pauseButton;
 //
 //	private Mutation mutation = new Mutation();
 //
@@ -88,11 +88,11 @@ public class ScreenView /*extends SurfaceView implements Runnable*/ {
 //        player = new Player(100,100, width / Constants.CHARACTER_WIDTH_DIVIDER, width / Constants.CHARACTER_HEIGHT_DIVIDER);
 //
 //        if (shootButton == null) {
-//            shootButton = new GameButton(width / Constants.BUTTON_SIZE_DIVIDER, width / Constants.BUTTON_SIZE_DIVIDER, getResources(),
+//            shootButton = new PauseButton(width / Constants.BUTTON_SIZE_DIVIDER, width / Constants.BUTTON_SIZE_DIVIDER, getResources(),
 //                    width - (width / Constants.BUTTON_SIZE_DIVIDER), height - (width / Constants.BUTTON_SIZE_DIVIDER), R.drawable.shoot_button);
 //        }
 //        if (pauseButton == null) {
-//            pauseButton = new GameButton(width / Constants.BUTTON_SIZE_DIVIDER, width / Constants.BUTTON_SIZE_DIVIDER, getResources(),
+//            pauseButton = new PauseButton(width / Constants.BUTTON_SIZE_DIVIDER, width / Constants.BUTTON_SIZE_DIVIDER, getResources(),
 //                    width - (width / Constants.BUTTON_SIZE_DIVIDER), 0, R.drawable.pause_button);
 //        }
 //        if (bitmap == null) {
