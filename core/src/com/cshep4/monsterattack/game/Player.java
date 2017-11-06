@@ -4,8 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 
-import java.util.concurrent.TimeoutException;
-
+import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
+import static com.cshep4.monsterattack.GameScreen.getScreenYMax;
 import static com.cshep4.monsterattack.game.Constants.CHARACTER_IDLE;
 
 public class Player extends Character {
@@ -16,17 +16,9 @@ public class Player extends Character {
 	private float touchCentreY;
 
 	private int frameNr;
-
-	MyApp myApp = MyApp.getInstance();
 	
 	public Player(Rectangle rectangle, Texture texture) {
 		super(rectangle, texture);
-//		xPos = aXPos;
-//		yPos = aYPos;
-//		destX = xPos;
-//		destY = yPos;
-//		width = aWidth;
-//		height = aHeight;
 		this.directionFacing = Constants.RIGHT;
 //		setNewBitmap(myApp.playerIdle, Constants.CHARACTER_IDLE_DIVIDER);
 	}
@@ -49,10 +41,10 @@ public class Player extends Character {
 	
 	public void update() {
 		// Stop player leaving the screan
-		if ((this.getRectangle().getX() < 0 && xVel < 0) || (this.getRectangle().getX() > myApp.getScreenWidth() + this.getRectangle().getWidth() && xVel > 0)) {
+		if ((this.getRectangle().getX() < 0 && xVel < 0) || (this.getRectangle().getX() > getScreenXMax() - this.getRectangle().getWidth() && xVel > 0)) {
 			xVel = 0;
 		}
-		if ((this.getRectangle().getY() < 0 && yVel < 0) || (this.getRectangle().getY() > myApp.getScreenHeight() + this.getRectangle().getHeight() && yVel > 0)) {
+		if ((this.getRectangle().getY() < 0 && yVel < 0) || (this.getRectangle().getY() > getScreenYMax() - this.getRectangle().getHeight() && yVel > 0)) {
 			yVel = 0;
 		}
 
