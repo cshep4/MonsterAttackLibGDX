@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
+import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
 
 public abstract class BomberEnemy extends Enemy {
 	
@@ -26,9 +27,8 @@ public abstract class BomberEnemy extends Enemy {
 
 	public void explode(Player player) {
 		Sounds.playExplode();
-		MyApp myApp = MyApp.getInstance();
-		this.getRectangle().setWidth(myApp.getScreenWidth() / Constants.CHARACTER_WIDTH_DIVIDER *2);
-		this.getRectangle().setHeight(myApp.getScreenWidth() / Constants.CHARACTER_WIDTH_DIVIDER *2);
+		this.getRectangle().setWidth(getScreenXMax() / Constants.CHARACTER_WIDTH_DIVIDER *2);
+		this.getRectangle().setHeight(getScreenXMax() / Constants.CHARACTER_WIDTH_DIVIDER *2);
 //		this.setNewBitmap(myApp.explosion, 1);
 		Gdx.app.log("Death", "BOMBED!");
 		player.setHealth(0);
@@ -36,7 +36,6 @@ public abstract class BomberEnemy extends Enemy {
 	
 	public boolean checkPlayerClose(Player player) {
 		Rectangle explosion = new Rectangle();
-		MyApp myApp = MyApp.getInstance();
 //		explosion.setNewBitmap(myApp.explosion,1);
 		
 		explosion.setX(this.getRectangle().getX() - this.getRectangle().getWidth()/2);

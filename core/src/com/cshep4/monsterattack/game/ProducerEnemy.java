@@ -3,6 +3,7 @@ package com.cshep4.monsterattack.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
+import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -14,14 +15,12 @@ public abstract class ProducerEnemy extends Enemy {
         super(rectangle, texture);
 //        getRectangle().setX(xPos);
 //        getRectangle().setY(yPos);
-        getRectangle().setWidth(myApp.getScreenWidth() / Constants.CHARACTER_WIDTH_DIVIDER);
-        getRectangle().setHeight(myApp.getScreenWidth() / Constants.CHARACTER_HEIGHT_DIVIDER);
     }
 
     public void decisionTree(ArrayList<Enemy> enemies) {
         //IF NOT IN POSITION, MOVE TO POSITION
 
-        if (getRectangle().getX() > myApp.getScreenWidth()-getRectangle().getWidth()) {
+        if (getRectangle().getX() > getScreenXMax()-getRectangle().getWidth()) {
             moveForward();
             //IF READY TO SPAWN, PRODUCE ENEMY
         } else if (checkSpawnDelay()) {
@@ -43,9 +42,9 @@ public abstract class ProducerEnemy extends Enemy {
     }
 
     private void produce(ArrayList<Enemy> enemies) {
-        int W = myApp.getScreenWidth() / Constants.CHARACTER_WIDTH_DIVIDER;
-        int x = (int) getRectangle().getX() - W;
-        int y = (int) getRectangle().getY();
+        float width = getScreenXMax() / Constants.CHARACTER_WIDTH_DIVIDER;
+        float x = getRectangle().getX() - width;
+        float y = getRectangle().getY();
         Gdx.app.log("AI", "Produce");
 
         this.xVel = 0;

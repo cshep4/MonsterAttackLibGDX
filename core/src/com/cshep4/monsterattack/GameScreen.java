@@ -3,95 +3,101 @@ package com.cshep4.monsterattack;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.cshep4.monsterattack.game.Bullet;
+import com.cshep4.monsterattack.game.Create;
+import com.cshep4.monsterattack.game.Enemy;
+import com.cshep4.monsterattack.game.GameObject;
+import com.cshep4.monsterattack.game.PauseButton;
+import com.cshep4.monsterattack.game.Player;
+import com.cshep4.monsterattack.game.ShootButton;
 
 import java.util.ArrayList;
-import java.util.Random;
+
+import static com.cshep4.monsterattack.game.Constants.BACKGROUND;
+import static com.cshep4.monsterattack.game.Constants.BUTTON_SIZE_DIVIDER;
 
 
 public class GameScreen implements Screen {
 
     private final MonsterAttack game;
-    private float screenXMax = 450;
-    private float screenYMax = 0;
+    private static float screenXMax = 450;
+    private static float screenYMax = 0;
     private OrthographicCamera camera;
-
-    private final int LEFT = 1;
-    private final int RIGHT = -1;
-
-    Circle tempBall;
-
-    //--------------TEXTURES
-    Texture ball;
-    //----------
+    private float width, height;
 
     //---------------PLAYER
-//    Player player;
-    Circle playerCircle;
-    float player_radius = 30;
+    private final int PLAYER_START_X = 50;
+    private final int PLAYER_START_Y = 50;
+    Player player = Create.player(PLAYER_START_X, PLAYER_START_Y);
+    //----------------------
 
-    //---------------BALLS
-//    ArrayList<Ball> balls = new ArrayList<Ball>();
-    Circle ballCircle;
-    float ball_radius;
+    //---------------ENEMIES
+    private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+    private ArrayList<Enemy> producerEnemies = new ArrayList<Enemy>();
+    //----------------------
 
-    ShapeRenderer debugRenderer = new ShapeRenderer();
+    //---------------BULLETS
+    private ArrayList<Bullet> playerBullets = new ArrayList<Bullet>();
+	private ArrayList<Bullet> enemyBullets = new ArrayList<Bullet>();
+    //----------------------
 
+    //---------------BUTTONS
+    private ShootButton shootButton;
+    private PauseButton pauseButton;
+    //----------------------
+
+    //---------------BACKGROUND
+    private Sprite backgroundSprite;
     //----------------------
 
     public GameScreen(final MonsterAttack game) {
         this.game = game;
 
         // create the camera and make sure it looks the same across all devices---------------------
-        float height = Gdx.graphics.getHeight();
-        float width = Gdx.graphics.getWidth();
+        height = Gdx.graphics.getHeight();
+        width = Gdx.graphics.getWidth();
         float ratio = width / height;
         screenYMax = screenXMax / ratio;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, screenXMax, screenYMax);
         //------------------------------------------------------------------------------------------
 
-        //----------------TEXTURE SETUP
-//        ball = new Texture(Gdx.files.internal("ball2.png"));
+        //----------------BACKGROUND SETUP
+        Texture backgroundTexture = new Texture(Gdx.files.internal(BACKGROUND));
+        backgroundSprite = new Sprite(backgroundTexture);
         //-------------------------------
 
-        //----------------OBJECT SETUP
+        //----------------BUTTON SETUP
+        float buttonWidth = screenXMax / BUTTON_SIZE_DIVIDER;
+        float buttonHeight = buttonWidth;
+        float shootButtonX = screenXMax - buttonWidth;
+        float shootButtonY = 0;
+        float pauseButtonX = screenXMax - buttonWidth;
+        float pauseButtonY = screenYMax - buttonHeight;
+        shootButton = Create.shootButton(shootButtonX, shootButtonY, buttonWidth, buttonHeight);
+        pauseButton = Create.pauseButton(pauseButtonX, pauseButtonY, buttonWidth, buttonHeight);
         //----------------------------------
 
     }
 
     @Override
     public void render(float delta) {
-
-        // background color-------------------------------------------------------------------------
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        //------------------------------------------------------------------------------------------
-        camera.update();
-        debugRenderer.setProjectionMatrix(camera.combined);
-        debugRenderer.setColor(Color.CYAN);
-        debugRenderer.begin(ShapeRenderer.ShapeType.Line);
-//        debugRenderer.circle(player.getCircle().x, player.getCircle().y, player.getCircle().radius);
-//        for (Ball ball : balls) {
-//            //game.batch.draw(ball.getTexture(), ball.getCircle().x,ball.getCircle().y,ball.getCircle().radius*2,ball.getCircle().radius*2);
-//            debugRenderer.circle(ball.getCircle().x, ball.getCircle().y, ball.getCircle().radius);
-//
-//        }
-        debugRenderer.end();
-        game.batch.setProjectionMatrix(camera.combined);
-
-
         processUserInput();
 
         updateEverything();
 
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // This cryptic line clears the screen.
+        game.batch.begin();
+
+        backgroundSprite.draw(game.batch);
+
         drawEverything();
+
+        game.batch.end();
     }
 
     @Override
@@ -125,25 +131,54 @@ public class GameScreen implements Screen {
     }
 
     public void drawEverything(){
+        //----------------BUTTONS
+        drawObject(shootButton);
+        drawObject(pauseButton);
+        //-----------------------
 
-        game.batch.begin();
+        //----------------PLAYER
+        drawObject(player);
+        //-----------------------
 
-        // get text layout height and width and place it in the middle of the screen----------------
-        String gameString = "Game";
-        GlyphLayout gameTextLayout = new GlyphLayout(game.font, gameString);
-        float gameTextWidth = gameTextLayout.width;
-        float gameTextHeight = gameTextLayout.height;
-        //game.font.draw(game.batch, gameString, screenXMax / 2 - (gameTextWidth / 2),
-        //        screenYMax / 2 - 100 - (gameTextHeight / 2));
-        //------------------------------------------------------------------------------------------
+        //----------------ENEMIES
+        drawEnemies();
+        //-----------------------
 
-        //---------------------------------DRAW OBJECT
-//			player.drawObject(paint, canvas);
-//			shootButton.drawButton(canvas);
-//			pauseButton.drawButton(canvas);
-        //--------------------------------------------
+        //----------------BULLETS
+        drawBullets();
+        //-----------------------
+    }
 
-        game.batch.end();
+    private void drawEnemies() {
+        //----------------ENEMIES
+        for (Enemy enemy : enemies) {
+            drawObject(enemy);
+        }
+        //-----------------------
+
+        //----------------PRODUCER ENEMIES
+        for (Enemy enemy : producerEnemies) {
+            drawObject(enemy);
+        }
+        //-----------------------
+    }
+
+    private void drawBullets() {
+        //----------------ENEMY BULLETS
+        for (Bullet bullet : enemyBullets) {
+            drawObject(bullet);
+        }
+        //-----------------------
+
+        //----------------PLAYER BULLETS
+        for (Bullet bullet : playerBullets) {
+            drawObject(bullet);
+        }
+        //-----------------------
+    }
+
+    private void drawObject(GameObject obj) {
+        game.batch.draw(obj.getTexture(), obj.getRectangle().getX(), obj.getRectangle().getY(), obj.getRectangle().getWidth(), obj.getRectangle().getHeight());
     }
 
     public void processUserInput(){
@@ -162,9 +197,26 @@ public class GameScreen implements Screen {
         });
     }
 
-    public void updateEverything(){
-//        player.update();
-//		  updateEnemies(canvas);
-//        updateBullets(canvas);
+    private void updateEverything(){
+
+    }
+
+    private void updateBullets() {
+        //----------------ENEMY BULLETS
+        playerBullets.removeIf(bullet -> bullet.update(enemies));
+        playerBullets.removeIf(bullet -> bullet.update(producerEnemies));
+        //-----------------------
+
+        //----------------PLAYER BULLETS
+        enemyBullets.removeIf(bullet -> bullet.update(player));
+        //-----------------------
+    }
+
+    public static float getScreenXMax() {
+        return screenXMax;
+    }
+
+    public static float getScreenYMax() {
+        return screenYMax;
     }
 }

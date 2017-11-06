@@ -1,11 +1,11 @@
 package com.cshep4.monsterattack.game;
 
-
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 
-public class Standard extends Enemy {
-	MyApp myApp = MyApp.getInstance();
+public class Standard extends Enemy implements Mutatable {
+	private long mutateTime = 0;
 	
 	public Standard(Rectangle rectangle, Texture texture, int aType) {
 		super(rectangle, texture);
@@ -31,11 +31,24 @@ public class Standard extends Enemy {
 			canShield = true;
 			canShootBombs = false;
 		}
-		
-//		xPos = aXPos;
-//		yPos = aYPos;
-//	    width = myApp.getScreenWidth() / Constants.CHARACTER_WIDTH_DIVIDER;
-//	    height = myApp.getScreenWidth() / Constants.CHARACTER_HEIGHT_DIVIDER;
-//	    setNewBitmap(myApp.standardMoveIdle[aType-1], Constants.S_MOVE_DIVIDER);
+
+	}
+
+	@Override
+	public void update(){
+		super.update();
+
+		if (this.isValidMutation(this.type, mutateTime)) {
+			this.mutate();
+		}
+	}
+
+	@Override
+	public void mutate() {
+		Gdx.app.log("Mutation", type + "->" + type+1);
+		Sounds.playMutateStandard();
+		this.type += 1;
+		// TODO - Change sprite
+		mutateTime = System.currentTimeMillis();
 	}
 }

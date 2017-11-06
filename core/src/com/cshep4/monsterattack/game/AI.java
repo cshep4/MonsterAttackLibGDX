@@ -2,7 +2,7 @@ package com.cshep4.monsterattack.game;
 
 import java.util.ArrayList;
 
-public interface ai {
+public interface AI {
 	
 	void decisionTree(Player player, ArrayList<Bullet> playerBullets, ArrayList<Bullet> enemyBullets);
 	

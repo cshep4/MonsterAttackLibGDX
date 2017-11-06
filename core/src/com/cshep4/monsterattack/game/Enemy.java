@@ -1,12 +1,16 @@
 package com.cshep4.monsterattack.game;
 
 import java.util.ArrayList;
+import java.util.function.Predicate;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
+import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
+import static com.cshep4.monsterattack.GameScreen.getScreenYMax;
 
-public abstract class Enemy extends Character implements ai {
+public abstract class Enemy extends Character implements AI {
 	protected boolean canShoot;
 	protected boolean canDodge;
 	protected boolean canShield;
@@ -14,29 +18,12 @@ public abstract class Enemy extends Character implements ai {
 	protected boolean sheilded;
 	private float bulletY;
 	private long shootTime = System.currentTimeMillis();
-	protected MyApp myApp = MyApp.getInstance();
 	protected int type;
 	
 	public Enemy(Rectangle rectangle, Texture texture) {
 		super(rectangle, texture);
 		this.directionFacing = Constants.LEFT;
 	}
-	
-	public boolean CanShoot(){
-		return canShoot;
-	}
-	
-	public boolean CanDodge(){
-		return canShoot;
-	}
-	
-	public boolean CanShield(){
-		return canShoot;
-	}
-	
-	public boolean CanShootBombs(){
-		return canShoot;
-	}	
 	
 	public Bullet shoot(){
 		// create and return a bullet
@@ -96,7 +83,7 @@ public abstract class Enemy extends Character implements ai {
 			}
 		}
 		else {
-			if (getRectangle().getY() > myApp.getScreenHeight() - getRectangle().getHeight()) {
+			if (getRectangle().getY() > getScreenYMax() - getRectangle().getHeight()) {
 				yVel = -Constants.ENEMY_SPEED;
 			} else {
 				if (yVel == 0) {
@@ -125,7 +112,7 @@ public abstract class Enemy extends Character implements ai {
 		} else {
 			this.yVel = 0;
 		}
-		if (getRectangle().getY() > myApp.getScreenHeight() - getRectangle().getHeight()) {
+		if (getRectangle().getY() > getScreenYMax() - getRectangle().getHeight()) {
 			yVel = -Constants.ENEMY_SPEED;
 		} else {
 			this.yVel = 0;
@@ -169,40 +156,36 @@ public abstract class Enemy extends Character implements ai {
 	}
 	
 	public boolean checkBulletClose(ArrayList<Bullet> playerBullets) {
-		if (playerBullets != null) {
-			for (int bulletLoop =0; bulletLoop < playerBullets.size(); bulletLoop++){
-				if (playerBullets.get(bulletLoop) != null) {
-					if 	(Math.abs(this.getRectangle().getX()-playerBullets.get(bulletLoop).getRectangle().getX())<100 &&
-						checkEnemyInLineOfBullet(playerBullets)) {
-						return true;
-					}
-				}		
-			}
-		}
-		return false;
-	}	
-	
+		Predicate<Bullet> inLineAndClose = (this::checkBulletInLineAndClose);
+
+		return playerBullets.stream().anyMatch(inLineAndClose);
+	}
+
 	public boolean checkEnemyInLineOfBullet(ArrayList<Bullet> playerBullets) {
-		if (playerBullets != null) {
-			for (int bulletLoop =0; bulletLoop < playerBullets.size(); bulletLoop++){
-				if (playerBullets.get(bulletLoop) != null) {
-					float bulletTop = playerBullets.get(bulletLoop).getRectangle().getY() + playerBullets.get(bulletLoop).getRectangle().getHeight();
-					float bulletBottom = playerBullets.get(bulletLoop).getRectangle().getY();
-					float top = this.getRectangle().getY() + this.getRectangle().getHeight();
-					float bottom = this.getRectangle().getY();
+		Predicate<Bullet> inLine = (this::checkBulletInLine);
 
-					float bulletRight = playerBullets.get(bulletLoop).getRectangle().getX() + playerBullets.get(bulletLoop).getRectangle().getWidth();
-					float left = this.getRectangle().getX() + this.getRectangle().getWidth();
+		return playerBullets.stream().anyMatch(inLine);
+	}
 
-					if 	(bulletTop > bottom && bulletBottom < top && bulletRight < left) {
-						bulletY = playerBullets.get(bulletLoop).getRectangle().getY();
-						return true;
-					}
-				}		
-			}
+	private boolean checkBulletInLineAndClose(Bullet bullet) {
+		return Math.abs(this.getRectangle().getX()-bullet.getRectangle().getX())<100 && checkBulletInLine(bullet);
+	}
+
+	private boolean checkBulletInLine(Bullet bullet) {
+		float bulletTop = bullet.getRectangle().getY() + bullet.getRectangle().getHeight();
+		float bulletBottom = bullet.getRectangle().getY();
+		float top = this.getRectangle().getY() + this.getRectangle().getHeight();
+		float bottom = this.getRectangle().getY();
+
+		float bulletRight = bullet.getRectangle().getX() + bullet.getRectangle().getWidth();
+		float left = this.getRectangle().getX() + this.getRectangle().getWidth();
+
+		if 	(bulletTop > bottom && bulletBottom < top && bulletRight < left) {
+			bulletY = bullet.getRectangle().getY();
+			return true;
 		}
 		return false;
-	}	
+	}
 	
 	public boolean checkPlayerInLineOfSight(Player player) {
 		float playerTop = player.getRectangle().getY() + player.getRectangle().getHeight();
@@ -226,5 +209,61 @@ public abstract class Enemy extends Character implements ai {
 
 	public int getType() {
 		return type;
+	}
+
+	public boolean isCanShoot() {
+		return canShoot;
+	}
+
+	public void setCanShoot(boolean canShoot) {
+		this.canShoot = canShoot;
+	}
+
+	public boolean isCanDodge() {
+		return canDodge;
+	}
+
+	public void setCanDodge(boolean canDodge) {
+		this.canDodge = canDodge;
+	}
+
+	public boolean isCanShield() {
+		return canShield;
+	}
+
+	public void setCanShield(boolean canShield) {
+		this.canShield = canShield;
+	}
+
+	public boolean isCanShootBombs() {
+		return canShootBombs;
+	}
+
+	public void setCanShootBombs(boolean canShootBombs) {
+		this.canShootBombs = canShootBombs;
+	}
+
+	public boolean isSheilded() {
+		return sheilded;
+	}
+
+	public void setSheilded(boolean sheilded) {
+		this.sheilded = sheilded;
+	}
+
+	public float getBulletY() {
+		return bulletY;
+	}
+
+	public void setBulletY(float bulletY) {
+		this.bulletY = bulletY;
+	}
+
+	public long getShootTime() {
+		return shootTime;
+	}
+
+	public void setShootTime(long shootTime) {
+		this.shootTime = shootTime;
 	}
 }
