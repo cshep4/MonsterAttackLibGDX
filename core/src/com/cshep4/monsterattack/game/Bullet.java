@@ -3,6 +3,9 @@ package com.cshep4.monsterattack.game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 
+import java.util.Collections;
+import java.util.List;
+
 public class Bullet extends GameObject {
 //	protected int xPos;
 //	protected int yPos;
@@ -60,10 +63,34 @@ public class Bullet extends GameObject {
 //	public Rect getRect(){
 //		return bullet;
 //	}
-	
-	public void update(){
+
+
+	public boolean update(List<Enemy> enemyList) {
+		this.updatePosition();
+		for (Enemy enemy : enemyList) {
+			if (checkCollisions(enemy)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean update(Player player) {
+		this.updatePosition();
+		return checkCollisions(player);
+	}
+
+	public void updatePosition(){
     	//Set the speed of the bullet
     	getRectangle().setX(getRectangle().getX() + this.xVel);
+	}
+
+	public boolean checkCollisions(Character character) {
+		if (this.getRectangle().overlaps(character.getRectangle())) {
+			character.setHealth(character.getHealth()-100);
+			return true;
+		}
+		return false;
 	}
 	
 	public void setXVel(int xVel){

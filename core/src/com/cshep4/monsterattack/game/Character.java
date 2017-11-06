@@ -2,6 +2,7 @@ package com.cshep4.monsterattack.game;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
+import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
 
 
 public abstract class Character extends GameObject {
@@ -13,8 +14,8 @@ public abstract class Character extends GameObject {
     public Character(Rectangle rectangle, Texture texture) {
         super(rectangle, texture);
         health = 100;
-        this.getRectangle().setWidth(40);
-        this.getRectangle().setHeight(40);
+        getRectangle().setWidth(getScreenXMax() / Constants.CHARACTER_WIDTH_DIVIDER);
+        getRectangle().setHeight(getScreenXMax() / Constants.CHARACTER_HEIGHT_DIVIDER);
     }
 
     public void update(){
@@ -22,14 +23,12 @@ public abstract class Character extends GameObject {
         this.getRectangle().setX(this.getRectangle().getX() + this.xVel);
         this.getRectangle().setY(this.getRectangle().getY() + this.yVel);
 
-//        directionChange = (this.xVel <= 0 && this.directionFacing == Constants.RIGHT) ||
-//                (this.xVel > 0 && this.directionFacing == Constants.LEFT);
-//        if (this.xVel <= 0)
-//        {
-//            this.directionFacing = Constants.LEFT;
-//        } else {
-//            this.directionFacing = Constants.RIGHT;
-//        }
+        if (this.xVel <= 0)
+        {
+            this.directionFacing = Constants.LEFT;
+        } else {
+            this.directionFacing = Constants.RIGHT;
+        }
     }
 
     public int getHealth() {
