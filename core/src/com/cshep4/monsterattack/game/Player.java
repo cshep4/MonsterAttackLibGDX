@@ -4,40 +4,21 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 
+import java.util.List;
+
 import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
 import static com.cshep4.monsterattack.GameScreen.getScreenYMax;
 import static com.cshep4.monsterattack.game.Constants.CHARACTER_IDLE;
+import static com.cshep4.monsterattack.game.Constants.CHARACTER_MOVE_LEFT;
+import static com.cshep4.monsterattack.game.Constants.CHARACTER_MOVE_RIGHT;
+import static com.cshep4.monsterattack.game.Constants.PLAYER_SPEED;
 
 public class Player extends Character {
-	private int destX;
-	private int destY;
+	private boolean standingTexture = true;
 
-	private float touchCentreX;
-	private float touchCentreY;
-
-	private int frameNr;
-	
-	public Player(Rectangle rectangle, Texture texture) {
-		super(rectangle, texture);
-		this.directionFacing = Constants.RIGHT;
-//		setNewBitmap(myApp.playerIdle, Constants.CHARACTER_IDLE_DIVIDER);
+	public Player(Rectangle rectangle, Texture texture, int frameCols, int frameRows) {
+		super(rectangle, texture, frameCols, frameRows);
 	}
-	
-	public void setDestX(int destX){
-		this.destX = destX;
-	}
-	
-	public int getDestX() {
-		return this.destX;
-	}	
-	
-	public void setDestY(int destY){
-		this.destY = destY;
-	}
-	
-	public int setDestY() {
-		return this.destY;
-	}		
 	
 	public void update() {
 		// Stop player leaving the screan
@@ -48,81 +29,67 @@ public class Player extends Character {
 			yVel = 0;
 		}
 
-		// Set direction player is facing
-		if (xVel < 0 && (directionFacing != Constants.LEFT || this.frameNr != Constants.CHARACTER_RUNNING_DIVIDER)) {
-			this.setDirectionFacing(Constants.LEFT);
-//			this.setNewBitmap(myApp.playerRunLeft, Constants.CHARACTER_RUNNING_DIVIDER);
-		}
-		if (xVel > 0 && (directionFacing != Constants.RIGHT || this.frameNr != Constants.CHARACTER_RUNNING_DIVIDER)) {
-			this.setDirectionFacing(Constants.RIGHT);
-//			this.setNewBitmap(myApp.playerRun, Constants.CHARACTER_RUNNING_DIVIDER);
-		}
-
-		// Set direction player is facing
-		if (xVel == 0 && yVel != 0) {
-			if (yVel < 0 && (directionFacing != Constants.LEFT || this.frameNr != Constants.CHARACTER_RUNNING_DIVIDER)) {
-				this.setDirectionFacing(Constants.LEFT);
-//				this.setNewBitmap(myApp.playerRunLeft, Constants.CHARACTER_RUNNING_DIVIDER);
-			}
-			if (yVel > 0 && (directionFacing != Constants.RIGHT || this.frameNr != Constants.CHARACTER_RUNNING_DIVIDER)) {
-				this.setDirectionFacing(Constants.RIGHT);
-//				this.setNewBitmap(myApp.playerRun, Constants.CHARACTER_RUNNING_DIVIDER);
-			}
-		}
-
 		getRectangle().setX(getRectangle().getX()+xVel);
 		getRectangle().setY(getRectangle().getY()+yVel);
 	}
 
 	public void move(float xPos, float yPos) {
 		double left = this.getRectangle().getX();
-		double top = this.getRectangle().getY();
+		double top = this.getRectangle().getY() + this.getRectangle().getHeight();
 		double right = this.getRectangle().getX() + this.getRectangle().getWidth();
-		double bottom = this.getRectangle().getY() + this.getRectangle().getHeight();
+		double bottom = this.getRectangle().getY();
 		double xMiddle = this.getRectangle().getX() + (this.getRectangle().getWidth()/2);
-
-		if (!(yPos<=bottom && yPos>=top)) {
-			if (yPos>bottom) {
-				this.setYVel(Constants.PLAYER_SPEED);
-			}
-			if (yPos<top) {
-				this.setYVel(-Constants.PLAYER_SPEED);
-			}
-		}
 
         if (!(xPos>=left && xPos<=right)) {
 			if (xPos<xMiddle) {
-				this.setXVel(-Constants.PLAYER_SPEED);
+				if (this.getXVel() != -PLAYER_SPEED) {
+					standingTexture = false;
+					changeAnimation(new Texture(Gdx.files.internal(CHARACTER_MOVE_LEFT)),6, 1);
+				}
+				this.setXVel(-PLAYER_SPEED);
 			}
 			if (xPos>xMiddle) {
-				this.setXVel(Constants.PLAYER_SPEED);
+				if (this.getXVel() != PLAYER_SPEED) {
+					standingTexture = false;
+					changeAnimation(new Texture(Gdx.files.internal(CHARACTER_MOVE_RIGHT)),6, 1);
+				}
+				this.setXVel(PLAYER_SPEED);
 			}
         }
+
+		if (!(yPos>=bottom && yPos<=top)) {
+			if (yPos>bottom) {
+				if (standingTexture) {
+					standingTexture = false;
+					changeAnimation(new Texture(Gdx.files.internal(CHARACTER_MOVE_RIGHT)),6, 1);
+				}
+				this.setYVel(PLAYER_SPEED);
+			}
+			if (yPos<top) {
+				if (standingTexture) {
+					standingTexture = false;
+					changeAnimation(new Texture(Gdx.files.internal(CHARACTER_MOVE_LEFT)),6, 1);
+				}
+				this.setYVel(-PLAYER_SPEED);
+			}
+		}
 
 	}
 
 	public void stand() {
-		//this.setNewBitmap(myApp.playerIdle, Constants.CHARACTER_IDLE_DIVIDER);
+		this.setXVel(0);
+		this.setYVel(0);
+		standingTexture = true;
 		setTexture(new Texture(Gdx.files.internal(CHARACTER_IDLE)));
+		changeAnimation(new Texture(Gdx.files.internal(CHARACTER_IDLE)), 2, 1);
 	}
 
-	public int getDestY() {
-		return destY;
-	}
+	public Bullet shoot() {
+		float x = getRectangle().getX()+(getRectangle().getWidth() /2);
+		float y = getRectangle().getY()+(getRectangle().getHeight() /2);
+		float width = getRectangle().getWidth() / Constants.BULLET_SIZE_DIVIDER;
+		float height = getRectangle().getHeight() / Constants.BULLET_SIZE_DIVIDER;
 
-	public float getTouchCentreX() {
-		return touchCentreX;
-	}
-
-	public void setTouchCentreX(float touchCentreX) {
-		this.touchCentreX = touchCentreX;
-	}
-
-	public float getTouchCentreY() {
-		return touchCentreY;
-	}
-
-	public void setTouchCentreY(float touchCentreY) {
-		this.touchCentreY = touchCentreY;
+		return Create.bullet(x, y, width, height);
 	}
 }

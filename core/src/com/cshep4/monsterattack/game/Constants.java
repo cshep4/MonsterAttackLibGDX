@@ -14,10 +14,10 @@ public final class Constants {
 
 	public static final int BUTTON_SIZE_DIVIDER = 10;
 
-	public static final int BULLET_SPEED = 15;
+	public static final int BULLET_SPEED = 10;
 
-	public static final int ENEMY_SPEED = 10;
-	public static final int PLAYER_SPEED = 10;
+	public static final float ENEMY_SPEED = 1.5f;
+	public static final float PLAYER_SPEED = 2;
 
 	public static final int SHOOT_DELAY = 1000;
 
@@ -29,6 +29,8 @@ public final class Constants {
 
 	public static final int MUTATE_DELAY_MIN = 3000;
 	public static final int MUTATE_DELAY_MAX = 4000;
+
+	public static final int MAX_ENEMIES = 4;
 	
 	//sprite dividers
 	public static final int CHARACTER_IDLE_DIVIDER = 2;
@@ -46,7 +48,7 @@ public final class Constants {
 	public static final int B_P_PRODUCE_DIVIDER = 1;
 
 	//Define the frame rate
-	public static final int FRAME_RATE = 60;
+	public static final float FRAME_RATE = 30;
 
 	// --------------------------------------Sprites
 	// Enemies
@@ -60,10 +62,14 @@ public final class Constants {
 //	public static final String B3_SPRITE_IDLE = "";
 //	public static final String B4_SPRITE_IDLE = "";
 	public static final String BP_SPRITE_IDLE = "bp_idle.png";
-	public static final String S1_SPRITE_MOVE = "s1_move.png";
-	public static final String S2_SPRITE_MOVE = "s2_move.png";
-	public static final String S3_SPRITE_MOVE = "s3_move.png";
-	public static final String S4_SPRITE_MOVE = "s4_move.png";
+	public static final String S1_SPRITE_MOVE_LEFT = "s1_move.png";
+	public static final String S2_SPRITE_MOVE_LEFT = "s2_move.png";
+	public static final String S3_SPRITE_MOVE_LEFT = "s3_move.png";
+	public static final String S4_SPRITE_MOVE_LEFT = "s4_move.png";
+	public static final String S1_SPRITE_MOVE_RIGHT = "s1_move1.png";
+	public static final String S2_SPRITE_MOVE_RIGHT = "s2_move1.png";
+	public static final String S3_SPRITE_MOVE_RIGHT = "s3_move1.png";
+	public static final String S4_SPRITE_MOVE_RIGHT = "s4_move1.png";
 	public static final String S4_SPRITE_SHIELD = "s4_shield.png";
 	public static final String SP_SPRITE_PRODUCE = "sp_produce.png";
 	public static final String B1_SPRITE_MOVE = "b1_move.png";
@@ -84,7 +90,8 @@ public final class Constants {
 
 	// Character
 	public static final String CHARACTER_IDLE = "idle.png";
-	public static final String CHARACTER_MOVE = "character_running.png";
+	public static final String CHARACTER_MOVE_RIGHT = "character_running.png";
+	public static final String CHARACTER_MOVE_LEFT = "character_running1.png";
 	public static final String CHARACTER_HIT = "gothit.png";
 
 	// Misc.

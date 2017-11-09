@@ -5,9 +5,14 @@ import com.badlogic.gdx.math.Rectangle;
 
 public class StandardProducer extends ProducerEnemy {
 
-	public StandardProducer(Rectangle rectangle, Texture texture) {
-		super(rectangle, texture);
-//		setNewBitmap(myApp.standardMoveIdle[4], Constants.S_P_IDLE_DIVIDER);
+	public StandardProducer(Rectangle rectangle, Texture texture, int frameCols, int frameRows) {
+		super(rectangle, texture, frameCols, frameRows);
 	}
+
+	@Override
+	public void changeAnimation(float newXVel) {}
+
+	@Override
+	public void shieldAnimation() {}
 
 }
