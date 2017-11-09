@@ -2,8 +2,8 @@ package com.cshep4.monsterattack;
 
 import com.badlogic.gdx.backends.iosmoe.IOSApplication;
 import com.badlogic.gdx.backends.iosmoe.IOSApplicationConfiguration;
+
 import org.moe.natj.general.Pointer;
-import com.cshep4.monsterattack.MyGdxGame;
 
 import apple.uikit.c.UIKit;
 
@@ -17,7 +17,7 @@ public class IOSMoeLauncher extends IOSApplication.Delegate {
     protected IOSApplication createApplication() {
         IOSApplicationConfiguration config = new IOSApplicationConfiguration();
         config.useAccelerometer = false;
-        return new IOSApplication(new MyGdxGame(), config);
+        return new IOSApplication(new MonsterAttack(), config);
     }
 
     public static void main(String[] argv) {

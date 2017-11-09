@@ -1,14 +1,14 @@
 package com.cshep4.monsterattack.game;
 
-import java.util.ArrayList;
-import java.util.function.Predicate;
-
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
-import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
+
+import java.util.ArrayList;
+import java.util.function.Predicate;
+
 import static com.cshep4.monsterattack.GameScreen.getScreenYMax;
+import static com.cshep4.monsterattack.game.Constants.ENEMY_SPEED;
 
 public abstract class Enemy extends Character implements AI {
 	protected boolean canShoot;
@@ -20,9 +20,9 @@ public abstract class Enemy extends Character implements AI {
 	private long shootTime = System.currentTimeMillis();
 	protected int type;
 	
-	public Enemy(Rectangle rectangle, Texture texture) {
-		super(rectangle, texture);
-		this.directionFacing = Constants.LEFT;
+	public Enemy(Rectangle rectangle, Texture texture, int frameCols, int frameRows) {
+		super(rectangle, texture, frameCols, frameRows);
+		this.xVel = -ENEMY_SPEED;
 	}
 	
 	public Bullet shoot(){
@@ -62,32 +62,26 @@ public abstract class Enemy extends Character implements AI {
 		//String string = "BulletY: " + Integer.toString(bulletY);
 		//Log.v("BulletPos",string);
 		this.sheilded = false;		
-		if (xVel != Constants.ENEMY_SPEED) {
-			//directionChange = true;
-			xVel = Constants.ENEMY_SPEED;
-			this.directionFacing = Constants.RIGHT;
-		}
-		if (this.directionFacing == Constants.RIGHT) {
-			// this.setNewBitmap(myApp.standardMoveIdleLeft[this.type-1], Constants.S_MOVE_DIVIDER);
-		} else {
-			 //this.setNewBitmap(myApp.standardMoveIdle[this.type-1], Constants.S_MOVE_DIVIDER);
+		if (xVel != ENEMY_SPEED) {
+			changeAnimation(ENEMY_SPEED);
+			xVel = ENEMY_SPEED;
 		}
 		//IF THE BULLET IS LOW MOVE UP, ELSE MOVE DOWN
 		if ((bulletY != 0) && ((getRectangle().getY()+getRectangle().getHeight()/2) < bulletY)) {
 			if (getRectangle().getY() < 0) {
-				this.yVel = Constants.ENEMY_SPEED;
+				this.yVel = ENEMY_SPEED;
 			} else {
 				if (yVel == 0) {
-					yVel = -Constants.ENEMY_SPEED;
+					yVel = -ENEMY_SPEED;
 				}
 			}
 		}
 		else {
 			if (getRectangle().getY() > getScreenYMax() - getRectangle().getHeight()) {
-				yVel = -Constants.ENEMY_SPEED;
+				yVel = -ENEMY_SPEED;
 			} else {
 				if (yVel == 0) {
-					yVel = Constants.ENEMY_SPEED;
+					yVel = ENEMY_SPEED;
 				}
 			}
 
@@ -96,24 +90,21 @@ public abstract class Enemy extends Character implements AI {
 	
 	public void moveForward() {
 		Gdx.app.log("AI","Move Forward");
-		if (this.canDodge) {
-			if (this.directionFacing == Constants.RIGHT) {
-//				this.setNewBitmap(myApp.standardMoveIdleLeft[this.type-1], Constants.S_MOVE_DIVIDER);
-			} else {
-//				this.setNewBitmap(myApp.standardMoveIdle[this.type-1], Constants.S_MOVE_DIVIDER);
-			}	
+		if (this.xVel != -ENEMY_SPEED) {
+			changeAnimation(-ENEMY_SPEED);
 		}
+
 		this.sheilded = false;
-		this.xVel = -Constants.ENEMY_SPEED;
-//		this.yVel = 0;
+
+		this.xVel = -ENEMY_SPEED;
 
 		if (getRectangle().getY() < 0) {
-			this.yVel = Constants.ENEMY_SPEED;
+			this.yVel = ENEMY_SPEED;
 		} else {
 			this.yVel = 0;
 		}
 		if (getRectangle().getY() > getScreenYMax() - getRectangle().getHeight()) {
-			yVel = -Constants.ENEMY_SPEED;
+			yVel = -ENEMY_SPEED;
 		} else {
 			this.yVel = 0;
 		}
@@ -128,7 +119,7 @@ public abstract class Enemy extends Character implements AI {
 		//IS BULLET CLOSE? & CAN ENEMY SHIELD?
 		if (this.checkBulletClose(playerBullets) && this.canShield) {
 			if(!this.sheilded) {
-//				this.setNewBitmap(myApp.standardShield, Constants.S_SHIELD_DIVIDER);
+				shieldAnimation();
 			}
 			this.shield();
 		}//IS ENEMY IN LINE OF BULLET? & CAN ENEMY DODGE?
@@ -202,6 +193,28 @@ public abstract class Enemy extends Character implements AI {
 	private boolean checkShootDelay() {
 		return System.currentTimeMillis() - shootTime > Constants.SHOOT_DELAY;
 	}
+
+	public void update(Player player, ArrayList<Bullet> playerBullets, ArrayList<Bullet> enemyBullets){
+		decisionTree(player, playerBullets, enemyBullets);
+
+		super.update();
+
+		//check if player has collided, if so KILL!!!
+		if (this.getRectangle().overlaps(player.getRectangle())) {
+			Gdx.app.log("Death", "COLLIDED!");
+			player.setHealth(player.getHealth()-100);
+		}
+
+		//check if enemy gets to edge of screen, game over
+		if (this.getRectangle().getX() <= 0) {
+			Gdx.app.log("Death", "LET THROUGH! Type: " + type);
+			player.setHealth(player.getHealth()-100);
+		}
+	}
+
+	public abstract void changeAnimation(float newXVel);
+
+	public abstract void shieldAnimation();
 
 	public void setType(int type){
 		this.type = type;

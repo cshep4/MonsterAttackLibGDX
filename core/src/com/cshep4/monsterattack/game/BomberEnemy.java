@@ -12,8 +12,8 @@ public abstract class BomberEnemy extends Enemy {
 	//collision handling
 //	private Collision collision = new Collision();
 	
-	public BomberEnemy(Rectangle rectangle, Texture texture) {
-		super(rectangle, texture);
+	public BomberEnemy(Rectangle rectangle, Texture texture, int frameCols, int frameRows) {
+		super(rectangle, texture, frameCols, frameRows);
 	}
 	
 	@Override
