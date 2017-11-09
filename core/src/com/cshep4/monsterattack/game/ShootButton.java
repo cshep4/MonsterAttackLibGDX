@@ -6,6 +6,6 @@ import com.badlogic.gdx.math.Rectangle;
 public class ShootButton extends GameObject {
 
 	public ShootButton(Rectangle rectangle, Texture texture) {
-		super(rectangle, texture);
+		super(rectangle, texture, 1, 1);
 	}
 }

@@ -11,8 +11,8 @@ import java.util.Random;
 public abstract class ProducerEnemy extends Enemy {
     protected long spawnTime = System.currentTimeMillis();
 
-    public ProducerEnemy(Rectangle rectangle, Texture texture) {
-        super(rectangle, texture);
+    public ProducerEnemy(Rectangle rectangle, Texture texture, int frameCols, int frameRows) {
+        super(rectangle, texture, frameCols, frameRows);
 //        getRectangle().setX(xPos);
 //        getRectangle().setY(yPos);
     }
@@ -90,6 +90,18 @@ public abstract class ProducerEnemy extends Enemy {
             } else {
                 enemies.add(Create.bomber(x, y, type));
             }
+        }
+    }
+
+    public void update(Player player, ArrayList<Enemy> enemies){
+        decisionTree(enemies);
+
+        super.update();
+
+        //check if player has collided, if so KILL!!!
+        if (this.getRectangle().overlaps(player.getRectangle())) {
+            Gdx.app.log("Death", "COLLIDED!");
+            player.setHealth(player.getHealth()-100);
         }
     }
 }

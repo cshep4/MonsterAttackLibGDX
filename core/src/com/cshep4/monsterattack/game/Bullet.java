@@ -1,78 +1,25 @@
 package com.cshep4.monsterattack.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 
-import java.util.Collections;
 import java.util.List;
 
+import static com.cshep4.monsterattack.game.Constants.BULLET_SPEED;
+
 public class Bullet extends GameObject {
-//	protected int xPos;
-//	protected int yPos;
-	protected int xVel;	
-//	protected int width;
-//	protected int height;
-//	protected Rect bullet = new Rect();
-	
-//	public Bullet(int x, int y, int width, int height){
-//		xPos = x;
-//		yPos = y;
-//		this.width = width;
-//		this.height = height;
-//		xVel = Constants.BULLET_SPEED;
-//	}
+	protected int xVel;
 
 	public Bullet (Rectangle rectangle, Texture texture) {
-		super (rectangle, texture);
-		xVel = Constants.BULLET_SPEED;
+		super (rectangle, texture, 1, 1);
+		xVel = BULLET_SPEED;
 	}
-	
-	//Method to draw a rectangle on the screen
-//	public void drawRect(Paint p, Canvas c){
-//	    p.setStrokeWidth(3);
-//	    int left = this.xPos;
-//	    int top = this.yPos;
-//	    int right = this.width + this.xPos;
-//	    int bottom = this.height + this.yPos;
-//	    bullet.set(left,top,right,bottom);
-//	    p.setColor(Color.BLACK);
-//        c.drawRect(left, top, right, bottom, p);
-//	}
-//
-//	//Set the x of the rectangle
-//	public void setXPos(int x){
-//		this.xPos = x;
-//	}
-//
-//	//Set the y of the rectangle
-//	public void setYPos(int y){
-//		this.yPos = y;
-//	}
-//
-//	//Get the x of the rectangle
-//	public int getXPos() {
-//		return this.xPos;
-//	}
-//
-//	//Get the y of the rectangle
-//	public int getYPos (){
-//		return this.yPos;
-//	}
 
-	//Get the rect that holds the block co-ordinates
-//	public Rect getRect(){
-//		return bullet;
-//	}
-
-
-	public boolean update(List<Enemy> enemyList) {
+	public boolean update(List<Enemy> enemyList, List<ProducerEnemy> producerEnemyList) {
 		this.updatePosition();
-		for (Enemy enemy : enemyList) {
-			if (checkCollisions(enemy)) {
-				return true;
-			}
-		}
-		return false;
+		return enemyList.stream().anyMatch(this::checkCollisionsWithShield) ||
+				producerEnemyList.stream().anyMatch(this::checkCollisions);
 	}
 
 	public boolean update(Player player) {
@@ -88,6 +35,19 @@ public class Bullet extends GameObject {
 	public boolean checkCollisions(Character character) {
 		if (this.getRectangle().overlaps(character.getRectangle())) {
 			character.setHealth(character.getHealth()-100);
+			if (character instanceof Player) { Gdx.app.log("Death", "SHOT!"); }
+			collisionSound();
+			return true;
+		}
+		return false;
+	}
+
+	public boolean checkCollisionsWithShield(Enemy enemy) {
+		if (this.getRectangle().overlaps(enemy.getRectangle())) {
+			if (!enemy.isSheilded()) {
+				enemy.setHealth(enemy.getHealth() - 100);
+				collisionSound();
+			}
 			return true;
 		}
 		return false;
@@ -99,29 +59,9 @@ public class Bullet extends GameObject {
 	
 	public int getXVel() {
 		return this.xVel;
-	}	
-	
-//	//Set the width of the rectangle
-//	public void setWidth (int width){
-//		this.width = width;
-//	}
-//
-//	//Set the height of the rectangle
-//	public void setHeight (int height){
-//		this.height = height;
-//	}
-//
-//	//Get the width of the rectangle
-//	public int getWidth() {
-//		return this.width;
-//	}
-//
-//	//Get the height of the rectangle
-//	public int getHeight (){
-//		return this.height;
-//	}
-//
-//	public void collisionSound() {
-//
-//	}
+	}
+
+	public void collisionSound() {
+		Sounds.playEnemyHit();
+	}
 }

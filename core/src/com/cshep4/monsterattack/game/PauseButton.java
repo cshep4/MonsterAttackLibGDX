@@ -6,6 +6,6 @@ import com.badlogic.gdx.math.Rectangle;
 public class PauseButton extends GameObject {
 	
 	public PauseButton(Rectangle rectangle, Texture texture) {
-		super(rectangle, texture);
+		super(rectangle, texture, 1, 1);
 	}
 }
