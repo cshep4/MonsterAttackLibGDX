@@ -11,7 +11,9 @@ import static com.cshep4.monsterattack.game.Constants.B3_SPRITE_MOVE;
 import static com.cshep4.monsterattack.game.Constants.B4_SPRITE_MOVE;
 import static com.cshep4.monsterattack.game.Constants.BP_SPRITE_IDLE;
 import static com.cshep4.monsterattack.game.Constants.CHARACTER_IDLE;
+import static com.cshep4.monsterattack.game.Constants.ENEMY_BULLET;
 import static com.cshep4.monsterattack.game.Constants.PAUSE_BUTTON;
+import static com.cshep4.monsterattack.game.Constants.PLAYER_BULLET;
 import static com.cshep4.monsterattack.game.Constants.S1_SPRITE_MOVE_LEFT;
 import static com.cshep4.monsterattack.game.Constants.S2_SPRITE_MOVE_LEFT;
 import static com.cshep4.monsterattack.game.Constants.S3_SPRITE_MOVE_LEFT;
@@ -119,9 +121,16 @@ public final class Create {
         return new PauseButton(rectangle, texture);
     }
 
-    public static Bullet bullet(float x, float y, float width, float height) {
+    public static Bullet playerBullet(float x, float y, float width, float height) {
         Rectangle rectangle = new Rectangle().setPosition(x,y).setSize(width, height);
-        Texture texture = new Texture(Gdx.files.internal(SHOOT_BUTTON));
+        Texture texture = new Texture(Gdx.files.internal(PLAYER_BULLET));
+
+        return new Bullet(rectangle, texture);
+    }
+
+    public static Bullet enemyBullet(float x, float y, float width, float height) {
+        Rectangle rectangle = new Rectangle().setPosition(x,y).setSize(width, height);
+        Texture texture = new Texture(Gdx.files.internal(ENEMY_BULLET));
 
         return new Bullet(rectangle, texture);
     }

@@ -2,7 +2,10 @@ package com.cshep4.monsterattack.game;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
+
 import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
+import static com.cshep4.monsterattack.game.Constants.CHARACTER_HEIGHT_DIVIDER;
+import static com.cshep4.monsterattack.game.Constants.CHARACTER_WIDTH_DIVIDER;
 
 
 public abstract class Character extends GameObject {
@@ -13,8 +16,8 @@ public abstract class Character extends GameObject {
     public Character(Rectangle rectangle, Texture texture, int frameCols, int frameRows) {
         super(rectangle, texture, frameCols, frameRows);
         health = 100;
-        getRectangle().setWidth(getScreenXMax() / Constants.CHARACTER_WIDTH_DIVIDER);
-        getRectangle().setHeight(getScreenXMax() / Constants.CHARACTER_HEIGHT_DIVIDER);
+        getRectangle().setWidth(getScreenXMax() / CHARACTER_WIDTH_DIVIDER);
+        getRectangle().setHeight(getScreenXMax() / CHARACTER_HEIGHT_DIVIDER);
     }
 
     public void update(){
