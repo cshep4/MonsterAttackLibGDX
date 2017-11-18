@@ -4,10 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 
-import java.util.List;
-
 import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
 import static com.cshep4.monsterattack.GameScreen.getScreenYMax;
+import static com.cshep4.monsterattack.game.Constants.BULLET_HEIGHT_DIVIDER;
+import static com.cshep4.monsterattack.game.Constants.BULLET_WIDTH_DIVIDER;
 import static com.cshep4.monsterattack.game.Constants.CHARACTER_IDLE;
 import static com.cshep4.monsterattack.game.Constants.CHARACTER_MOVE_LEFT;
 import static com.cshep4.monsterattack.game.Constants.CHARACTER_MOVE_RIGHT;
@@ -87,9 +87,9 @@ public class Player extends Character {
 	public Bullet shoot() {
 		float x = getRectangle().getX()+(getRectangle().getWidth() /2);
 		float y = getRectangle().getY()+(getRectangle().getHeight() /2);
-		float width = getRectangle().getWidth() / Constants.BULLET_SIZE_DIVIDER;
-		float height = getRectangle().getHeight() / Constants.BULLET_SIZE_DIVIDER;
+		float width = getRectangle().getWidth() / BULLET_WIDTH_DIVIDER;
+		float height = getRectangle().getHeight() / BULLET_HEIGHT_DIVIDER;
 
-		return Create.bullet(x, y, width, height);
+		return Create.playerBullet(x, y, width, height);
 	}
 }

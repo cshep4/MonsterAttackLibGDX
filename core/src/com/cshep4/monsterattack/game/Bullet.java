@@ -47,6 +47,8 @@ public class Bullet extends GameObject {
 			if (!enemy.isSheilded()) {
 				enemy.setHealth(enemy.getHealth() - 100);
 				collisionSound();
+			} else {
+				enemy.setShieldHealth(enemy.getShieldHealth() - 100);
 			}
 			return true;
 		}

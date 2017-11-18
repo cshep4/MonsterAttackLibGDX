@@ -1,11 +1,5 @@
 package com.cshep4.monsterattack.game;
 
-import java.util.ArrayList;
-import java.util.Random;
-
-import com.badlogic.gdx.Gdx;
-
-
 public final class Mutation {
 //	private static long mutateTime = 0;//System.currentTimeMillis();
 //	MyApp myApp = MyApp.getInstance();
