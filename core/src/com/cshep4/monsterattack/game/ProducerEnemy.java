@@ -3,10 +3,14 @@ package com.cshep4.monsterattack.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
-import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
 
 import java.util.ArrayList;
 import java.util.Random;
+
+import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
+import static com.cshep4.monsterattack.game.Constants.CHARACTER_WIDTH_DIVIDER;
+import static com.cshep4.monsterattack.game.Constants.PRODCUER_SPAWN_DELAY_MAX;
+import static com.cshep4.monsterattack.game.Constants.PRODCUER_SPAWN_DELAY_MIN;
 
 public abstract class ProducerEnemy extends Enemy {
     protected long spawnTime = System.currentTimeMillis();
@@ -36,13 +40,13 @@ public abstract class ProducerEnemy extends Enemy {
 
     private boolean checkSpawnDelay() {
         Random rand = new Random();
-        int delay = rand.nextInt(Constants.PRODCUER_SPAWN_DELAY_MAX) + Constants.PRODCUER_SPAWN_DELAY_MIN;
+        int delay = rand.nextInt(PRODCUER_SPAWN_DELAY_MAX) + PRODCUER_SPAWN_DELAY_MIN;
 
         return System.currentTimeMillis() - spawnTime > delay;
     }
 
     private void produce(ArrayList<Enemy> enemies) {
-        float width = getScreenXMax() / Constants.CHARACTER_WIDTH_DIVIDER;
+        float width = getScreenXMax() / CHARACTER_WIDTH_DIVIDER;
         float x = getRectangle().getX() - width;
         float y = getRectangle().getY();
         Gdx.app.log("AI", "Produce");

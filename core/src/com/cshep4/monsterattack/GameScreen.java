@@ -24,7 +24,6 @@ import java.util.ArrayList;
 
 import static com.cshep4.monsterattack.game.Constants.BACKGROUND;
 import static com.cshep4.monsterattack.game.Constants.BUTTON_SIZE_DIVIDER;
-import static com.cshep4.monsterattack.game.Constants.PLAYER_SPEED;
 
 
 public class GameScreen implements Screen {
@@ -37,7 +36,7 @@ public class GameScreen implements Screen {
 
     private State state = State.RUN;
     private boolean justPaused = false;
-    private int pressDownPointer;
+    private int pressDownPointer = -1;
 
     // A variable for tracking elapsed time for the animation
     float stateTime;
@@ -243,7 +242,9 @@ public class GameScreen implements Screen {
         //-----------------------
 
         //----------------ENEMY POSITIONS
-        enemies.forEach(enemy -> enemy.update(player, playerBullets, enemyBullets));
+        enemies.forEach(enemy -> {
+            enemy.update(player, playerBullets, enemyBullets);
+        });
         producerEnemies.forEach(enemy -> enemy.update(player, enemies));
         //-----------------------
 
@@ -311,9 +312,9 @@ public class GameScreen implements Screen {
 
                     //-------------------------------------------------MOVE
                     else {
-//                        setPressDownX(xPos);
-//                        setPressDownY(yPos);
-                        setPressDownPointer(pointer);
+                        if (getPressDownPointer() == -1) {
+                            setPressDownPointer(pointer);
+                        }
                     }
                 }
                 //---------------------------------------------------------

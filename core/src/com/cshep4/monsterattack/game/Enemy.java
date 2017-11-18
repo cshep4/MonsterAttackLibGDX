@@ -7,8 +7,13 @@ import com.badlogic.gdx.math.Rectangle;
 import java.util.ArrayList;
 import java.util.function.Predicate;
 
+import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
 import static com.cshep4.monsterattack.GameScreen.getScreenYMax;
+import static com.cshep4.monsterattack.game.Constants.BOMB_SIZE_DIVIDER;
+import static com.cshep4.monsterattack.game.Constants.BULLET_HEIGHT_DIVIDER;
+import static com.cshep4.monsterattack.game.Constants.BULLET_WIDTH_DIVIDER;
 import static com.cshep4.monsterattack.game.Constants.ENEMY_SPEED;
+import static com.cshep4.monsterattack.game.Constants.SHOOT_DELAY;
 
 public abstract class Enemy extends Character implements AI {
 	protected boolean canShoot;
@@ -19,6 +24,7 @@ public abstract class Enemy extends Character implements AI {
 	private float bulletY;
 	private long shootTime = System.currentTimeMillis();
 	protected int type;
+	protected int shieldHealth;
 	
 	public Enemy(Rectangle rectangle, Texture texture, int frameCols, int frameRows) {
 		super(rectangle, texture, frameCols, frameRows);
@@ -27,12 +33,11 @@ public abstract class Enemy extends Character implements AI {
 	
 	public Bullet shoot(){
 		// create and return a bullet
-		this.sheilded = false;
 		shootTime = System.currentTimeMillis();
 		Bullet bullet;
 		if (this.canShootBombs) {	
-			float w = getRectangle().getWidth()/ Constants.BULLET_SIZE_DIVIDER *6;
-			float h = getRectangle().getHeight()/ Constants.BULLET_SIZE_DIVIDER *6;
+			float w = (getRectangle().getWidth() / BOMB_SIZE_DIVIDER) * 4;
+			float h = (getRectangle().getHeight() / BOMB_SIZE_DIVIDER) * 4;
 			float x = getRectangle().getX() +(getRectangle().getWidth()/2)-w/2;
 			float y = getRectangle().getY() +(getRectangle().getHeight()/2)-h/2;
 			bullet = Create.bomb(x, y, w, h);
@@ -41,9 +46,9 @@ public abstract class Enemy extends Character implements AI {
 		else {
 			float x = getRectangle().getX()+(getRectangle().getWidth() /2);
 			float y = getRectangle().getY()+(getRectangle().getHeight() /2);
-			float w = getRectangle().getWidth() / Constants.BULLET_SIZE_DIVIDER;
-			float h = getRectangle().getHeight() / Constants.BULLET_SIZE_DIVIDER;
-			bullet = Create.bullet(x, y, w, h);
+			float w = getRectangle().getWidth() / BULLET_WIDTH_DIVIDER;
+			float h = getRectangle().getHeight() / BULLET_HEIGHT_DIVIDER;
+			bullet = Create.enemyBullet(x, y, w, h);
 			Gdx.app.log("AI","Shoot Bullet");
 		}
 		bullet.setXVel(-bullet.getXVel());
@@ -59,15 +64,13 @@ public abstract class Enemy extends Character implements AI {
 	
 	public void dodge() {
 		Gdx.app.log("AI","Dodge");
-		//String string = "BulletY: " + Integer.toString(bulletY);
-		//Log.v("BulletPos",string);
-		this.sheilded = false;		
-		if (xVel != ENEMY_SPEED) {
+
+		if (xVel != ENEMY_SPEED && getRectangle().getX() + getRectangle().getWidth() < getScreenXMax()) {
 			changeAnimation(ENEMY_SPEED);
 			xVel = ENEMY_SPEED;
 		}
 		//IF THE BULLET IS LOW MOVE UP, ELSE MOVE DOWN
-		if ((bulletY != 0) && ((getRectangle().getY()+getRectangle().getHeight()/2) < bulletY)) {
+		if ((bulletY != 0) && (getRectangle().getY()+(getRectangle().getHeight()/2) < bulletY)) {
 			if (getRectangle().getY() < 0) {
 				this.yVel = ENEMY_SPEED;
 			} else {
@@ -77,7 +80,7 @@ public abstract class Enemy extends Character implements AI {
 			}
 		}
 		else {
-			if (getRectangle().getY() > getScreenYMax() - getRectangle().getHeight()) {
+			if (getRectangle().getY() + getRectangle().getHeight() > getScreenYMax()) {
 				yVel = -ENEMY_SPEED;
 			} else {
 				if (yVel == 0) {
@@ -94,8 +97,6 @@ public abstract class Enemy extends Character implements AI {
 			changeAnimation(-ENEMY_SPEED);
 		}
 
-		this.sheilded = false;
-
 		this.xVel = -ENEMY_SPEED;
 
 		if (getRectangle().getY() < 0) {
@@ -103,10 +104,12 @@ public abstract class Enemy extends Character implements AI {
 		} else {
 			this.yVel = 0;
 		}
-		if (getRectangle().getY() > getScreenYMax() - getRectangle().getHeight()) {
+		if (getRectangle().getY() + getRectangle().getHeight() > getScreenYMax()) {
 			yVel = -ENEMY_SPEED;
 		} else {
-			this.yVel = 0;
+			if (this.yVel != ENEMY_SPEED) {
+				this.yVel = 0;
+			}
 		}
 	}
 	
@@ -117,42 +120,45 @@ public abstract class Enemy extends Character implements AI {
 	public void decisionTree(Player player, ArrayList<Bullet> playerBullets, ArrayList<Bullet> enemyBullets) {
 		// check decision		
 		//IS BULLET CLOSE? & CAN ENEMY SHIELD?
-		if (this.checkBulletClose(playerBullets) && this.canShield) {
+		if (canShield() && this.checkBulletClose(playerBullets)) {
 			if(!this.sheilded) {
 				shieldAnimation();
 			}
 			this.shield();
 		}//IS ENEMY IN LINE OF BULLET? & CAN ENEMY DODGE?
 		else if (checkEnemyInLineOfBullet(playerBullets) && this.canDodge) {
-			if(this.sheilded) {
-//				this.setNewBitmap(myApp.standardMoveIdle[3], Constants.S_MOVE_DIVIDER);
-			}
+			this.sheilded = false;
 			this.dodge();
 		}//IS PLAYER IN LINE OF ENEMY SIGHT? & CAN ENEMY SHOOT?
 		else if (checkPlayerInLineOfSight(player) && this.canShoot) {
-			if(this.sheilded) {
-//				this.setNewBitmap(myApp.standardMoveIdle[3], Constants.S_MOVE_DIVIDER);
-			}			
+			this.sheilded = false;
 			if (checkShootDelay()) {
 				enemyBullets.add(this.shoot());
 			}
+			this.moveForward();
 		}//ELSE RUN FORWARD
 		else {
-			if(this.sheilded) {
-//				this.setNewBitmap(myApp.standardMoveIdle[3], Constants.S_MOVE_DIVIDER);
-			}			
+			this.sheilded = false;
 			this.moveForward();
 		}
 		this.update();
 	}
 	
 	public boolean checkBulletClose(ArrayList<Bullet> playerBullets) {
+		if (playerBullets.size() == 0) {
+			return false;
+		}
+
 		Predicate<Bullet> inLineAndClose = (this::checkBulletInLineAndClose);
 
 		return playerBullets.stream().anyMatch(inLineAndClose);
 	}
 
 	public boolean checkEnemyInLineOfBullet(ArrayList<Bullet> playerBullets) {
+		if (playerBullets.size() == 0) {
+			return false;
+		}
+
 		Predicate<Bullet> inLine = (this::checkBulletInLine);
 
 		return playerBullets.stream().anyMatch(inLine);
@@ -191,13 +197,13 @@ public abstract class Enemy extends Character implements AI {
 	}
 	
 	private boolean checkShootDelay() {
-		return System.currentTimeMillis() - shootTime > Constants.SHOOT_DELAY;
+		return System.currentTimeMillis() - shootTime > SHOOT_DELAY;
 	}
 
 	public void update(Player player, ArrayList<Bullet> playerBullets, ArrayList<Bullet> enemyBullets){
 		decisionTree(player, playerBullets, enemyBullets);
 
-		super.update();
+//		super.update();
 
 		//check if player has collided, if so KILL!!!
 		if (this.getRectangle().overlaps(player.getRectangle())) {
@@ -210,6 +216,10 @@ public abstract class Enemy extends Character implements AI {
 			Gdx.app.log("Death", "LET THROUGH! Type: " + type);
 			player.setHealth(player.getHealth()-100);
 		}
+	}
+
+	public boolean canShield() {
+		return this.canShield && shieldHealth > 0;
 	}
 
 	public abstract void changeAnimation(float newXVel);
@@ -278,5 +288,13 @@ public abstract class Enemy extends Character implements AI {
 
 	public void setShootTime(long shootTime) {
 		this.shootTime = shootTime;
+	}
+
+	public int getShieldHealth() {
+		return shieldHealth;
+	}
+
+	public void setShieldHealth(int shieldHealth) {
+		this.shieldHealth = shieldHealth;
 	}
 }

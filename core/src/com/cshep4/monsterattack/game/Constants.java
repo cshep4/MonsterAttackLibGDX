@@ -10,13 +10,16 @@ public final class Constants {
 	public static final int CHARACTER_WIDTH_DIVIDER = 14;
 	public static final int CHARACTER_HEIGHT_DIVIDER = 10;
 
-	public static final int BULLET_SIZE_DIVIDER = 5;
+	public static final int BULLET_WIDTH_DIVIDER = 3;
+	public static final int BULLET_HEIGHT_DIVIDER = 5;
+
+	public static final int BOMB_SIZE_DIVIDER = 5;
 
 	public static final int BUTTON_SIZE_DIVIDER = 10;
 
 	public static final int BULLET_SPEED = 10;
 
-	public static final float ENEMY_SPEED = 1.5f;
+	public static final float ENEMY_SPEED = 2;
 	public static final float PLAYER_SPEED = 2;
 
 	public static final int SHOOT_DELAY = 1000;
@@ -30,7 +33,7 @@ public final class Constants {
 	public static final int MUTATE_DELAY_MIN = 3000;
 	public static final int MUTATE_DELAY_MAX = 4000;
 
-	public static final int MAX_ENEMIES = 4;
+	public static final int MAX_ENEMIES = 2;
 	
 	//sprite dividers
 	public static final int CHARACTER_IDLE_DIVIDER = 2;
@@ -98,4 +101,8 @@ public final class Constants {
 	public static final String BACKGROUND = "background_small.png";
 	public static final String PAUSE_BUTTON = "pause_button.png";
 	public static final String SHOOT_BUTTON = "shoot_button.png";
+
+	// Bullet
+	public static final String PLAYER_BULLET = "bullet.png";
+	public static final String ENEMY_BULLET = "bullet1.png";
 }

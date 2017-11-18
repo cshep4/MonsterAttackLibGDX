@@ -34,24 +34,28 @@ public class Bomber extends BomberEnemy implements Mutatable {
 			canShield = false;
 			canShootBombs = false;
 			health = 100;
+			shieldHealth = 0;
 		} else if (type == 2) {
 			canShoot = true;
 			canDodge = false;
 			canShield = false;
 			canShootBombs = false;
 			health = 100;
+			shieldHealth = 0;
 		} else if (type == 3) {
 			canShoot = true;
 			canDodge = false;
 			canShield = false;
 			canShootBombs = false;
 			health = 200;
+			shieldHealth = 0;
 		} else if (type == 4) {
 			canShoot = true;
 			canDodge = false;
 			canShield = false;
 			canShootBombs = true;
 			health = 200;
+			shieldHealth = 0;
 		}
 	}
 

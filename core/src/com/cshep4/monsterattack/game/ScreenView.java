@@ -1,11 +1,5 @@
 package com.cshep4.monsterattack.game;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Random;
-
-
 //import android.content.Context;
 //import android.content.Intent;
 //import android.content.res.Resources;

@@ -4,8 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 
-import java.util.ArrayList;
-
 import static com.cshep4.monsterattack.game.Constants.S1_SPRITE_MOVE_LEFT;
 import static com.cshep4.monsterattack.game.Constants.S1_SPRITE_MOVE_RIGHT;
 import static com.cshep4.monsterattack.game.Constants.S2_SPRITE_MOVE_LEFT;
@@ -40,21 +38,25 @@ public class Standard extends Enemy implements Mutatable {
 			canDodge = false;
 			canShield = false;
 			canShootBombs = false;
+			shieldHealth = 0;
 		} else if (type == 2) {
 			canShoot = true;
 			canDodge = false;
 			canShield = false;
 			canShootBombs = false;
+			shieldHealth = 0;
 		} else if (type == 3) {
 			canShoot = true;
 			canDodge = true;
 			canShield = false;
 			canShootBombs = false;
+			shieldHealth = 0;
 		} else if (type == 4) {
 			canShoot = true;
 			canDodge = true;
 			canShield = true;
 			canShootBombs = false;
+			shieldHealth = 200;
 		}
 	}
 
