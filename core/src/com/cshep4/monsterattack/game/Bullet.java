@@ -29,7 +29,7 @@ public class Bullet extends GameObject {
 
 	public void updatePosition(){
     	//Set the speed of the bullet
-    	getRectangle().setX(getRectangle().getX() + this.xVel);
+    	getRectangle().setX(getRectangle().getX() + (this.xVel*Gdx.graphics.getDeltaTime()));
 	}
 
 	public boolean checkCollisions(Character character) {
@@ -64,6 +64,6 @@ public class Bullet extends GameObject {
 	}
 
 	public void collisionSound() {
-		Sounds.playEnemyHit();
+		SoundWrapper.playEnemyHit();
 	}
 }

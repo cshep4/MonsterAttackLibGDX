@@ -5,5 +5,6 @@ public enum State
     PAUSE,
     RUN,
     RESUME,
-    STOPPED
+    STOPPED,
+    GAME_OVER
 }

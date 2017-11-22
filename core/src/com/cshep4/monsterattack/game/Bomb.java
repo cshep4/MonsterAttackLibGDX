@@ -10,7 +10,7 @@ public class Bomb extends Bullet {
 	}
 	
 	public void collisionSound() {
-		Sounds.playExplode();
+		SoundWrapper.playExplode();
 	}	
 
 }

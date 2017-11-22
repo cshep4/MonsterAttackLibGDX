@@ -15,7 +15,7 @@ import static com.cshep4.monsterattack.game.Constants.S4_SPRITE_MOVE_RIGHT;
 import static com.cshep4.monsterattack.game.Constants.S4_SPRITE_SHIELD;
 
 public class Standard extends Enemy implements Mutatable {
-	private static long mutateTime = 0;
+	private static long mutateTime = System.currentTimeMillis();
 	
 	public Standard(Rectangle rectangle, Texture texture, int frameCols, int frameRows, int type) {
 		super(rectangle, texture, frameCols, frameRows);
@@ -110,7 +110,7 @@ public class Standard extends Enemy implements Mutatable {
 	@Override
 	public void mutate() {
 		Gdx.app.log("Mutation", type + "->" + (type+1));
-		Sounds.playMutateStandard();
+		SoundWrapper.playMutateStandard();
 		this.type += 1;
 		changeAnimation(this.xVel);
 		setAbility();
