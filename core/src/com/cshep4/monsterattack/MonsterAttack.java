@@ -1,8 +1,11 @@
 package com.cshep4.monsterattack;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.cshep4.monsterattack.game.SoundWrapper;
 
 public class MonsterAttack  extends Game {
 
@@ -14,12 +17,15 @@ public class MonsterAttack  extends Game {
 	SpriteBatch batch;
 	BitmapFont font;
 
+	static public Skin gameSkin;
+
 	@Override
 	public void create () {
 
 		batch = new SpriteBatch();
 		font = new BitmapFont();
 
+		gameSkin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
 		this.setScreen(new MainMenuScreen(this));
 	}
 
@@ -31,5 +37,7 @@ public class MonsterAttack  extends Game {
 	@Override
 	public void dispose () {
 		batch.dispose();
+		SoundWrapper.dispose();
+		screen.dispose();
 	}
 }

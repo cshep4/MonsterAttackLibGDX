@@ -24,6 +24,7 @@ import java.util.ArrayList;
 
 import static com.cshep4.monsterattack.game.Constants.BACKGROUND;
 import static com.cshep4.monsterattack.game.Constants.BUTTON_SIZE_DIVIDER;
+import static com.cshep4.monsterattack.game.State.GAME_OVER;
 
 
 public class GameScreen implements Screen {
@@ -34,17 +35,24 @@ public class GameScreen implements Screen {
     private OrthographicCamera camera;
     private float width, height;
 
+    // A variable for tracking elapsed time for the animation
+    private float stateTime;
+
+    //----------------STATE
     private State state = State.RUN;
     private boolean justPaused = false;
     private int pressDownPointer = -1;
+    //---------------------
 
-    // A variable for tracking elapsed time for the animation
-    float stateTime;
+    //------------GAME OVER
+    private long gameOverTime = 0;
+    private static final int GAME_OVER_DELAY = 1000;
+    //---------------------
 
     //---------------PLAYER
     private final int PLAYER_START_X = 50;
     private final int PLAYER_START_Y = 50;
-    Player player = Create.player(PLAYER_START_X, PLAYER_START_Y);
+    private Player player = Create.player(PLAYER_START_X, PLAYER_START_Y);
     //----------------------
 
     //---------------ENEMIES
@@ -110,6 +118,12 @@ public class GameScreen implements Screen {
             case RESUME:
                 this.state = State.RUN;
                 break;
+            case GAME_OVER:
+                if (System.currentTimeMillis() - gameOverTime > GAME_OVER_DELAY) {
+                    game.setScreen(new GameOverScreen(game));
+                    this.dispose();
+                }
+                break;
             default:
                 this.state = State.RUN;
                 break;
@@ -121,7 +135,7 @@ public class GameScreen implements Screen {
         processUserInput();
 
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // This cryptic line clears the screen.
-        updateStateTime();
+        updateStateTime(); // update time in animation state
 
         game.batch.begin();
 
@@ -144,9 +158,12 @@ public class GameScreen implements Screen {
 
         game.batch.end();
 
-//        if (gameOver()) {
-//            game.setScreen(new GameOverScreen(game));
-//        }
+        if (gameOver()) {
+            this.state = GAME_OVER;
+            if (gameOverTime == 0) {
+                gameOverTime = System.currentTimeMillis();
+            }
+        }
     }
 
     private void updateStateTime() {
@@ -201,7 +218,7 @@ public class GameScreen implements Screen {
         pauseButton.getTexture().dispose();
 
         //---------------GAME
-        game.batch.dispose();
+//        game.batch.dispose();
         //----------------------
     }
 
@@ -242,9 +259,7 @@ public class GameScreen implements Screen {
         //-----------------------
 
         //----------------ENEMY POSITIONS
-        enemies.forEach(enemy -> {
-            enemy.update(player, playerBullets, enemyBullets);
-        });
+        enemies.forEach(enemy -> enemy.update(player, playerBullets, enemyBullets));
         producerEnemies.forEach(enemy -> enemy.update(player, enemies));
         //-----------------------
 
@@ -261,7 +276,9 @@ public class GameScreen implements Screen {
         Spawn.spawnEnemies(enemies, producerEnemies);
         //-----------------------
 
+        //----------------DEBUG ONLY - ENEMIES REACHING END OF SCREEN WILL CAUSE GAME OVER
         enemies.removeIf(enemy -> enemy.getRectangle().getX() + enemy.getRectangle().getWidth() < 0);
+        //-----------------------
     }
 
     private void updateBullets() {
