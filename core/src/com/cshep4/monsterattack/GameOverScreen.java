@@ -36,6 +36,7 @@ public class GameOverScreen implements Screen {
         //------------------------------------------------------------------------------------------
 
         if (Gdx.input.isTouched()) {
+            game.getScreen().dispose();
             game.setScreen(new MainMenuScreen(game));
         }
 

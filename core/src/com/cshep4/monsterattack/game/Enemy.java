@@ -196,7 +196,7 @@ public abstract class Enemy extends Character implements AI {
 		return playerTop > bottom && playerBottom < top && playerRight < left;
 	}
 	
-	private boolean checkShootDelay() {
+	protected boolean checkShootDelay() {
 		return System.currentTimeMillis() - shootTime > SHOOT_DELAY;
 	}
 

@@ -1,5 +1,6 @@
 package com.cshep4.monsterattack.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 
@@ -22,8 +23,8 @@ public abstract class Character extends GameObject {
 
     public void update(){
         //Set the speed of the object
-        this.getRectangle().setX(this.getRectangle().getX() + this.xVel);
-        this.getRectangle().setY(this.getRectangle().getY() + this.yVel);
+        this.getRectangle().setX(this.getRectangle().getX() + (this.xVel* Gdx.graphics.getDeltaTime()));
+        this.getRectangle().setY(this.getRectangle().getY() + (this.yVel*Gdx.graphics.getDeltaTime()));
     }
 
     public int getHealth() {

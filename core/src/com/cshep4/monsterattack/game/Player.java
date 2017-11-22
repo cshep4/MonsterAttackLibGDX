@@ -29,8 +29,8 @@ public class Player extends Character {
 			yVel = 0;
 		}
 
-		getRectangle().setX(getRectangle().getX()+xVel);
-		getRectangle().setY(getRectangle().getY()+yVel);
+		getRectangle().setX(getRectangle().getX()+(xVel*Gdx.graphics.getDeltaTime()));
+		getRectangle().setY(getRectangle().getY()+(yVel*Gdx.graphics.getDeltaTime()));
 	}
 
 	public void move(float xPos, float yPos) {

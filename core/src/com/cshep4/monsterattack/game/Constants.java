@@ -17,10 +17,10 @@ public final class Constants {
 
 	public static final int BUTTON_SIZE_DIVIDER = 10;
 
-	public static final int BULLET_SPEED = 10;
+	public static final int BULLET_SPEED = 600;
 
-	public static final float ENEMY_SPEED = 2;
-	public static final float PLAYER_SPEED = 2;
+	public static final float ENEMY_SPEED = 150;
+	public static final float PLAYER_SPEED = 150;
 
 	public static final int SHOOT_DELAY = 1000;
 
@@ -30,10 +30,10 @@ public final class Constants {
 	public static final int PRODCUER_SPAWN_DELAY_MIN = 1500;
 	public static final int PRODCUER_SPAWN_DELAY_MAX = 2500;
 
-	public static final int MUTATE_DELAY_MIN = 3000;
-	public static final int MUTATE_DELAY_MAX = 4000;
+	public static final int MUTATE_DELAY_MIN = 2000;
+	public static final int MUTATE_DELAY_MAX = 10000;
 
-	public static final int MAX_ENEMIES = 2;
+	public static final int MAX_ENEMIES = 1;
 	
 	//sprite dividers
 	public static final int CHARACTER_IDLE_DIVIDER = 2;
@@ -90,6 +90,7 @@ public final class Constants {
 	public static final String B3_SPRITE_HIT = "b3_gothit.png";
 	public static final String B4_SPRITE_HIT = "b4_gothit.png";
 //	public static final String BP_SPRITE_HIT = "";
+	public static final String EXPLOSION = "explosion.png";
 
 	// Character
 	public static final String CHARACTER_IDLE = "idle.png";
