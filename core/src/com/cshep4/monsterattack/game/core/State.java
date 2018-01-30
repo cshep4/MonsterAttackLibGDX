@@ -1,4 +1,4 @@
-package com.cshep4.monsterattack.game;
+package com.cshep4.monsterattack.game.core;
 
 public enum State
 {
