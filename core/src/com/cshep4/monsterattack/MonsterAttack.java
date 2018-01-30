@@ -5,7 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.cshep4.monsterattack.game.SoundWrapper;
+import com.cshep4.monsterattack.game.core.SoundWrapper;
 
 public class MonsterAttack  extends Game {
 
@@ -26,7 +26,7 @@ public class MonsterAttack  extends Game {
 		font = new BitmapFont();
 
 		gameSkin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
-		this.setScreen(new MainMenuScreen(this));
+		setScreen(new MainMenuScreen(this));
 	}
 
 	@Override

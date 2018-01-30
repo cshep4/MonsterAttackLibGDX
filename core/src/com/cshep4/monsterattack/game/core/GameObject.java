@@ -1,23 +1,25 @@
-package com.cshep4.monsterattack.game;
+package com.cshep4.monsterattack.game.core;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
-import static com.cshep4.monsterattack.game.Constants.FRAME_RATE;
+import lombok.Data;
 
+@Data
 public abstract class GameObject {
     private Rectangle rectangle;
     private Texture texture;
     private Animation<TextureRegion> animation;
-    private int frameCols, frameRows;
+    private int frameCols;
+    private int frameRows;
 
     public GameObject(Rectangle rectangle, Texture texture, int frameCols, int frameRows) {
         this.rectangle = rectangle;
         this.texture = texture;
 
-        this.createAnimation(frameCols, frameRows);
+        createAnimation(frameCols, frameRows);
     }
 
     private void createAnimation(int frameCols, int frameRows) {
@@ -38,52 +40,21 @@ public abstract class GameObject {
             }
         }
 
-        float frameNumber = frameCols * frameRows;
-        float frameDuration = frameNumber / FRAME_RATE;
-
         // Initialize the Animation with the frame interval and array of frames
-        animation = new Animation<TextureRegion>(0.1f, frames);
+        animation = new Animation<>(0.1f, frames);
     }
 
     public void changeAnimation(Texture texture, int frameCols, int frameRows) {
-        this.texture.dispose();
+        texture.dispose();
         this.texture = texture;
-        this.createAnimation(frameCols, frameRows);
+        createAnimation(frameCols, frameRows);
     }
 
-    public Rectangle getRectangle() { return rectangle; }
-
-    public void setRectangle(Rectangle rectangle) { this.rectangle = rectangle; }
-
-    public Texture getTexture() {
-        return texture;
+    protected float getMidX() {
+        return rectangle.getX()+(rectangle.getWidth()/2);
     }
 
-    public void setTexture(Texture texture) {
-        this.texture = texture;
-    }
-
-    public Animation<TextureRegion> getAnimation() {
-        return animation;
-    }
-
-    public void setAnimation(Animation<TextureRegion> animation) {
-        this.animation = animation;
-    }
-
-    public int getFrameCols() {
-        return frameCols;
-    }
-
-    public void setFrameCols(int frameCols) {
-        this.frameCols = frameCols;
-    }
-
-    public int getFrameRows() {
-        return frameRows;
-    }
-
-    public void setFrameRows(int frameRows) {
-        this.frameRows = frameRows;
+    protected float getMidY() {
+        return rectangle.getY()+(rectangle.getHeight()/2);
     }
 }
