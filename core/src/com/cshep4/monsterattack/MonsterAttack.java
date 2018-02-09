@@ -17,15 +17,12 @@ public class MonsterAttack  extends Game {
 	SpriteBatch batch;
 	BitmapFont font;
 
-	static public Skin gameSkin;
-
 	@Override
 	public void create () {
 
 		batch = new SpriteBatch();
 		font = new BitmapFont();
 
-		gameSkin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
 		setScreen(new MainMenuScreen(this));
 	}
 

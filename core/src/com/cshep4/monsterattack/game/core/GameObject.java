@@ -7,6 +7,8 @@ import com.badlogic.gdx.math.Rectangle;
 
 import lombok.Data;
 
+import static com.cshep4.monsterattack.game.constants.Constants.FRAME_RATE;
+
 @Data
 public abstract class GameObject {
     private Rectangle rectangle;
@@ -18,6 +20,7 @@ public abstract class GameObject {
     public GameObject(Rectangle rectangle, Texture texture, int frameCols, int frameRows) {
         this.rectangle = rectangle;
         this.texture = texture;
+        animation = null;
 
         createAnimation(frameCols, frameRows);
     }
@@ -45,16 +48,49 @@ public abstract class GameObject {
     }
 
     public void changeAnimation(Texture texture, int frameCols, int frameRows) {
-        texture.dispose();
+        this.texture.dispose();
         this.texture = texture;
         createAnimation(frameCols, frameRows);
     }
 
-    protected float getMidX() {
-        return rectangle.getX()+(rectangle.getWidth()/2);
+    public float getMidX() {
+        return getX()+(getWidth()/2);
     }
 
-    protected float getMidY() {
-        return rectangle.getY()+(rectangle.getHeight()/2);
+    public float getMidY() {
+        return getY()+(getHeight()/2);
     }
+
+    public float getX() {
+        return rectangle.x;
+    }
+
+    public void setX(float x) {
+        rectangle.x = x;
+    }
+
+    public float getY() {
+        return rectangle.y;
+    }
+
+    public void setY(float y) {
+        rectangle.y = y;
+    }
+
+    public float getWidth () {
+        return rectangle.width;
+    }
+
+    public void setWidth (float width) {
+        rectangle.width = width;
+    }
+
+    public float getHeight () {
+        return rectangle.height;
+    }
+
+    public void setHeight (float height) {
+        rectangle.height = height;
+    }
+
 }

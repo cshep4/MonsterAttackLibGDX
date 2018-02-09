@@ -80,8 +80,8 @@ public class BomberTest {
         GameObject bomber = Bomber.create(X_POS, Y_POS, 1);
 
         assertTrue(bomber instanceof Bomber);
-        assertEquals(X_POS, bomber.getRectangle().getX());
-        assertEquals(Y_POS, bomber.getRectangle().getX());
+        assertEquals(X_POS, bomber.getX());
+        assertEquals(Y_POS, bomber.getX());
     }
 
     @Test
@@ -89,7 +89,7 @@ public class BomberTest {
         Player player = Player.create(400, 600);
         Bomber bomber = Bomber.create(X_POS, Y_POS, 1);
 
-        final float startDifferenceX = player.getRectangle().getX() - bomber.getRectangle().getX();
+        final float startDifferenceX = player.getX() - bomber.getRectangle().getX();
         final float startDifferenceY = player.getRectangle().getY() - bomber.getRectangle().getY();
 
         //set mutateTime to be low so that mutation is triggered

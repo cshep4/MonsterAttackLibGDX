@@ -24,31 +24,30 @@ public class Player extends Character {
 
 		return new Player(rectangle, texture, 2, 1);
 	}
-	
+
+	@Override
 	public void update() {
 		stopPlayerLeavingTheScreen();
 
-		getRectangle().setX(getRectangle().getX()+getXVelByDeltaTime());
-		getRectangle().setY(getRectangle().getY()+getYVelByDeltaTime());
+		setX(getX() + getXVelByDeltaTime());
+		setY(getY() + getYVelByDeltaTime());
 	}
 
 	private void stopPlayerLeavingTheScreen() {
-		if (playerLeavingScreenHorizontally()) {
+		if (isPlayerLeavingScreenHorizontally()) {
 			xVel = 0;
 		}
-		if (playerLeavingScreenVertiically()) {
+		if (isPlayerLeavingScreenVertiically()) {
 			yVel = 0;
 		}
 	}
 
-	private boolean playerLeavingScreenHorizontally() {
-		return getRectangle().getX() < 0 && xVel < 0 ||
-				getRectangle().getX() > getScreenXMax() - getRectangle().getWidth() && xVel > 0;
+	private boolean isPlayerLeavingScreenHorizontally() {
+		return (getX() < 0 && xVel < 0) || (getX() > getScreenXMax() - getWidth() && xVel > 0);
 	}
 
-	private boolean playerLeavingScreenVertiically() {
-		return getRectangle().getY() < 0 && yVel < 0 ||
-				getRectangle().getY() > getScreenYMax() - getRectangle().getHeight() && yVel > 0;
+	private boolean isPlayerLeavingScreenVertiically() {
+		return (getY() < 0 && yVel < 0) || (getY() > getScreenYMax() - getHeight() && yVel > 0);
 	}
 
 	public void move(float xPos, float yPos) {
@@ -59,15 +58,14 @@ public class Player extends Character {
 		xVel = 0;
 		yVel = 0;
 		Texture texture = TextureFactory.create(CHARACTER_IDLE);
-		setTexture(texture);
 		changeAnimation(texture, 2, 1);
 	}
 
 	public Bullet shoot() {
 		float x = getMidX();
 		float y = getMidY();
-		float width = getRectangle().getWidth() / BULLET_WIDTH_DIVIDER;
-		float height = getRectangle().getHeight() / BULLET_HEIGHT_DIVIDER;
+		float width = getWidth() / BULLET_WIDTH_DIVIDER;
+		float height = getHeight() / BULLET_HEIGHT_DIVIDER;
 
 		return Bullet.create(this, x, y, width, height);
 	}

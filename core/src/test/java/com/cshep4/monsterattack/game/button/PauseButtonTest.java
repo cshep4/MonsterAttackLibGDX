@@ -54,9 +54,9 @@ public class PauseButtonTest {
         GameObject pauseButton = PauseButton.create(X_POS, Y_POS, WIDTH, HEIGHT);
 
         assertTrue(pauseButton instanceof PauseButton);
-        assertEquals(X_POS, pauseButton.getRectangle().getX());
-        assertEquals(Y_POS, pauseButton.getRectangle().getY());
-        assertEquals(WIDTH, pauseButton.getRectangle().getWidth());
-        assertEquals(HEIGHT, pauseButton.getRectangle().getHeight());
+        assertEquals(X_POS, pauseButton.getX());
+        assertEquals(Y_POS, pauseButton.getY());
+        assertEquals(WIDTH, pauseButton.getWidth());
+        assertEquals(HEIGHT, pauseButton.getHeight());
     }
 }

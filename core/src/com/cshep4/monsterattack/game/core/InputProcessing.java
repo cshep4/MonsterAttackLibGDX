@@ -25,22 +25,34 @@ public class InputProcessing extends InputAdapter {
         float xPos = xMultiplier * x;
         float yPos = yMultiplier * (gameScreen.getHeight() - y);
 
-        if (gameScreen.getState() == RUN) {
-            if (gameScreen.getPauseButton().getRectangle().contains(xPos, yPos)) {
-                gameScreen.setState(PAUSE);
-                gameScreen.setJustPaused(true);
-            }
-            else if (gameScreen.getShootButton().getRectangle().contains(xPos, yPos)) {
-                gameScreen.shoot();
-            }
-            else {
-                if (gameScreen.getPressDownPointer() == -1) {
-                    gameScreen.setPressDownPointer(pointer);
-                }
+        if (gameScreen.getState() != RUN) {
+            return false;
+        }
+
+
+        if (isPauseButtonPressed(xPos, yPos)) {
+            gameScreen.setState(PAUSE);
+            gameScreen.setJustPaused(true);
+        }
+        else if (isShootButtonPressed(xPos, yPos)) {
+            gameScreen.shoot();
+        }
+        else {
+            if (gameScreen.getPressDownPointer() == -1) {
+                gameScreen.setPressDownPointer(pointer);
+                gameScreen.setPlayerMoving(true);
             }
         }
 
         return true;
+    }
+
+    private boolean isPauseButtonPressed(float xPos, float yPos) {
+        return gameScreen.getPauseButton().getRectangle().contains(xPos, yPos);
+    }
+
+    private boolean isShootButtonPressed(float xPos, float yPos) {
+        return gameScreen.getShootButton().getRectangle().contains(xPos, yPos);
     }
 
     @Override
@@ -51,6 +63,7 @@ public class InputProcessing extends InputAdapter {
         gameScreen.setJustPaused(false);
 
         if (pointer == gameScreen.getPressDownPointer()) {
+            gameScreen.setPlayerMoving(false);
             gameScreen.getPlayer().stand();
             gameScreen.setPressDownPointer(-1);
         }
@@ -67,7 +80,8 @@ public class InputProcessing extends InputAdapter {
         float yPos = yMultiplier * (gameScreen.getHeight() - screenY);
 
         if (pointer == gameScreen.getPressDownPointer()) {
-            gameScreen.getPlayer().move(xPos, yPos);
+            gameScreen.setDestinationX(xPos);
+            gameScreen.setDestinationY(yPos);
         }
         return true;
     }

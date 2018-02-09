@@ -4,9 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.cshep4.monsterattack.game.character.Character;
-import com.cshep4.monsterattack.game.character.Enemy;
 import com.cshep4.monsterattack.game.character.Player;
 import com.cshep4.monsterattack.game.character.ProducerEnemy;
+import com.cshep4.monsterattack.game.character.RunningEnemy;
 import com.cshep4.monsterattack.game.core.GameObject;
 import com.cshep4.monsterattack.game.core.SoundWrapper;
 import com.cshep4.monsterattack.game.factory.TextureFactory;
@@ -45,27 +45,28 @@ public class Bullet extends GameObject {
 		return new Bullet(rectangle, texture, xVel);
 	}
 
-	public boolean update(List<Enemy> enemyList, List<ProducerEnemy> producerEnemyList) {
+	public boolean update(List<RunningEnemy> enemyList, List<ProducerEnemy> producerEnemyList) {
 		updatePosition();
-		return enemyList.stream().anyMatch(this::checkCollisions) ||
-				producerEnemyList.stream().anyMatch(this::checkCollisions);
+		return enemyList.stream().anyMatch(this::hasCollidedWithRunningEnemy) ||
+				producerEnemyList.stream().anyMatch(this::hasCollidedWithProducerEnemy);
 	}
+
 
 	public boolean update(Player player) {
 		updatePosition();
-		return checkCollisions(player);
+		return hasCollidedWithPlayer(player);
 	}
 
 	private void updatePosition(){
     	//Set the speed of the bullet
-    	getRectangle().setX(getRectangle().getX() + getXVelByDeltaTime());
+    	setX(getX() + getXVelByDeltaTime());
 	}
 
 	private float getXVelByDeltaTime() {
 		return xVel*Gdx.graphics.getDeltaTime();
 	}
 
-	private boolean checkCollisions(Player player) {
+	private boolean hasCollidedWithPlayer(Player player) {
 		if (getRectangle().overlaps(player.getRectangle())) {
 			player.setHealth(player.getHealth()-100);
 			collisionSound();
@@ -75,20 +76,29 @@ public class Bullet extends GameObject {
 		return false;
 	}
 
-	private boolean checkCollisions(Enemy enemy) {
-		if (getRectangle().overlaps(enemy.getRectangle())) {
-			enemyShot(enemy);
+	private boolean hasCollidedWithRunningEnemy(RunningEnemy runningEnemy) {
+		if (getRectangle().overlaps(runningEnemy.getRectangle())) {
+			runningEnemyShot(runningEnemy);
 			return true;
 		}
 		return false;
 	}
 
-	private void enemyShot(Enemy enemy) {
-		if (!enemy.isSheilded()) {
-			enemy.setHealth(enemy.getHealth() - 100);
+	private boolean hasCollidedWithProducerEnemy(ProducerEnemy producerEnemy) {
+		if (getRectangle().overlaps(producerEnemy.getRectangle())) {
+			producerEnemy.setHealth(producerEnemy.getHealth() - 100);
+			collisionSound();
+			return true;
+		}
+		return false;
+	}
+
+	private void runningEnemyShot(RunningEnemy runningEnemy) {
+		if (!runningEnemy.isShielding()) {
+			runningEnemy.setHealth(runningEnemy.getHealth() - 100);
 			collisionSound();
 		} else {
-			enemy.setShieldHealth(enemy.getShieldHealth() - 100);
+			runningEnemy.setShieldHealth(runningEnemy.getShieldHealth() - 100);
 		}
 	}
 

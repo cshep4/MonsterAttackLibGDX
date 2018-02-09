@@ -11,9 +11,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.cshep4.monsterattack.game.bullet.Bullet;
 import com.cshep4.monsterattack.game.button.PauseButton;
 import com.cshep4.monsterattack.game.button.ShootButton;
-import com.cshep4.monsterattack.game.character.Enemy;
 import com.cshep4.monsterattack.game.character.Player;
 import com.cshep4.monsterattack.game.character.ProducerEnemy;
+import com.cshep4.monsterattack.game.character.RunningEnemy;
 import com.cshep4.monsterattack.game.core.GameObject;
 import com.cshep4.monsterattack.game.core.InputProcessing;
 import com.cshep4.monsterattack.game.core.Spawn;
@@ -55,7 +55,7 @@ public class GameScreen implements Screen {
     private static final int GAME_OVER_DELAY = 1000;
     private Player player = Player.create(PLAYER_START_X, PLAYER_START_Y);
 
-    private List<Enemy> enemies = new ArrayList<>();
+    private List<RunningEnemy> runningEnemies = new ArrayList<>();
     private List<ProducerEnemy> producerEnemies = new ArrayList<>();
 
     private List<Bullet> playerBullets = new ArrayList<>();
@@ -65,6 +65,10 @@ public class GameScreen implements Screen {
     private PauseButton pauseButton;
 
     private Sprite backgroundSprite;
+
+    private float destinationX;
+    private float destinationY;
+    private boolean playerMoving;
 
     public GameScreen(final MonsterAttack game) {
         this.game = game;
@@ -141,11 +145,11 @@ public class GameScreen implements Screen {
 
         game.batch.end();
 
-        if (gameOver()) {
-            state = GAME_OVER;
-            if (gameOverTime == 0) {
-                gameOverTime = System.currentTimeMillis();
-            }
+        if (isGameOver()) {
+//            state = GAME_OVER;
+//            if (gameOverTime == 0) {
+//                gameOverTime = System.currentTimeMillis();
+//            }
         }
     }
 
@@ -184,7 +188,7 @@ public class GameScreen implements Screen {
     public void dispose() {
         player.getTexture().dispose();
 
-        enemies.forEach(enemy -> enemy.getTexture().dispose());
+        runningEnemies.forEach(enemy -> enemy.getTexture().dispose());
         producerEnemies.forEach(enemy -> enemy.getTexture().dispose());
 
         playerBullets.forEach(bullet -> bullet.getTexture().dispose());
@@ -202,7 +206,7 @@ public class GameScreen implements Screen {
 
         drawObject(player);
 
-        enemies.forEach(this::drawObject);
+        runningEnemies.forEach(this::drawObject);
         producerEnemies.forEach(this::drawObject);
 
         enemyBullets.forEach(this::drawObject);
@@ -215,37 +219,41 @@ public class GameScreen implements Screen {
         // Get current frame of animation for the current stateTime
         TextureRegion currentFrame = obj.getAnimation().getKeyFrame(stateTime, true);
 
-        game.batch.draw(currentFrame, obj.getRectangle().getX(), obj.getRectangle().getY(), obj.getRectangle().getWidth(), obj.getRectangle().getHeight());
+        game.batch.draw(currentFrame, obj.getX(), obj.getY(), obj.getWidth(), obj.getHeight());
     }
 
     private void updateEverything(){
+        if (playerMoving) {
+            player.move(destinationX, destinationY);
+        }
+
         player.update();
 
-        enemies.forEach(enemy -> enemy.update(player, playerBullets, enemyBullets));
-        producerEnemies.forEach(enemy -> enemy.update(player, enemies));
+        runningEnemies.forEach(enemy -> enemy.update(player, playerBullets, enemyBullets));
+        producerEnemies.forEach(enemy -> enemy.update(player, runningEnemies));
 
         updateBullets();
 
-        enemies.removeIf(enemy -> enemy.getHealth() <= 0);
+        runningEnemies.removeIf(enemy -> enemy.getHealth() <= 0);
         producerEnemies.removeIf(enemy -> enemy.getHealth() <= 0);
 
-        Spawn.spawnEnemies(enemies, producerEnemies);
+        Spawn.spawnEnemies(runningEnemies, producerEnemies);
 
-        //----------------DEBUG ONLY - ENEMIES REACHING END OF SCREEN WILL CAUSE GAME OVER
-        enemies.removeIf(enemy -> enemy.getRectangle().getX() + enemy.getRectangle().getWidth() < 0);
+        //----------------DEBUG ONLY - USUALLY ENEMIES REACHING END OF SCREEN WILL CAUSE GAME OVER
+        runningEnemies.removeIf(enemy -> enemy.getX() + enemy.getWidth() < 0);
         //-----------------------
     }
 
     private void updateBullets() {
-        playerBullets.removeIf(bullet -> (bullet.update(enemies, producerEnemies) || bullet.getRectangle().getX() > screenXMax));
-        enemyBullets.removeIf(bullet -> (bullet.update(player) || bullet.getRectangle().getX() + bullet.getRectangle().getWidth() < 0));
+        playerBullets.removeIf(bullet -> (bullet.update(runningEnemies, producerEnemies) || bullet.getX() > screenXMax));
+        enemyBullets.removeIf(bullet -> (bullet.update(player) || bullet.getX() + bullet.getWidth() < 0));
     }
 
     public void shoot() {
         playerBullets.add(player.shoot());
     }
 
-    private boolean gameOver() {
+    private boolean isGameOver() {
         return player.getHealth() <= 0;
     }
 
