@@ -72,7 +72,8 @@ project(":android") {
         natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-arm64-v8a"
         natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-x86"
         natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-x86_64"
-        
+        testCompile "org.mockito:mockito-core:2.13.0"
+
     }
 }
 
@@ -115,11 +116,12 @@ project(":core") {
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-        
+
     }
 }
 
 project(":ios-moe") {
+    apply plugin: "java"
     apply plugin: "moe"
 
     configurations { natives }
@@ -129,7 +131,7 @@ project(":ios-moe") {
         compile "com.badlogicgames.gdx:gdx-backend-moe:$gdxVersion"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
         natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-ios"
-        
+
     }
 }
 
