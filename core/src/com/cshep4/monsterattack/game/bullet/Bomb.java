@@ -20,7 +20,8 @@ public class Bomb extends Bullet {
 
 		return new Bomb(rectangle, texture);
 	}
-	
+
+	@Override
 	public void collisionSound() {
 		SoundWrapper.playExplode();
 	}	

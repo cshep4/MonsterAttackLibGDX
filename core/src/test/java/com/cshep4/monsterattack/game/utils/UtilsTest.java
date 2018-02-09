@@ -73,13 +73,13 @@ public class UtilsTest {
 
         Utils.moveCharacterTowardsPoint(character, DESTINATION_X, DESTINATION_Y);
 
-        final float endDifferenceX = DESTINATION_X - character.getRectangle().getX();
-        final float endDifferenceY = DESTINATION_Y - character.getRectangle().getY();
+        final float endDifferenceX = DESTINATION_X - character.getX();
+        final float endDifferenceY = DESTINATION_Y - character.getY();
 
         assertTrue(START_DIFFERENCE_X > endDifferenceX);
         assertTrue(START_DIFFERENCE_Y > endDifferenceY);
         //should equal same as both start X and Y and end X and Y are same
-        assertEquals(character.getRectangle().getX(), character.getRectangle().getY());
+        assertEquals(character.getX(), character.getY());
     }
 
     @Test
@@ -93,8 +93,8 @@ public class UtilsTest {
 
         Utils.movePlayerTowardsPoint(player, DESTINATION_X, DESTINATION_Y);
 
-        final float endDifferenceX = DESTINATION_X - player.getRectangle().getX();
-        final float endDifferenceY = DESTINATION_Y - player.getRectangle().getY();
+        final float endDifferenceX = DESTINATION_X - player.getX();
+        final float endDifferenceY = DESTINATION_Y - player.getY();
 
         assertTrue(START_DIFFERENCE_X > endDifferenceX);
         assertTrue(START_DIFFERENCE_Y > endDifferenceY);

@@ -2,8 +2,8 @@ package com.cshep4.monsterattack.game.core;
 
 import com.cshep4.monsterattack.game.character.Bomber;
 import com.cshep4.monsterattack.game.character.BomberProducer;
-import com.cshep4.monsterattack.game.character.Enemy;
 import com.cshep4.monsterattack.game.character.ProducerEnemy;
+import com.cshep4.monsterattack.game.character.RunningEnemy;
 import com.cshep4.monsterattack.game.character.Standard;
 import com.cshep4.monsterattack.game.character.StandardProducer;
 
@@ -26,8 +26,8 @@ public final class Spawn {
 
     private Spawn() {}
 
-    public static void spawnEnemies(List<Enemy> enemies, List<ProducerEnemy> producerEnemies) {
-        if (readyToSpawn(enemies, producerEnemies)) {
+    public static void spawnEnemies(List<RunningEnemy> runningEnemies, List<ProducerEnemy> producerEnemies) {
+        if (isReadyToSpawn(runningEnemies, producerEnemies)) {
             int maxY = (int) (getScreenYMax() - (getScreenXMax() / CHARACTER_HEIGHT_DIVIDER * 2)) + 1;
             int minY = (int) getScreenXMax() / CHARACTER_HEIGHT_DIVIDER;
 
@@ -39,19 +39,19 @@ public final class Spawn {
 
             switch (randEnemy) {
                 case 1:
-                    enemies.add(Standard.create(x, y, level));
+                    runningEnemies.add(Standard.create(x, y, level));
                     break;
                 case 2:
                     producerEnemies.add(StandardProducer.create(x, y));
                     break;
                 case 3:
-                    enemies.add(Bomber.create(x, y, level));
+                    runningEnemies.add(Bomber.create(x, y, level));
                     break;
                 case 4:
                     producerEnemies.add(BomberProducer.create(x, y));
                     break;
                 default:
-                    enemies.add(Standard.create(x, y, level));
+                    runningEnemies.add(Standard.create(x, y, level));
                     break;
             }
 
@@ -59,12 +59,12 @@ public final class Spawn {
         }
 	}
 
-	private static boolean readyToSpawn(List<Enemy> enemies, List<ProducerEnemy> producerEnemies) {
-        return lessThanMaxNumberOfEnemies(enemies, producerEnemies) && checkSpawnDelay();
+	private static boolean isReadyToSpawn(List<RunningEnemy> runningEnemies, List<ProducerEnemy> producerEnemies) {
+        return isLessThanMaxNumberOfEnemies(runningEnemies, producerEnemies) && checkSpawnDelay();
     }
 
-	private static boolean lessThanMaxNumberOfEnemies(List<Enemy> enemies, List<ProducerEnemy> producerEnemies) {
-        return ((enemies.size() + producerEnemies.size()) < MAX_ENEMIES);
+	private static boolean isLessThanMaxNumberOfEnemies(List<RunningEnemy> runningEnemies, List<ProducerEnemy> producerEnemies) {
+        return ((runningEnemies.size() + producerEnemies.size()) < MAX_ENEMIES);
     }
 
 	private static boolean checkSpawnDelay() {

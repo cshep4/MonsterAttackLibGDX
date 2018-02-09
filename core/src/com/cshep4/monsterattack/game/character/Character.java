@@ -20,13 +20,13 @@ public abstract class Character extends GameObject {
     protected Character(Rectangle rectangle, Texture texture, int frameCols, int frameRows) {
         super(rectangle, texture, frameCols, frameRows);
         health = 100;
-        getRectangle().setWidth(getScreenXMax() / CHARACTER_WIDTH_DIVIDER);
-        getRectangle().setHeight(getScreenXMax() / CHARACTER_HEIGHT_DIVIDER);
+        setWidth(getScreenXMax() / CHARACTER_WIDTH_DIVIDER);
+        setHeight(getScreenXMax() / CHARACTER_HEIGHT_DIVIDER);
     }
 
     public void update(){
-        getRectangle().setX(getRectangle().getX() + getXVelByDeltaTime());
-        getRectangle().setY(getRectangle().getY() + getYVelByDeltaTime());
+        setX(getX() + getXVelByDeltaTime());
+        setY(getY() + getYVelByDeltaTime());
     }
 
     protected float getXVelByDeltaTime() {
