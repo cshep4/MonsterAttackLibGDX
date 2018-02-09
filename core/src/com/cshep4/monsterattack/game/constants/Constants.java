@@ -98,4 +98,16 @@ public final class Constants {
 	// Bullet
 	public static final String PLAYER_BULLET = "bullet.png";
 	public static final String ENEMY_BULLET = "bullet1.png";
+
+	//Producers
+	public static final int STANDARD = 0;
+	public static final int BOMBER = 1;
+	public static final int BP_IDLE_COLS = 2;
+	public static final int SP_IDLE_COLS = 8;
+	public static final int BP_IDLE_ROWS = 1;
+	public static final int SP_IDLE_ROWS = 1;
+	public static final int BP_PRODUCING_COLS = 1;
+	public static final int SP_PRODUCING_COLS = 2;
+	public static final int BP_PRODUCING_ROWS = 1;
+	public static final int SP_PRODUCING_ROWS = 1;
 }

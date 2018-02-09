@@ -63,10 +63,10 @@ public class BombTest {
         GameObject bomb = Bomb.create(X_POS, Y_POS, WIDTH, HEIGHT);
 
         assertTrue(bomb instanceof Bomb);
-        assertEquals(X_POS, bomb.getRectangle().getX());
-        assertEquals(Y_POS, bomb.getRectangle().getY());
-        assertEquals(WIDTH, bomb.getRectangle().getWidth());
-        assertEquals(HEIGHT, bomb.getRectangle().getHeight());
+        assertEquals(X_POS, bomb.getX());
+        assertEquals(Y_POS, bomb.getY());
+        assertEquals(WIDTH, bomb.getWidth());
+        assertEquals(HEIGHT, bomb.getHeight());
     }
 
     @Test

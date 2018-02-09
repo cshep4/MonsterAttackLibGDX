@@ -3,32 +3,45 @@ package com.cshep4.monsterattack.game.character;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
+import com.cshep4.monsterattack.game.core.ProducerAI;
+import com.cshep4.monsterattack.game.factory.TextureFactory;
 
 import java.util.List;
 import java.util.Random;
 
+import lombok.EqualsAndHashCode;
+
 import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
 import static com.cshep4.monsterattack.game.constants.Constants.CHARACTER_WIDTH_DIVIDER;
+import static com.cshep4.monsterattack.game.constants.Constants.ENEMY_SPEED;
 import static com.cshep4.monsterattack.game.constants.Constants.PRODCUER_SPAWN_DELAY_MAX;
 import static com.cshep4.monsterattack.game.constants.Constants.PRODCUER_SPAWN_DELAY_MIN;
+import static com.cshep4.monsterattack.game.utils.EnemyUtils.getProducerIdleCols;
+import static com.cshep4.monsterattack.game.utils.EnemyUtils.getProducerIdleRows;
+import static com.cshep4.monsterattack.game.utils.EnemyUtils.getProducerIdleSprite;
+import static com.cshep4.monsterattack.game.utils.EnemyUtils.getProducerProducingCols;
+import static com.cshep4.monsterattack.game.utils.EnemyUtils.getProducerProducingRows;
+import static com.cshep4.monsterattack.game.utils.EnemyUtils.getProducerProducingSprite;
 
-public abstract class ProducerEnemy extends Enemy {
+@EqualsAndHashCode
+public abstract class ProducerEnemy extends Character implements ProducerAI {
+    private static final String PRODUCER_AI = "ProducerAI";
     private long spawnTime = System.currentTimeMillis();
     private long producingTime = 0;
 
     private static final int PRODUCE_DURATION = 250;
 
-    protected ProducerEnemy(Rectangle rectangle, Texture texture, int frameCols, int frameRows) {
-        super(rectangle, texture, frameCols, frameRows);
+    protected ProducerEnemy(Rectangle rectangle, Texture texture, int idleCols, int idleRows) {
+        super(rectangle, texture, idleCols, idleRows);
         health = 300;
     }
 
-    public void decisionTree(List<Enemy> enemies) {
-        if (producerNotInPosition()) {
+    public void decisionTree(List<RunningEnemy> runningEnemies) {
+        if (isProducerNotInPosition()) {
             moveForward();
             //IF READY TO SPAWN, PRODUCE ENEMY
         } else if (checkSpawnDelay()) {
-            produce(enemies);
+            produce(runningEnemies);
         } else {
             //WAIT
             xVel = 0;
@@ -38,8 +51,8 @@ public abstract class ProducerEnemy extends Enemy {
         update();
     }
 
-    private boolean producerNotInPosition() {
-        return getRectangle().getX() > getScreenXMax()-getRectangle().getWidth();
+    private boolean isProducerNotInPosition() {
+        return getX() > getScreenXMax() - getWidth();
     }
 
     private boolean checkSpawnDelay() {
@@ -49,9 +62,9 @@ public abstract class ProducerEnemy extends Enemy {
         return System.currentTimeMillis() - spawnTime > delay;
     }
 
-    private void produce(List<Enemy> enemies) {
-        if (startedProducing()) {
-            processProduction(enemies);
+    private void produce(List<RunningEnemy> runningEnemies) {
+        if (hasStartedProducing()) {
+            processProduction(runningEnemies);
         } else {
             //set time of produce method beginning
             producingTime = System.currentTimeMillis();
@@ -61,12 +74,12 @@ public abstract class ProducerEnemy extends Enemy {
         }
     }
 
-    private void processProduction(List<Enemy> enemies) {
-        if (readyToReleaseEnemy()) {
+    private void processProduction(List<RunningEnemy> runningEnemies) {
+        if (isReadyToReleaseEnemy()) {
             float width = getScreenXMax() / CHARACTER_WIDTH_DIVIDER;
-            float x = getRectangle().getX() - width;
-            float y = getRectangle().getY();
-            Gdx.app.log("AI", "Produce");
+            float x = getX() - width;
+            float y = getY();
+            Gdx.app.log("RunningAI", "Produce");
 
             xVel = 0;
             yVel = 0;
@@ -75,7 +88,7 @@ public abstract class ProducerEnemy extends Enemy {
             Random rand = new Random();
             int level = rand.nextInt(4) + 1;
 
-            enemies.add(createEnemy(x, y, level));
+            runningEnemies.add(createEnemy(x, y, level));
 
             //reset producing time
             producingTime = 0;
@@ -85,7 +98,7 @@ public abstract class ProducerEnemy extends Enemy {
         }
     }
 
-    private Enemy createEnemy(float x, float y, int level) {
+    private RunningEnemy createEnemy(float x, float y, int level) {
         if (this instanceof StandardProducer) {
             return Standard.create(x, y, level);
         } else {
@@ -93,23 +106,42 @@ public abstract class ProducerEnemy extends Enemy {
         }
     }
 
-    private boolean readyToReleaseEnemy() {
+    private boolean isReadyToReleaseEnemy() {
         return System.currentTimeMillis() - producingTime > PRODUCE_DURATION;
     }
 
-    private boolean startedProducing() {
+    private boolean hasStartedProducing() {
         return producingTime != 0;
     }
 
-    protected abstract void setProducingSprite();
+    public void update(Player player, List<RunningEnemy> runningEnemies){
+        decisionTree(runningEnemies);
 
-    protected abstract void resetSprite();
+        checkPlayerHasBeenKilled(player);
+    }
 
-    public void update(Player player, List<Enemy> enemies){
-        decisionTree(enemies);
+    @Override
+    public void moveForward() {
+        Gdx.app.log(PRODUCER_AI,"Move Forward");
+        xVel = -ENEMY_SPEED;
+    }
 
-        super.update();
+    @Override
+    public void checkPlayerHasBeenKilled(Player player) {
+        //check if player has collided, if so KILL!!!
+        if (getRectangle().overlaps(player.getRectangle())) {
+            Gdx.app.log("Death", "COLLIDED!");
+            player.setHealth(player.getHealth()-100);
+        }
+    }
 
-        checkPlayerDeath(player);
+    private void setProducingSprite() {
+        Texture texture = TextureFactory.create(getProducerProducingSprite(this));
+        changeAnimation(texture, getProducerProducingCols(this), getProducerProducingRows(this));
+    }
+
+    private void resetSprite() {
+        Texture texture = TextureFactory.create(getProducerIdleSprite(this));
+        changeAnimation(texture, getProducerIdleCols(this), getProducerIdleRows(this));
     }
 }

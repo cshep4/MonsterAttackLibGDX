@@ -57,10 +57,10 @@ public class ShootButtonTest {
         GameObject shootButton = ShootButton.create(X_POS, Y_POS, WIDTH, HEIGHT);
 
         assertTrue(shootButton instanceof ShootButton);
-        assertEquals(X_POS, shootButton.getRectangle().getX());
-        assertEquals(Y_POS, shootButton.getRectangle().getY());
-        assertEquals(WIDTH, shootButton.getRectangle().getWidth());
-        assertEquals(HEIGHT, shootButton.getRectangle().getHeight());
+        assertEquals(X_POS, shootButton.getX());
+        assertEquals(Y_POS, shootButton.getY());
+        assertEquals(WIDTH, shootButton.getWidth());
+        assertEquals(HEIGHT, shootButton.getHeight());
     }
 
 }

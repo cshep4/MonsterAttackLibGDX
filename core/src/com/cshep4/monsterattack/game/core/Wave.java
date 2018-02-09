@@ -20,29 +20,5 @@ public class Wave {
 	private int b3;
 	private boolean b3Mutate;
 	private int b4;
-	private int bProducer;	
-	
-	public Wave() {
-		
-	}
-	
-	public Wave(Wave wave){
-		id = wave.getId();
-		s1 = wave.getS1();
-		s1Mutate = wave.isS1Mutate();
-		s2 = wave.getS2();
-		s2Mutate = wave.isS2Mutate();
-		s3 = wave.getS3();
-		s3Mutate = wave.isS3Mutate();
-		s4 = wave.getB4();
-		sProducer = wave.getSProducer();
-		b1 = wave.getB1();
-		b1Mutate = wave.isB1Mutate();
-		b2 = wave.getB2();
-		b2Mutate = wave.isB2Mutate();
-		b3 = wave.getB3();
-		b3Mutate = wave.isB3Mutate();
-		b4 = wave.getB4();
-		bProducer = wave.getBProducer();
-	}
+	private int bProducer;
 }

@@ -8,20 +8,17 @@ import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
-import com.cshep4.monsterattack.game.character.Bomber;
-import com.cshep4.monsterattack.game.character.Character;
 import com.cshep4.monsterattack.game.character.Enemy;
 import com.cshep4.monsterattack.game.character.Player;
 import com.cshep4.monsterattack.game.character.ProducerEnemy;
+import com.cshep4.monsterattack.game.character.RunningEnemy;
 import com.cshep4.monsterattack.game.character.Standard;
 import com.cshep4.monsterattack.game.character.StandardProducer;
-import com.cshep4.monsterattack.game.core.GameObject;
 import com.cshep4.monsterattack.game.factory.TextureFactory;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -66,7 +63,7 @@ public class BulletTest {
     private Player player;
 
     @Mock
-    private Enemy enemy;
+    private RunningEnemy runningEnemy;
 
     @Before
     public void init() {
@@ -95,22 +92,22 @@ public class BulletTest {
         Bullet bullet = Bullet.create(player, X_POS, Y_POS, WIDTH, HEIGHT);
 
         assertTrue(bullet instanceof Bullet);
-        assertEquals(X_POS, bullet.getRectangle().getX());
-        assertEquals(Y_POS, bullet.getRectangle().getY());
-        assertEquals(WIDTH, bullet.getRectangle().getWidth());
-        assertEquals(HEIGHT, bullet.getRectangle().getHeight());
+        assertEquals(X_POS, bullet.getX());
+        assertEquals(Y_POS, bullet.getY());
+        assertEquals(WIDTH, bullet.getWidth());
+        assertEquals(HEIGHT, bullet.getHeight());
         assertEquals(BULLET_SPEED, bullet.getXVel());
     }
 
     @Test
     public void create_enemy() throws Exception {
-        Bullet bullet = Bullet.create(enemy, X_POS, Y_POS, WIDTH, HEIGHT);
+        Bullet bullet = Bullet.create(runningEnemy, X_POS, Y_POS, WIDTH, HEIGHT);
 
         assertTrue(bullet instanceof Bullet);
-        assertEquals(X_POS, bullet.getRectangle().getX());
-        assertEquals(Y_POS, bullet.getRectangle().getY());
-        assertEquals(WIDTH, bullet.getRectangle().getWidth());
-        assertEquals(HEIGHT, bullet.getRectangle().getHeight());
+        assertEquals(X_POS, bullet.getX());
+        assertEquals(Y_POS, bullet.getY());
+        assertEquals(WIDTH, bullet.getWidth());
+        assertEquals(HEIGHT, bullet.getHeight());
         assertEquals(-BULLET_SPEED, bullet.getXVel());
     }
 
@@ -120,12 +117,12 @@ public class BulletTest {
         float xPos = X_POS + BULLET_SPEED;
 
         Bullet bullet = Bullet.create(player, X_POS, Y_POS, WIDTH, HEIGHT);
-        List<Enemy> enemyList = Arrays.asList(Standard.create(xPos, Y_POS, 1));
+        List<RunningEnemy> runningEnemies = Arrays.asList(Standard.create(xPos, Y_POS, 1));
         List<ProducerEnemy> producerEnemyList = Collections.emptyList();
 
-        boolean result = bullet.update(enemyList, producerEnemyList);
+        boolean result = bullet.update(runningEnemies, producerEnemyList);
 
-        assertEquals(xPos, bullet.getRectangle().getX());
+        assertEquals(xPos, bullet.getX());
         assertTrue(result);
     }
 
@@ -135,12 +132,12 @@ public class BulletTest {
         float xPos = X_POS + BULLET_SPEED;
 
         Bullet bullet = Bullet.create(player, X_POS, Y_POS, WIDTH, HEIGHT);
-        List<Enemy> enemyList = Collections.emptyList();
+        List<RunningEnemy> runningEnemies = Collections.emptyList();
         List<ProducerEnemy> producerEnemyList = Arrays.asList(StandardProducer.create(xPos, Y_POS));
 
-        boolean result = bullet.update(enemyList, producerEnemyList);
+        boolean result = bullet.update(runningEnemies, producerEnemyList);
 
-        assertEquals(xPos, bullet.getRectangle().getX());
+        assertEquals(xPos, bullet.getX());
         assertTrue(result);
     }
 
@@ -150,12 +147,12 @@ public class BulletTest {
         float xPos = X_POS + BULLET_SPEED;
 
         Bullet bullet = Bullet.create(player, X_POS, Y_POS, WIDTH, HEIGHT);
-        List<Enemy> enemyList = Arrays.asList(Standard.create(1000000, 100000, 1));
+        List<RunningEnemy> runningEnemies = Arrays.asList(Standard.create(1000000, 100000, 1));
         List<ProducerEnemy> producerEnemyList = Arrays.asList(StandardProducer.create(1000000, 100000));
 
-        boolean result = bullet.update(enemyList, producerEnemyList);
+        boolean result = bullet.update(runningEnemies, producerEnemyList);
 
-        assertEquals(xPos, bullet.getRectangle().getX());
+        assertEquals(xPos, bullet.getX());
         assertFalse(result);
     }
 
@@ -164,12 +161,12 @@ public class BulletTest {
         //bullet will update and move to this x position
         float xPos = X_POS - BULLET_SPEED;
 
-        Bullet bullet = Bullet.create(enemy, X_POS, Y_POS, WIDTH, HEIGHT);
+        Bullet bullet = Bullet.create(runningEnemy, X_POS, Y_POS, WIDTH, HEIGHT);
         Player player = Player.create(xPos, Y_POS);
 
         boolean result = bullet.update(player);
 
-        assertEquals(xPos, bullet.getRectangle().getX());
+        assertEquals(xPos, bullet.getX());
         assertTrue(result);
     }
 
@@ -178,12 +175,12 @@ public class BulletTest {
         //bullet will update and move to this x position
         float xPos = X_POS - BULLET_SPEED;
 
-        Bullet bullet = Bullet.create(enemy, X_POS, Y_POS, WIDTH, HEIGHT);
+        Bullet bullet = Bullet.create(runningEnemy, X_POS, Y_POS, WIDTH, HEIGHT);
         Player player = Player.create(1000000, 1000000);
 
         boolean result = bullet.update(player);
 
-        assertEquals(xPos, bullet.getRectangle().getX());
+        assertEquals(xPos, bullet.getX());
         assertFalse(result);
     }
 
