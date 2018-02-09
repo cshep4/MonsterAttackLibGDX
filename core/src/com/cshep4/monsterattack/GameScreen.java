@@ -196,8 +196,6 @@ public class GameScreen implements Screen {
 
         shootButton.getTexture().dispose();
         pauseButton.getTexture().dispose();
-
-//        game.batch.dispose();
     }
 
     private void drawEverything(){

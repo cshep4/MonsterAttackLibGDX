@@ -1,10 +1,19 @@
-apply plugin: "java"
+plugins {
+    id 'io.franzbecker.gradle-lombok' version '1.11'
+    id 'java'
+    id "me.tatarka.retrolambda" version "3.7.0"
+}
+
+repositories {
+    jcenter()
+}
 
 targetCompatibility = 1.8
 sourceCompatibility = 1.8
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 sourceSets.main.java.srcDirs = [ "src/" ]
+sourceSets.test.java.srcDirs = ["src/test/java/"]
 
 
 eclipse.project {
@@ -12,5 +21,6 @@ eclipse.project {
 }
 
 dependencies {
-
+    compile 'junit:junit:4.12'
+    compile 'org.mockito:mockito-core:2.13.0'
 }
