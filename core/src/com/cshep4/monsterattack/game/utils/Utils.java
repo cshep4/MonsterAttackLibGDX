@@ -1,7 +1,6 @@
 package com.cshep4.monsterattack.game.utils;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.cshep4.monsterattack.game.character.Character;
 import com.cshep4.monsterattack.game.character.Player;
 import com.cshep4.monsterattack.game.factory.TextureFactory;

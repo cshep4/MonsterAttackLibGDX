@@ -46,6 +46,12 @@ moe {
     }
 }
 
+
+// Set maven repository
+repositories {
+    jcenter()
+}
+
 moeMainReleaseIphoneosXcodeBuild.dependsOn copyNatives
 moeMainDebugIphoneosXcodeBuild.dependsOn copyNatives
 moeMainReleaseIphonesimulatorXcodeBuild.dependsOn copyNatives
