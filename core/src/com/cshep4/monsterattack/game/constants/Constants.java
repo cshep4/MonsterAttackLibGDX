@@ -109,7 +109,7 @@ public final class Constants {
 	public static final String ENEMY_BULLET = "bullet1.png";
     public static final String PICKUP_BULLET = "bullet_pickup.png";
 
-	//Producers
+	//Producer
 	public static final int STANDARD = 0;
 	public static final int BOMBER = 1;
 	public static final int BP_IDLE_COLS = 2;
