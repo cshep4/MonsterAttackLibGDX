@@ -6,6 +6,10 @@ import com.cshep4.monsterattack.game.character.ProducerEnemy;
 import com.cshep4.monsterattack.game.character.RunningEnemy;
 import com.cshep4.monsterattack.game.character.Standard;
 
+import static com.cshep4.monsterattack.game.constants.Constants.B1_SPRITE_MOVE;
+import static com.cshep4.monsterattack.game.constants.Constants.B2_SPRITE_MOVE;
+import static com.cshep4.monsterattack.game.constants.Constants.B3_SPRITE_MOVE;
+import static com.cshep4.monsterattack.game.constants.Constants.B4_SPRITE_MOVE;
 import static com.cshep4.monsterattack.game.constants.Constants.BOMBER;
 import static com.cshep4.monsterattack.game.constants.Constants.BP_IDLE_COLS;
 import static com.cshep4.monsterattack.game.constants.Constants.BP_IDLE_ROWS;
@@ -13,6 +17,14 @@ import static com.cshep4.monsterattack.game.constants.Constants.BP_PRODUCING_COL
 import static com.cshep4.monsterattack.game.constants.Constants.BP_PRODUCING_ROWS;
 import static com.cshep4.monsterattack.game.constants.Constants.BP_SPRITE_IDLE;
 import static com.cshep4.monsterattack.game.constants.Constants.BP_SPRITE_PRODUCE;
+import static com.cshep4.monsterattack.game.constants.Constants.S1_SPRITE_MOVE_LEFT;
+import static com.cshep4.monsterattack.game.constants.Constants.S1_SPRITE_MOVE_RIGHT;
+import static com.cshep4.monsterattack.game.constants.Constants.S2_SPRITE_MOVE_LEFT;
+import static com.cshep4.monsterattack.game.constants.Constants.S2_SPRITE_MOVE_RIGHT;
+import static com.cshep4.monsterattack.game.constants.Constants.S3_SPRITE_MOVE_LEFT;
+import static com.cshep4.monsterattack.game.constants.Constants.S3_SPRITE_MOVE_RIGHT;
+import static com.cshep4.monsterattack.game.constants.Constants.S4_SPRITE_MOVE_LEFT;
+import static com.cshep4.monsterattack.game.constants.Constants.S4_SPRITE_MOVE_RIGHT;
 import static com.cshep4.monsterattack.game.constants.Constants.SP_IDLE_COLS;
 import static com.cshep4.monsterattack.game.constants.Constants.SP_IDLE_ROWS;
 import static com.cshep4.monsterattack.game.constants.Constants.SP_PRODUCING_COLS;
@@ -34,20 +46,20 @@ public class EnemyUtils {
     private static void setBomberAbility(RunningEnemy runningEnemy) {
         switch (runningEnemy.getLevel()) {
             case 1:
-                runningEnemy.setHealth(100);
+                runningEnemy.setHealth(1);
                 break;
             case 2:
                 runningEnemy.setCanShoot(true);
-                runningEnemy.setHealth(100);
+                runningEnemy.setHealth(1);
                 break;
             case 3:
                 runningEnemy.setCanShoot(true);
-                runningEnemy.setHealth(200);
+                runningEnemy.setHealth(2);
                 break;
             case 4:
                 runningEnemy.setCanShoot(true);
                 runningEnemy.setCanShootBombs(true);
-                runningEnemy.setHealth(200);
+                runningEnemy.setHealth(2);
                 break;
             default:
                 break;
@@ -57,26 +69,71 @@ public class EnemyUtils {
     private static void setStandardAbility(RunningEnemy runningEnemy) {
         switch (runningEnemy.getLevel()) {
             case 1:
-                runningEnemy.setHealth(100);
+                runningEnemy.setHealth(1);
                 break;
             case 2:
                 runningEnemy.setCanShoot(true);
-                runningEnemy.setHealth(100);
+                runningEnemy.setHealth(1);
                 break;
             case 3:
                 runningEnemy.setCanShoot(true);
                 runningEnemy.setCanDodge(true);
-                runningEnemy.setHealth(200);
+                runningEnemy.setHealth(2);
                 break;
             case 4:
                 runningEnemy.setCanShoot(true);
                 runningEnemy.setCanDodge(true);
                 runningEnemy.setCanShield(true);
-                runningEnemy.setHealth(100);
-                runningEnemy.setShieldHealth(200);
+                runningEnemy.setHealth(1);
+                runningEnemy.setShieldHealth(2);
                 break;
             default:
                 break;
+        }
+    }
+
+    public static String getStandardSpriteLeft(int level) {
+        switch (level) {
+            case 1:
+                return S1_SPRITE_MOVE_LEFT;
+            case 2:
+                return S2_SPRITE_MOVE_LEFT;
+            case 3:
+                return S3_SPRITE_MOVE_LEFT;
+            case 4:
+                return S4_SPRITE_MOVE_LEFT;
+            default:
+                return S1_SPRITE_MOVE_LEFT;
+        }
+    }
+
+    public static String getStandardSpriteRight(int level) {
+        switch (level) {
+            case 1:
+                return S1_SPRITE_MOVE_RIGHT;
+            case 2:
+                return S2_SPRITE_MOVE_RIGHT;
+            case 3:
+                return S3_SPRITE_MOVE_RIGHT;
+            case 4:
+                return S4_SPRITE_MOVE_RIGHT;
+            default:
+                return S1_SPRITE_MOVE_RIGHT;
+        }
+    }
+
+    public static String getBomberSprite(int level) {
+        switch (level) {
+            case 1:
+                return B1_SPRITE_MOVE;
+            case 2:
+                return B2_SPRITE_MOVE;
+            case 3:
+                return B3_SPRITE_MOVE;
+            case 4:
+                return B4_SPRITE_MOVE;
+            default:
+                return B1_SPRITE_MOVE;
         }
     }
 

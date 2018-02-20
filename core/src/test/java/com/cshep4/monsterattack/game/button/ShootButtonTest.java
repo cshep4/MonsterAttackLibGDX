@@ -1,13 +1,10 @@
 package com.cshep4.monsterattack.game.button;
 
 import com.badlogic.gdx.Application;
-import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Rectangle;
 import com.cshep4.monsterattack.game.core.GameObject;
 import com.cshep4.monsterattack.game.factory.TextureFactory;
 

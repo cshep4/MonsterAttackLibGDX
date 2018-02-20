@@ -13,16 +13,14 @@ import java.util.List;
 import lombok.EqualsAndHashCode;
 
 import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
-import static com.cshep4.monsterattack.game.constants.Constants.B1_SPRITE_MOVE;
-import static com.cshep4.monsterattack.game.constants.Constants.B2_SPRITE_MOVE;
-import static com.cshep4.monsterattack.game.constants.Constants.B3_SPRITE_MOVE;
-import static com.cshep4.monsterattack.game.constants.Constants.B4_SPRITE_MOVE;
 import static com.cshep4.monsterattack.game.constants.Constants.CHARACTER_WIDTH_DIVIDER;
 import static com.cshep4.monsterattack.game.constants.Constants.ENEMY_SPEED;
 import static com.cshep4.monsterattack.game.constants.Constants.EXPLOSION;
+import static com.cshep4.monsterattack.game.core.SoundWrapper.playMutateBomb;
+import static com.cshep4.monsterattack.game.utils.EnemyUtils.getBomberSprite;
 import static com.cshep4.monsterattack.game.utils.Utils.moveCharacterTowardsPoint;
 
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper=true)
 public class Bomber extends RunningEnemy {
 	private static final String RUNNING_AI = "RunningAI";
 	private static long mutateTime = System.currentTimeMillis();
@@ -39,27 +37,10 @@ public class Bomber extends RunningEnemy {
 
 	public static Bomber create(float x, float y, int level) {
 		Rectangle rectangle = new Rectangle().setPosition(x,y);
-		String sprite;
 		int frameCols = 7;
 		int frameRows = 1;
 
-		switch (level) {
-			case 1:
-				sprite = B1_SPRITE_MOVE;
-				break;
-			case 2:
-				sprite = B2_SPRITE_MOVE;
-				break;
-			case 3:
-				sprite = B3_SPRITE_MOVE;
-				break;
-			case 4:
-				sprite = B4_SPRITE_MOVE;
-				break;
-			default:
-				sprite = B1_SPRITE_MOVE;
-				break;
-		}
+		String sprite = getBomberSprite(level);
 
 		Texture texture = TextureFactory.create(sprite);
 
@@ -80,7 +61,7 @@ public class Bomber extends RunningEnemy {
 	@Override
 	public void mutate() {
 		Gdx.app.log("Mutation", level + "->" + (level +1));
-		SoundWrapper.playMutateBomb();
+		playMutateBomb();
 		level += 1;
 		EnemyUtils.setAbility(this);
 		updateMutateTime();
@@ -99,7 +80,7 @@ public class Bomber extends RunningEnemy {
 	@Override
 	public void decisionTree(Player player, List<Bullet> playerBullets, List<Bullet> enemyBullets) {
 		if (hasExplosionOccurred()) {
-			kill();
+			killSelfIfExplosionFinished();
 		} else {
 			decisionTreeProcessing(player, playerBullets, enemyBullets);
 		}
@@ -134,10 +115,10 @@ public class Bomber extends RunningEnemy {
 		}
 	}
 
-	private void kill() {
+	private void killSelfIfExplosionFinished() {
 		// delay killing instance so explosion sprite will be drawn
 		if (hasExplosionFinished()) {
-			setHealth(0);
+			kill();
 		}
 	}
 
@@ -157,7 +138,7 @@ public class Bomber extends RunningEnemy {
 		setHeight((getScreenXMax() / CHARACTER_WIDTH_DIVIDER) * 2);
 		changeAnimation(TextureFactory.create(EXPLOSION),1, 1);
 		Gdx.app.log("Death", "BOMBED!");
-		player.setHealth(0);
+		player.kill();
 	}
 
 	private boolean isPlayerInExplosionRange(Player player) {
@@ -173,24 +154,7 @@ public class Bomber extends RunningEnemy {
 
 	@Override
 	public void changeAnimation(float newXVel) {
-		String textureFile;
-
-		switch (level) {
-			case 1:
-				textureFile = B1_SPRITE_MOVE;
-				break;
-			case 2:
-				textureFile = B2_SPRITE_MOVE;
-				break;
-			case 3:
-				textureFile = B3_SPRITE_MOVE;
-				break;
-			case 4:
-				textureFile = B4_SPRITE_MOVE;
-				break;
-			default:
-				return;
-		}
+		String textureFile = getBomberSprite(level);
 
 		changeAnimation(TextureFactory.create(textureFile), 7, 1);
 	}

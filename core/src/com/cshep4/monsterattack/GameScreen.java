@@ -2,6 +2,7 @@ package com.cshep4.monsterattack;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -16,9 +17,10 @@ import com.cshep4.monsterattack.game.character.ProducerEnemy;
 import com.cshep4.monsterattack.game.character.RunningEnemy;
 import com.cshep4.monsterattack.game.core.GameObject;
 import com.cshep4.monsterattack.game.core.InputProcessing;
-import com.cshep4.monsterattack.game.core.Spawn;
 import com.cshep4.monsterattack.game.core.State;
 import com.cshep4.monsterattack.game.factory.TextureFactory;
+import com.cshep4.monsterattack.game.pickup.BulletCase;
+import com.cshep4.monsterattack.game.pickup.PickupItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,15 +29,21 @@ import lombok.Data;
 
 import static com.cshep4.monsterattack.game.constants.Constants.BACKGROUND;
 import static com.cshep4.monsterattack.game.constants.Constants.BUTTON_SIZE_DIVIDER;
+import static com.cshep4.monsterattack.game.constants.Constants.INDICATOR_SIZE_DIVIDER;
+import static com.cshep4.monsterattack.game.constants.Constants.LIFE;
 import static com.cshep4.monsterattack.game.core.State.GAME_OVER;
 import static com.cshep4.monsterattack.game.core.State.PAUSE;
 import static com.cshep4.monsterattack.game.core.State.RESUME;
 import static com.cshep4.monsterattack.game.core.State.RUN;
+import static com.cshep4.monsterattack.game.utils.SpawnUtils.spawnEnemies;
+import static com.cshep4.monsterattack.game.utils.SpawnUtils.spawnPickups;
+import static java.lang.String.valueOf;
 
 @Data
 public class GameScreen implements Screen {
     private static final int PLAYER_START_X = 50;
     private static final int PLAYER_START_Y = 50;
+    private static final Texture LIFE_TEXTURE = TextureFactory.create(LIFE);
 
     private final MonsterAttack game;
     private static float screenXMax = 450;
@@ -63,6 +71,9 @@ public class GameScreen implements Screen {
 
     private ShootButton shootButton;
     private PauseButton pauseButton;
+    private BulletCase bulletIndicator;
+
+    private List<PickupItem> pickups;
 
     private Sprite backgroundSprite;
 
@@ -72,6 +83,7 @@ public class GameScreen implements Screen {
 
     public GameScreen(final MonsterAttack game) {
         this.game = game;
+        game.font.setColor(Color.BLACK);
 
         // create the camera and make sure it looks the same across all devices
         height = Gdx.graphics.getHeight();
@@ -83,20 +95,26 @@ public class GameScreen implements Screen {
         Texture backgroundTexture = TextureFactory.create(BACKGROUND);
         backgroundSprite = new Sprite(backgroundTexture);
 
-        float buttonWidth = screenXMax / BUTTON_SIZE_DIVIDER;
-        float buttonHeight = buttonWidth;
-        float shootButtonX = screenXMax - buttonWidth;
+        float buttonSize = screenXMax / BUTTON_SIZE_DIVIDER;
+        float shootButtonX = screenXMax - buttonSize;
         float shootButtonY = 0;
-        float pauseButtonX = screenXMax - buttonWidth;
-        float pauseButtonY = screenYMax - buttonHeight;
-        shootButton = ShootButton.create(shootButtonX, shootButtonY, buttonWidth, buttonHeight);
-        pauseButton = PauseButton.create(pauseButtonX, pauseButtonY, buttonWidth, buttonHeight);
+        shootButton = ShootButton.create(shootButtonX, shootButtonY, buttonSize, buttonSize);
+        float pauseButtonX = screenXMax - buttonSize;
+        float pauseButtonY = screenYMax - buttonSize;
+        pauseButton = PauseButton.create(pauseButtonX, pauseButtonY, buttonSize, buttonSize);
+
+        float bulletSize = screenXMax / INDICATOR_SIZE_DIVIDER;
+        bulletIndicator = BulletCase.create(0, 0, bulletSize, bulletSize);
+
+        pickups = new ArrayList<>();
 
         stateTime = 0f;
     }
 
     @Override
     public void render(float delta) {
+        draw();
+
         switch (state)
         {
             case RUN:
@@ -118,7 +136,45 @@ public class GameScreen implements Screen {
                 state = RUN;
                 break;
         }
-        draw();
+    }
+
+    @Override
+    public void show() {
+        // not implemented
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        // not implemented
+    }
+
+    @Override
+    public void pause() {
+        state = PAUSE;
+    }
+
+    @Override
+    public void resume() {
+        state = RESUME;
+    }
+
+    @Override
+    public void hide() {
+        pause();
+    }
+
+    @Override
+    public void dispose() {
+        player.getTexture().dispose();
+
+        runningEnemies.forEach(enemy -> enemy.getTexture().dispose());
+        producerEnemies.forEach(enemy -> enemy.getTexture().dispose());
+
+        playerBullets.forEach(bullet -> bullet.getTexture().dispose());
+        enemyBullets.forEach(bullet -> bullet.getTexture().dispose());
+
+        shootButton.getTexture().dispose();
+        pauseButton.getTexture().dispose();
     }
 
     private void draw() {
@@ -146,62 +202,14 @@ public class GameScreen implements Screen {
         game.batch.end();
 
         if (isGameOver()) {
-//            state = GAME_OVER;
-//            if (gameOverTime == 0) {
-//                gameOverTime = System.currentTimeMillis();
-//            }
+            state = GAME_OVER;
+            if (gameOverTime == 0) {
+                gameOverTime = System.currentTimeMillis();
+            }
         }
-    }
-
-    private void updateStateTime() {
-        if (state == RUN) {
-            stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
-        }
-    }
-
-    @Override
-    public void show() {
-        // do nothing
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        // do nothing
-    }
-
-    @Override
-    public void pause() {
-        state = PAUSE;
-    }
-
-    @Override
-    public void resume() {
-        state = RESUME;
-    }
-
-    @Override
-    public void hide() {
-        // do nothing
-    }
-
-    @Override
-    public void dispose() {
-        player.getTexture().dispose();
-
-        runningEnemies.forEach(enemy -> enemy.getTexture().dispose());
-        producerEnemies.forEach(enemy -> enemy.getTexture().dispose());
-
-        playerBullets.forEach(bullet -> bullet.getTexture().dispose());
-        enemyBullets.forEach(bullet -> bullet.getTexture().dispose());
-
-        shootButton.getTexture().dispose();
-        pauseButton.getTexture().dispose();
     }
 
     private void drawEverything(){
-        drawObject(shootButton);
-        drawObject(pauseButton);
-
         drawObject(player);
 
         runningEnemies.forEach(this::drawObject);
@@ -210,7 +218,13 @@ public class GameScreen implements Screen {
         enemyBullets.forEach(this::drawObject);
         playerBullets.forEach(this::drawObject);
 
-        //----------------TEXT
+        pickups.forEach(this::drawObject);
+
+        drawObject(shootButton);
+        drawObject(pauseButton);
+        drawLives();
+        drawObject(bulletIndicator);
+        drawBulletNumber();
     }
 
     private void drawObject(GameObject obj) {
@@ -218,6 +232,29 @@ public class GameScreen implements Screen {
         TextureRegion currentFrame = obj.getAnimation().getKeyFrame(stateTime, true);
 
         game.batch.draw(currentFrame, obj.getX(), obj.getY(), obj.getWidth(), obj.getHeight());
+    }
+
+    private void drawBulletNumber() {
+        String bulletNumber = valueOf(player.getNumberOfBullets());
+        float x = bulletIndicator.getWidth() + bulletIndicator.getX();
+        float y = bulletIndicator.getHeight();
+        game.font.draw(game.batch, bulletNumber, x, y);
+    }
+
+    private void drawLives() {
+        for (int i=0; i<player.getHealth(); i++) {
+            float size = getScreenXMax() / INDICATOR_SIZE_DIVIDER;
+            float x = size * i;
+            float y = getScreenYMax() - size;
+
+            game.batch.draw(LIFE_TEXTURE, x, y, size, size);
+        }
+    }
+
+    private void updateStateTime() {
+        if (state == RUN) {
+            stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
+        }
     }
 
     private void updateEverything(){
@@ -232,14 +269,14 @@ public class GameScreen implements Screen {
 
         updateBullets();
 
+        pickups.removeIf(pickup -> pickup.isPickedUp(player) || pickup.hasExpired());
+
         runningEnemies.removeIf(enemy -> enemy.getHealth() <= 0);
         producerEnemies.removeIf(enemy -> enemy.getHealth() <= 0);
 
-        Spawn.spawnEnemies(runningEnemies, producerEnemies);
+        spawnEnemies(runningEnemies, producerEnemies);
 
-        //----------------DEBUG ONLY - USUALLY ENEMIES REACHING END OF SCREEN WILL CAUSE GAME OVER
-        runningEnemies.removeIf(enemy -> enemy.getX() + enemy.getWidth() < 0);
-        //-----------------------
+        spawnPickups(pickups);
     }
 
     private void updateBullets() {
@@ -248,7 +285,9 @@ public class GameScreen implements Screen {
     }
 
     public void shoot() {
-        playerBullets.add(player.shoot());
+        if (player.getNumberOfBullets() > 0) {
+            playerBullets.add(player.shoot());
+        }
     }
 
     private boolean isGameOver() {

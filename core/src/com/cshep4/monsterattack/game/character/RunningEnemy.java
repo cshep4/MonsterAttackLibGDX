@@ -5,13 +5,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.cshep4.monsterattack.game.bullet.Bomb;
 import com.cshep4.monsterattack.game.bullet.Bullet;
-import com.cshep4.monsterattack.game.core.Mutatable;
-import com.cshep4.monsterattack.game.core.RunningAI;
+import com.cshep4.monsterattack.game.ai.Mutation;
+import com.cshep4.monsterattack.game.ai.RunningAI;
 
 import java.util.List;
 import java.util.function.Predicate;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
 import static com.cshep4.monsterattack.GameScreen.getScreenYMax;
@@ -21,8 +22,9 @@ import static com.cshep4.monsterattack.game.constants.Constants.BULLET_WIDTH_DIV
 import static com.cshep4.monsterattack.game.constants.Constants.ENEMY_SPEED;
 import static com.cshep4.monsterattack.game.constants.Constants.SHOOT_DELAY;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
-public abstract class RunningEnemy extends Character implements RunningAI, Mutatable {
+public abstract class RunningEnemy extends Character implements RunningAI, Mutation {
     private static final String RUNNING_AI = "RunningAI";
     protected boolean canShoot;
     protected boolean canDodge;
@@ -99,17 +101,17 @@ public abstract class RunningEnemy extends Character implements RunningAI, Mutat
 
     private void enemyRetreatUpwards() {
         if (isEnemyOffBottomOfScreen()) {
-            yVel = ENEMY_SPEED;
+            yVel = ENEMY_SPEED/2;
         } else if (yVel == 0) {
-            yVel = -ENEMY_SPEED;
+            yVel = -ENEMY_SPEED/2;
         }
     }
 
     private void enemyRetreatDownwards() {
         if (isEnemyOffTopOfScreen()) {
-            yVel = -ENEMY_SPEED;
+            yVel = -ENEMY_SPEED/2;
         } else if (yVel == 0) {
-            yVel = ENEMY_SPEED;
+            yVel = ENEMY_SPEED/2;
         }
     }
 
@@ -140,11 +142,11 @@ public abstract class RunningEnemy extends Character implements RunningAI, Mutat
 
     private void keepEnemyOnScreen() {
         if (isEnemyOffBottomOfScreen() && yVel < 0) {
-            yVel = ENEMY_SPEED;
+            yVel = ENEMY_SPEED/2;
         }
 
         if (isEnemyOffTopOfScreen() && yVel > 0) {
-            yVel = -ENEMY_SPEED;
+            yVel = -ENEMY_SPEED/2;
         }
     }
 
@@ -252,9 +254,9 @@ public abstract class RunningEnemy extends Character implements RunningAI, Mutat
         changeAnimation(xVel);
 
         if (isEnemyOffBottomOfScreen()) {
-            yVel = ENEMY_SPEED;
+            yVel = ENEMY_SPEED/2;
         } else if (isEnemyOffTopOfScreen()) {
-            yVel = -ENEMY_SPEED;
+            yVel = -ENEMY_SPEED/2;
         }
         else {
             yVel = 0;
@@ -263,16 +265,11 @@ public abstract class RunningEnemy extends Character implements RunningAI, Mutat
 
     @Override
     public void checkPlayerHasBeenKilled(Player player) {
-        //check if player has collided, if so KILL!!!
-        if (getRectangle().overlaps(player.getRectangle())) {
-            Gdx.app.log("Death", "COLLIDED!");
-            player.setHealth(player.getHealth()-100);
-        }
-
         //check if enemy gets to edge of screen, game over
         if (getX() <= 0) {
             Gdx.app.log("Death", "LET THROUGH! Level: " + level);
-            player.setHealth(player.getHealth()-100);
+            player.setHealth(player.getHealth()-1);
+            kill();
         }
     }
 }

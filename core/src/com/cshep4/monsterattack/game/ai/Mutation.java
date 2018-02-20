@@ -1,4 +1,4 @@
-package com.cshep4.monsterattack.game.core;
+package com.cshep4.monsterattack.game.ai;
 
 import java.util.Random;
 
@@ -6,7 +6,7 @@ import static com.cshep4.monsterattack.game.constants.Constants.MAX_LEVEL;
 import static com.cshep4.monsterattack.game.constants.Constants.MUTATE_DELAY_MAX;
 import static com.cshep4.monsterattack.game.constants.Constants.MUTATE_DELAY_MIN;
 
-public interface Mutatable {
+public interface Mutation {
     void mutate();
 
     default boolean checkMutateDelay(long mutateTime) {

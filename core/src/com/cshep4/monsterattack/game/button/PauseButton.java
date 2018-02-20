@@ -5,8 +5,11 @@ import com.badlogic.gdx.math.Rectangle;
 import com.cshep4.monsterattack.game.core.GameObject;
 import com.cshep4.monsterattack.game.factory.TextureFactory;
 
+import lombok.EqualsAndHashCode;
+
 import static com.cshep4.monsterattack.game.constants.Constants.PAUSE_BUTTON;
 
+@EqualsAndHashCode(callSuper=true)
 public class PauseButton extends GameObject {
 	
 	private PauseButton(Rectangle rectangle, Texture texture) {

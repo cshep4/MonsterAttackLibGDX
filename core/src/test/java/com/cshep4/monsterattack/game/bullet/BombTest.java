@@ -7,7 +7,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
-import com.cshep4.monsterattack.game.button.PauseButton;
 import com.cshep4.monsterattack.game.core.GameObject;
 import com.cshep4.monsterattack.game.factory.TextureFactory;
 
