@@ -14,11 +14,13 @@ import com.cshep4.monsterattack.game.factory.TextureFactory;
 import java.util.List;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import static com.cshep4.monsterattack.game.constants.Constants.BULLET_SPEED;
 import static com.cshep4.monsterattack.game.constants.Constants.ENEMY_BULLET;
 import static com.cshep4.monsterattack.game.constants.Constants.PLAYER_BULLET;
 
+@EqualsAndHashCode(callSuper=false)
 @Data
 public class Bullet extends GameObject {
 	private int xVel;
@@ -68,7 +70,7 @@ public class Bullet extends GameObject {
 
 	private boolean hasCollidedWithPlayer(Player player) {
 		if (getRectangle().overlaps(player.getRectangle())) {
-			player.setHealth(player.getHealth()-100);
+			player.setHealth(player.getHealth()-1);
 			collisionSound();
 			Gdx.app.log("Death", "SHOT!");
 			return true;
@@ -86,7 +88,7 @@ public class Bullet extends GameObject {
 
 	private boolean hasCollidedWithProducerEnemy(ProducerEnemy producerEnemy) {
 		if (getRectangle().overlaps(producerEnemy.getRectangle())) {
-			producerEnemy.setHealth(producerEnemy.getHealth() - 100);
+			producerEnemy.setHealth(producerEnemy.getHealth() - 1);
 			collisionSound();
 			return true;
 		}
@@ -95,10 +97,10 @@ public class Bullet extends GameObject {
 
 	private void runningEnemyShot(RunningEnemy runningEnemy) {
 		if (!runningEnemy.isShielding()) {
-			runningEnemy.setHealth(runningEnemy.getHealth() - 100);
+			runningEnemy.setHealth(runningEnemy.getHealth() - 1);
 			collisionSound();
 		} else {
-			runningEnemy.setShieldHealth(runningEnemy.getShieldHealth() - 100);
+			runningEnemy.setShieldHealth(runningEnemy.getShieldHealth() - 1);
 		}
 	}
 

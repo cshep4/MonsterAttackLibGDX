@@ -10,16 +10,16 @@ public final class TextureFactory {
     private TextureFactory() {}
 
     public static Texture create(String fileName) {
-//        try {
+        try {
             return new Texture(Gdx.files.internal(fileName));
-//        } catch (GdxRuntimeException gre) {
-//            // Do not create texture
-//            //return last loaded texture
-//            //should only occur in development
-//            Gdx.app.log("Error!", "Could not load texture");
-//        }
-//
-//        return texture;
+        } catch (GdxRuntimeException gre) {
+            // Do not create texture
+            //return last loaded texture
+            //should only occur in development
+            Gdx.app.log("Error!", "Could not load texture");
+        }
+
+        return texture;
     }
 
     public static Texture getLastTexture() {

@@ -5,17 +5,26 @@ import com.badlogic.gdx.math.Rectangle;
 import com.cshep4.monsterattack.game.bullet.Bullet;
 import com.cshep4.monsterattack.game.factory.TextureFactory;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
 import static com.cshep4.monsterattack.GameScreen.getScreenYMax;
 import static com.cshep4.monsterattack.game.constants.Constants.BULLET_HEIGHT_DIVIDER;
+import static com.cshep4.monsterattack.game.constants.Constants.BULLET_NUMBER;
 import static com.cshep4.monsterattack.game.constants.Constants.BULLET_WIDTH_DIVIDER;
 import static com.cshep4.monsterattack.game.constants.Constants.CHARACTER_IDLE;
 import static com.cshep4.monsterattack.game.utils.Utils.movePlayerTowardsPoint;
 
+@EqualsAndHashCode(callSuper = true)
+@Data
 public class Player extends Character {
+	private int numberOfBullets;
 
 	private Player(Rectangle rectangle, Texture texture, int frameCols, int frameRows) {
 		super(rectangle, texture, frameCols, frameRows);
+		health = 5;
+		numberOfBullets = BULLET_NUMBER;
 	}
 
 	public static Player create(float x, float y) {
@@ -66,6 +75,8 @@ public class Player extends Character {
 		float y = getMidY();
 		float width = getWidth() / BULLET_WIDTH_DIVIDER;
 		float height = getHeight() / BULLET_HEIGHT_DIVIDER;
+
+		numberOfBullets -= 1;
 
 		return Bullet.create(this, x, y, width, height);
 	}

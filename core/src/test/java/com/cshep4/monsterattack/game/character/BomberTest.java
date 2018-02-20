@@ -121,7 +121,7 @@ public class BomberTest {
         assertEquals(bomber.isCanDodge(), false);
         assertEquals(bomber.isCanShield(), false);
         assertEquals(bomber.isCanShootBombs(), false);
-        assertEquals(bomber.getHealth(), 100);
+        assertEquals(bomber.getHealth(), 1);
     }
 
     @Test
@@ -136,7 +136,7 @@ public class BomberTest {
         assertEquals(bomber.isCanDodge(), false);
         assertEquals(bomber.isCanShield(), false);
         assertEquals(bomber.isCanShootBombs(), false);
-        assertEquals(bomber.getHealth(), 200);
+        assertEquals(bomber.getHealth(), 2);
     }
 
     @Test
@@ -151,7 +151,7 @@ public class BomberTest {
         assertEquals(bomber.isCanDodge(), false);
         assertEquals(bomber.isCanShield(), false);
         assertEquals(bomber.isCanShootBombs(), true);
-        assertEquals(bomber.getHealth(), 200);
+        assertEquals(bomber.getHealth(), 2);
     }
 
     @Test
