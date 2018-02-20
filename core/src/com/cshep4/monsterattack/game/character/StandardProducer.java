@@ -4,10 +4,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.cshep4.monsterattack.game.factory.TextureFactory;
 
+import lombok.EqualsAndHashCode;
+
 import static com.cshep4.monsterattack.game.constants.Constants.SP_IDLE_COLS;
 import static com.cshep4.monsterattack.game.constants.Constants.SP_IDLE_ROWS;
 import static com.cshep4.monsterattack.game.constants.Constants.SP_SPRITE_IDLE;
 
+@EqualsAndHashCode(callSuper=true)
 public class StandardProducer extends ProducerEnemy {
 
 	private StandardProducer(Rectangle rectangle, Texture texture) {

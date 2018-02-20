@@ -3,7 +3,7 @@ package com.cshep4.monsterattack.game.character;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
-import com.cshep4.monsterattack.game.core.ProducerAI;
+import com.cshep4.monsterattack.game.ai.ProducerAI;
 import com.cshep4.monsterattack.game.factory.TextureFactory;
 
 import java.util.List;
@@ -23,7 +23,7 @@ import static com.cshep4.monsterattack.game.utils.EnemyUtils.getProducerProducin
 import static com.cshep4.monsterattack.game.utils.EnemyUtils.getProducerProducingRows;
 import static com.cshep4.monsterattack.game.utils.EnemyUtils.getProducerProducingSprite;
 
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper=true)
 public abstract class ProducerEnemy extends Character implements ProducerAI {
     private static final String PRODUCER_AI = "ProducerAI";
     private long spawnTime = System.currentTimeMillis();
@@ -33,7 +33,7 @@ public abstract class ProducerEnemy extends Character implements ProducerAI {
 
     protected ProducerEnemy(Rectangle rectangle, Texture texture, int idleCols, int idleRows) {
         super(rectangle, texture, idleCols, idleRows);
-        health = 300;
+        health = 3;
     }
 
     public void decisionTree(List<RunningEnemy> runningEnemies) {
@@ -107,6 +107,7 @@ public abstract class ProducerEnemy extends Character implements ProducerAI {
     }
 
     private boolean isReadyToReleaseEnemy() {
+
         return System.currentTimeMillis() - producingTime > PRODUCE_DURATION;
     }
 
@@ -131,7 +132,8 @@ public abstract class ProducerEnemy extends Character implements ProducerAI {
         //check if player has collided, if so KILL!!!
         if (getRectangle().overlaps(player.getRectangle())) {
             Gdx.app.log("Death", "COLLIDED!");
-            player.setHealth(player.getHealth()-100);
+            player.setHealth(player.getHealth()-1);
+            kill();
         }
     }
 

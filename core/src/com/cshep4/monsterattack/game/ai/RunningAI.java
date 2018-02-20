@@ -1,4 +1,4 @@
-package com.cshep4.monsterattack.game.core;
+package com.cshep4.monsterattack.game.ai;
 
 import com.cshep4.monsterattack.game.bullet.Bullet;
 import com.cshep4.monsterattack.game.character.Enemy;

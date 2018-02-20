@@ -3,20 +3,17 @@ package com.cshep4.monsterattack.game.character;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
-import com.cshep4.monsterattack.game.core.SoundWrapper;
 import com.cshep4.monsterattack.game.factory.TextureFactory;
 import com.cshep4.monsterattack.game.utils.EnemyUtils;
 
-import static com.cshep4.monsterattack.game.constants.Constants.S1_SPRITE_MOVE_LEFT;
-import static com.cshep4.monsterattack.game.constants.Constants.S1_SPRITE_MOVE_RIGHT;
-import static com.cshep4.monsterattack.game.constants.Constants.S2_SPRITE_MOVE_LEFT;
-import static com.cshep4.monsterattack.game.constants.Constants.S2_SPRITE_MOVE_RIGHT;
-import static com.cshep4.monsterattack.game.constants.Constants.S3_SPRITE_MOVE_LEFT;
-import static com.cshep4.monsterattack.game.constants.Constants.S3_SPRITE_MOVE_RIGHT;
-import static com.cshep4.monsterattack.game.constants.Constants.S4_SPRITE_MOVE_LEFT;
-import static com.cshep4.monsterattack.game.constants.Constants.S4_SPRITE_MOVE_RIGHT;
-import static com.cshep4.monsterattack.game.constants.Constants.S4_SPRITE_SHIELD;
+import lombok.EqualsAndHashCode;
 
+import static com.cshep4.monsterattack.game.constants.Constants.S4_SPRITE_SHIELD;
+import static com.cshep4.monsterattack.game.core.SoundWrapper.playMutateStandard;
+import static com.cshep4.monsterattack.game.utils.EnemyUtils.getStandardSpriteLeft;
+import static com.cshep4.monsterattack.game.utils.EnemyUtils.getStandardSpriteRight;
+
+@EqualsAndHashCode(callSuper=true)
 public class Standard extends RunningEnemy {
 	private static long mutateTime = System.currentTimeMillis();
 
@@ -28,27 +25,10 @@ public class Standard extends RunningEnemy {
 
 	public static Standard create(float x, float y, int level) {
 		Rectangle rectangle = new Rectangle().setPosition(x,y);
-		String sprite;
 		int frameCols = 2;
 		int frameRows = 1;
 
-		switch (level) {
-			case 1:
-				sprite = S1_SPRITE_MOVE_LEFT;
-				break;
-			case 2:
-				sprite = S2_SPRITE_MOVE_LEFT;
-				break;
-			case 3:
-				sprite = S3_SPRITE_MOVE_LEFT;
-				break;
-			case 4:
-				sprite = S4_SPRITE_MOVE_LEFT;
-				break;
-			default:
-				sprite = S1_SPRITE_MOVE_LEFT;
-				break;
-		}
+		String sprite = getStandardSpriteLeft(level);
 
 		Texture texture = TextureFactory.create(sprite);
 
@@ -74,8 +54,8 @@ public class Standard extends RunningEnemy {
 
 	@Override
 	public void mutate() {
-		Gdx.app.log("Mutation", level + "->" + (level +1));
-		SoundWrapper.playMutateStandard();
+		Gdx.app.log("Mutation", level + "->" + (level + 1));
+		playMutateStandard();
 		level += 1;
 		changeAnimation(xVel);
 		EnemyUtils.setAbility(this);
@@ -86,44 +66,27 @@ public class Standard extends RunningEnemy {
 		mutateTime = System.currentTimeMillis();
 	}
 
+	@Override
+    public void checkPlayerHasBeenKilled(Player player) {
+        super.checkPlayerHasBeenKilled(player);
+
+		//check if player has collided, if so KILL!!!
+        if (getRectangle().overlaps(player.getRectangle())) {
+            Gdx.app.log("Death", "COLLIDED!");
+            player.setHealth(player.getHealth()-1);
+            kill();
+        }
+    }
+
+
 	public void changeAnimation(float newXVel) {
 		String textureFile;
 
 		// Get texture file depending level and direction facing
 		if (isFacingLeft(newXVel)) {
-			switch (level) {
-				case 1:
-					textureFile = S1_SPRITE_MOVE_LEFT;
-					break;
-				case 2:
-					textureFile = S2_SPRITE_MOVE_LEFT;
-					break;
-				case 3:
-					textureFile = S3_SPRITE_MOVE_LEFT;
-					break;
-				case 4:
-					textureFile = S4_SPRITE_MOVE_LEFT;
-					break;
-				default:
-					return;
-			}
+			textureFile = getStandardSpriteLeft(level);
 		} else { // facing right
-			switch (level) {
-				case 1:
-					textureFile = S1_SPRITE_MOVE_RIGHT;
-					break;
-				case 2:
-					textureFile = S2_SPRITE_MOVE_RIGHT;
-					break;
-				case 3:
-					textureFile = S3_SPRITE_MOVE_RIGHT;
-					break;
-				case 4:
-					textureFile = S4_SPRITE_MOVE_RIGHT;
-					break;
-				default:
-					return;
-			}
+			textureFile = getStandardSpriteRight(level);
 		}
 
 		changeAnimation(TextureFactory.create(textureFile), 2, 1);

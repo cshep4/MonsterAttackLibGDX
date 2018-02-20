@@ -17,6 +17,9 @@ public final class Constants {
 
 	public static final int BUTTON_SIZE_DIVIDER = 10;
 
+	public static final int INDICATOR_SIZE_DIVIDER = 30;
+	public static final int PICKUP_SIZE_DIVIDER = 20;
+
 	public static final int BULLET_SPEED = 600;
 
 	public static final float ENEMY_SPEED = 150;
@@ -26,6 +29,11 @@ public final class Constants {
 
 	public static final int SPAWN_DELAY_MIN = 1500;
 	public static final int SPAWN_DELAY_MAX = 2500;
+
+	public static final int PICKUP_SPAWN_DELAY_MIN = 5000;
+	public static final int PICKUP_SPAWN_DELAY_MAX = 12500;
+
+    public static final int PICKUP_DURATION = 5000;
 
 	public static final int PRODCUER_SPAWN_DELAY_MIN = 1500;
 	public static final int PRODCUER_SPAWN_DELAY_MAX = 2500;
@@ -94,10 +102,12 @@ public final class Constants {
 	public static final String BACKGROUND = "background_small.png";
 	public static final String PAUSE_BUTTON = "pause_button.png";
 	public static final String SHOOT_BUTTON = "shoot_button.png";
+	public static final String LIFE = "heart.png";
 
 	// Bullet
 	public static final String PLAYER_BULLET = "bullet.png";
 	public static final String ENEMY_BULLET = "bullet1.png";
+    public static final String PICKUP_BULLET = "bullet_pickup.png";
 
 	//Producers
 	public static final int STANDARD = 0;
@@ -110,4 +120,6 @@ public final class Constants {
 	public static final int SP_PRODUCING_COLS = 2;
 	public static final int BP_PRODUCING_ROWS = 1;
 	public static final int SP_PRODUCING_ROWS = 1;
+
+	public static final int BULLET_NUMBER = 30;
 }
