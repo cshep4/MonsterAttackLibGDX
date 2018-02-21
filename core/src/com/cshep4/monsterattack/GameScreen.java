@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.cshep4.monsterattack.game.bullet.Bullet;
 import com.cshep4.monsterattack.game.button.PauseButton;
 import com.cshep4.monsterattack.game.button.ShootButton;
+import com.cshep4.monsterattack.game.character.Character;
 import com.cshep4.monsterattack.game.character.Player;
 import com.cshep4.monsterattack.game.character.ProducerEnemy;
 import com.cshep4.monsterattack.game.character.RunningEnemy;
@@ -52,6 +53,8 @@ public class GameScreen implements Screen {
     private float width;
     private float height;
 
+    private static int numKills;
+
     // A variable for tracking elapsed time for the animation
     private float stateTime;
     private State state = RUN;
@@ -73,7 +76,7 @@ public class GameScreen implements Screen {
     private PauseButton pauseButton;
     private BulletCase bulletIndicator;
 
-    private List<PickupItem> pickups;
+    private List<PickupItem> pickups = new ArrayList<>();
 
     private Sprite backgroundSprite;
 
@@ -106,9 +109,13 @@ public class GameScreen implements Screen {
         float bulletSize = screenXMax / INDICATOR_SIZE_DIVIDER;
         bulletIndicator = BulletCase.create(0, 0, bulletSize, bulletSize);
 
-        pickups = new ArrayList<>();
-
         stateTime = 0f;
+
+        setupNewGame();
+    }
+
+    private static void setupNewGame() {
+        numKills = 0;
     }
 
     @Override
@@ -189,16 +196,6 @@ public class GameScreen implements Screen {
 
         drawEverything();
 
-        if (state == PAUSE) {
-            // get text layout height and width and place it in the middle of the screen----------------
-            String mainMenuString = "PAUSED";
-            GlyphLayout mainMenuLayout = new GlyphLayout(game.font, mainMenuString);
-            float mainMenuTextWidth = mainMenuLayout.width;
-            float mainMenuTextHeight = mainMenuLayout.height;
-            game.font.draw(game.batch, mainMenuString, screenXMax / 2 - (mainMenuTextWidth / 2),
-                    screenYMax / 2 - (mainMenuTextHeight / 2));
-        }
-
         game.batch.end();
 
         if (isGameOver()) {
@@ -225,6 +222,11 @@ public class GameScreen implements Screen {
         drawLives();
         drawObject(bulletIndicator);
         drawBulletNumber();
+        drawKillNumber();
+
+        if (state == PAUSE) {
+            drawPausedMessage();
+        }
     }
 
     private void drawObject(GameObject obj) {
@@ -239,6 +241,26 @@ public class GameScreen implements Screen {
         float x = bulletIndicator.getWidth() + bulletIndicator.getX();
         float y = bulletIndicator.getHeight();
         game.font.draw(game.batch, bulletNumber, x, y);
+    }
+
+    private void drawKillNumber() {
+        String bulletNumber = "Kills: " + numKills;
+
+        final GlyphLayout layout = new GlyphLayout(game.font, bulletNumber);
+        final float x = (screenXMax - layout.width) / 2;
+        final float y = screenYMax;
+
+        game.font.draw(game.batch, layout, x, y);
+    }
+
+    private void drawPausedMessage() {
+        String pausedText = "PAUSED";
+
+        GlyphLayout pauseLayout = new GlyphLayout(game.font, pausedText);
+        float x = (screenXMax - pauseLayout.width) / 2;
+        float y = (screenYMax - pauseLayout.height) / 2;
+
+        game.font.draw(game.batch, pausedText, x, y);
     }
 
     private void drawLives() {
@@ -264,24 +286,32 @@ public class GameScreen implements Screen {
 
         player.update();
 
-        runningEnemies.forEach(enemy -> enemy.update(player, playerBullets, enemyBullets));
-        producerEnemies.forEach(enemy -> enemy.update(player, runningEnemies));
+        runningEnemies.forEach(e -> e.update(player, playerBullets, enemyBullets));
+        producerEnemies.forEach(e -> e.update(player, runningEnemies));
 
         updateBullets();
 
-        pickups.removeIf(pickup -> pickup.isPickedUp(player) || pickup.hasExpired());
+        pickups.removeIf(p -> p.isPickedUp(player) || p.hasExpired());
 
-        runningEnemies.removeIf(enemy -> enemy.getHealth() <= 0);
-        producerEnemies.removeIf(enemy -> enemy.getHealth() <= 0);
+        runningEnemies.removeIf(GameScreen::enemyDead);
+        producerEnemies.removeIf(GameScreen::enemyDead);
 
         spawnEnemies(runningEnemies, producerEnemies);
 
         spawnPickups(pickups);
     }
 
+    private static boolean enemyDead(Character enemy) {
+        if (enemy.getHealth() <= 0) {
+            numKills++;
+            return true;
+        }
+        return false;
+    }
+
     private void updateBullets() {
-        playerBullets.removeIf(bullet -> (bullet.update(runningEnemies, producerEnemies) || bullet.getX() > screenXMax));
-        enemyBullets.removeIf(bullet -> (bullet.update(player) || bullet.getX() + bullet.getWidth() < 0));
+        playerBullets.removeIf(b -> (b.update(runningEnemies, producerEnemies) || b.getX() > screenXMax));
+        enemyBullets.removeIf(b -> (b.update(player) || b.getX() + b.getWidth() < 0));
     }
 
     public void shoot() {
