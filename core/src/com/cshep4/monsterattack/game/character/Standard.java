@@ -15,8 +15,6 @@ import static com.cshep4.monsterattack.game.utils.EnemyUtils.getStandardSpriteRi
 
 @EqualsAndHashCode(callSuper=true)
 public class Standard extends RunningEnemy {
-	private static long mutateTime = System.currentTimeMillis();
-
 	private Standard(Rectangle rectangle, Texture texture, int frameCols, int frameRows, int level) {
 		super(rectangle, texture, frameCols, frameRows);
 		this.level = level;
@@ -39,7 +37,7 @@ public class Standard extends RunningEnemy {
 	public void update(){
 		super.update();
 
-		if (isValidMutation(level, mutateTime)) {
+		if (isValidMutation()) {
 			mutate();
 		}
 	}
@@ -54,16 +52,12 @@ public class Standard extends RunningEnemy {
 
 	@Override
 	public void mutate() {
-		Gdx.app.log("Mutation", level + "->" + (level + 1));
+		Gdx.app.log("Mutate", level + "->" + (level + 1));
 		playMutateStandard();
 		level += 1;
 		changeAnimation(xVel);
 		EnemyUtils.setAbility(this);
 		updateMutateTime();
-	}
-
-	private static void updateMutateTime() {
-		mutateTime = System.currentTimeMillis();
 	}
 
 	@Override

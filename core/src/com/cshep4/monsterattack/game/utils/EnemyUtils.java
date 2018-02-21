@@ -10,7 +10,6 @@ import static com.cshep4.monsterattack.game.constants.Constants.B1_SPRITE_MOVE;
 import static com.cshep4.monsterattack.game.constants.Constants.B2_SPRITE_MOVE;
 import static com.cshep4.monsterattack.game.constants.Constants.B3_SPRITE_MOVE;
 import static com.cshep4.monsterattack.game.constants.Constants.B4_SPRITE_MOVE;
-import static com.cshep4.monsterattack.game.constants.Constants.BOMBER;
 import static com.cshep4.monsterattack.game.constants.Constants.BP_IDLE_COLS;
 import static com.cshep4.monsterattack.game.constants.Constants.BP_IDLE_ROWS;
 import static com.cshep4.monsterattack.game.constants.Constants.BP_PRODUCING_COLS;

@@ -23,7 +23,7 @@ import static com.cshep4.monsterattack.game.utils.Utils.moveCharacterTowardsPoin
 @EqualsAndHashCode(callSuper=true)
 public class Bomber extends RunningEnemy {
 	private static final String RUNNING_AI = "RunningAI";
-	private static long mutateTime = System.currentTimeMillis();
+
 	private long explosionTime = 0;
 	private static final int EXPLOSION_DELAY = 500;
 		
@@ -53,23 +53,19 @@ public class Bomber extends RunningEnemy {
 		float playerY = player.getY();
 		moveCharacterTowardsPoint(this, playerX, playerY);
 
-		if (isValidMutation(level, mutateTime)) {
+		if (isValidMutation()) {
 			mutate();
 		}
 	}
 
 	@Override
 	public void mutate() {
-		Gdx.app.log("Mutation", level + "->" + (level +1));
+		Gdx.app.log("Mutate", level + "->" + (level +1));
 		playMutateBomb();
 		level += 1;
 		EnemyUtils.setAbility(this);
 		updateMutateTime();
 		changeAnimation(xVel);
-	}
-
-	private static void updateMutateTime() {
-		mutateTime = System.currentTimeMillis();
 	}
 
 	@Override

@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Data;
+import lombok.Getter;
 
 import static com.cshep4.monsterattack.game.constants.Constants.BACKGROUND;
 import static com.cshep4.monsterattack.game.constants.Constants.BUTTON_SIZE_DIVIDER;
@@ -53,6 +54,7 @@ public class GameScreen implements Screen {
     private float width;
     private float height;
 
+    @Getter
     private static int numKills;
 
     // A variable for tracking elapsed time for the animation

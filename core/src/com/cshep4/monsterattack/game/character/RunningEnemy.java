@@ -3,10 +3,9 @@ package com.cshep4.monsterattack.game.character;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
+import com.cshep4.monsterattack.game.ai.RunningAI;
 import com.cshep4.monsterattack.game.bullet.Bomb;
 import com.cshep4.monsterattack.game.bullet.Bullet;
-import com.cshep4.monsterattack.game.ai.Mutation;
-import com.cshep4.monsterattack.game.ai.RunningAI;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -24,7 +23,7 @@ import static com.cshep4.monsterattack.game.constants.Constants.SHOOT_DELAY;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public abstract class RunningEnemy extends Character implements RunningAI, Mutation {
+public abstract class RunningEnemy extends Mutant implements RunningAI {
     private static final String RUNNING_AI = "RunningAI";
     protected boolean canShoot;
     protected boolean canDodge;
@@ -34,7 +33,6 @@ public abstract class RunningEnemy extends Character implements RunningAI, Mutat
     protected boolean dodging;
     private float bulletY;
     private long shootTime = System.currentTimeMillis();
-    protected int level;
     protected int shieldHealth;
 
     protected RunningEnemy(Rectangle rectangle, Texture texture, int frameCols, int frameRows) {
