@@ -5,15 +5,16 @@ import com.cshep4.monsterattack.game.character.Character;
 import com.cshep4.monsterattack.game.character.Player;
 import com.cshep4.monsterattack.game.factory.TextureFactory;
 
+import lombok.experimental.UtilityClass;
+
 import static com.cshep4.monsterattack.game.constants.Constants.CHARACTER_MOVE_LEFT;
 import static com.cshep4.monsterattack.game.constants.Constants.CHARACTER_MOVE_RIGHT;
 import static com.cshep4.monsterattack.game.constants.Constants.PLAYER_SPEED;
 import static java.lang.Math.abs;
 import static java.lang.Math.sqrt;
 
-public class Utils {
-    private Utils() {}
-
+@UtilityClass
+public class MovementUtils {
     public static void moveCharacterTowardsPoint(Character character, float destinationX, float destinationY) {
         float dirX = destinationX - character.getX();
         float dirY = destinationY - character.getY();
@@ -55,7 +56,7 @@ public class Utils {
         }
     }
 
-    private static boolean isPlayerCloseToDestination(Player player, float destinationX, float destinationY) {
+    private boolean isPlayerCloseToDestination(Player player, float destinationX, float destinationY) {
         return abs(player.getMidX() - destinationX) < player.getWidth()/4 &&
                 abs(player.getMidY() - destinationY) < player.getHeight()/4;
     }

@@ -8,7 +8,6 @@ import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.cshep4.monsterattack.game.character.Character;
 import com.cshep4.monsterattack.game.character.Player;
 import com.cshep4.monsterattack.game.factory.TextureFactory;
@@ -28,7 +27,7 @@ import static org.mockito.Mockito.when;
 
 
 @RunWith(MockitoJUnitRunner.class)
-public class UtilsTest {
+public class MovementUtilsTest {
     private static final int START_X = 100;
     private static final int START_Y = 100;
     private static final int DESTINATION_X = 400;
@@ -71,7 +70,7 @@ public class UtilsTest {
         character.setXVel(PLAYER_SPEED);
         character.setYVel(PLAYER_SPEED);
 
-        Utils.moveCharacterTowardsPoint(character, DESTINATION_X, DESTINATION_Y);
+        MovementUtils.moveCharacterTowardsPoint(character, DESTINATION_X, DESTINATION_Y);
 
         final float endDifferenceX = DESTINATION_X - character.getX();
         final float endDifferenceY = DESTINATION_Y - character.getY();
@@ -91,7 +90,7 @@ public class UtilsTest {
         player.setXVel(PLAYER_SPEED);
         player.setYVel(PLAYER_SPEED);
 
-        Utils.movePlayerTowardsPoint(player, DESTINATION_X, DESTINATION_Y);
+        MovementUtils.movePlayerTowardsPoint(player, DESTINATION_X, DESTINATION_Y);
 
         final float endDifferenceX = DESTINATION_X - player.getX();
         final float endDifferenceY = DESTINATION_Y - player.getY();

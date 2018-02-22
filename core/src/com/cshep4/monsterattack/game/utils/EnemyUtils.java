@@ -6,6 +6,8 @@ import com.cshep4.monsterattack.game.character.ProducerEnemy;
 import com.cshep4.monsterattack.game.character.RunningEnemy;
 import com.cshep4.monsterattack.game.character.Standard;
 
+import lombok.experimental.UtilityClass;
+
 import static com.cshep4.monsterattack.game.constants.Constants.B1_SPRITE_MOVE;
 import static com.cshep4.monsterattack.game.constants.Constants.B2_SPRITE_MOVE;
 import static com.cshep4.monsterattack.game.constants.Constants.B3_SPRITE_MOVE;
@@ -31,9 +33,8 @@ import static com.cshep4.monsterattack.game.constants.Constants.SP_PRODUCING_ROW
 import static com.cshep4.monsterattack.game.constants.Constants.SP_SPRITE_IDLE;
 import static com.cshep4.monsterattack.game.constants.Constants.SP_SPRITE_PRODUCE;
 
+@UtilityClass
 public class EnemyUtils {
-    private EnemyUtils() {}
-
     public static void setAbility(RunningEnemy runningEnemy) {
         if (runningEnemy instanceof Bomber) {
             setBomberAbility(runningEnemy);
@@ -42,7 +43,7 @@ public class EnemyUtils {
         }
     }
 
-    private static void setBomberAbility(RunningEnemy runningEnemy) {
+    private void setBomberAbility(RunningEnemy runningEnemy) {
         switch (runningEnemy.getLevel()) {
             case 1:
                 runningEnemy.setHealth(1);
@@ -65,7 +66,7 @@ public class EnemyUtils {
         }
     }
 
-    private static void setStandardAbility(RunningEnemy runningEnemy) {
+    private void setStandardAbility(RunningEnemy runningEnemy) {
         switch (runningEnemy.getLevel()) {
             case 1:
                 runningEnemy.setHealth(1);

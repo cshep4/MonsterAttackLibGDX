@@ -14,7 +14,7 @@ import static com.cshep4.monsterattack.game.constants.Constants.BULLET_HEIGHT_DI
 import static com.cshep4.monsterattack.game.constants.Constants.BULLET_NUMBER;
 import static com.cshep4.monsterattack.game.constants.Constants.BULLET_WIDTH_DIVIDER;
 import static com.cshep4.monsterattack.game.constants.Constants.CHARACTER_IDLE;
-import static com.cshep4.monsterattack.game.utils.Utils.movePlayerTowardsPoint;
+import static com.cshep4.monsterattack.game.utils.MovementUtils.movePlayerTowardsPoint;
 
 @EqualsAndHashCode(callSuper = true)
 @Data

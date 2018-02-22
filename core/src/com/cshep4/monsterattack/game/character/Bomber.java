@@ -18,7 +18,7 @@ import static com.cshep4.monsterattack.game.constants.Constants.ENEMY_SPEED;
 import static com.cshep4.monsterattack.game.constants.Constants.EXPLOSION;
 import static com.cshep4.monsterattack.game.core.SoundWrapper.playMutateBomb;
 import static com.cshep4.monsterattack.game.utils.EnemyUtils.getBomberSprite;
-import static com.cshep4.monsterattack.game.utils.Utils.moveCharacterTowardsPoint;
+import static com.cshep4.monsterattack.game.utils.MovementUtils.moveCharacterTowardsPoint;
 
 @EqualsAndHashCode(callSuper=true)
 public class Bomber extends RunningEnemy {
