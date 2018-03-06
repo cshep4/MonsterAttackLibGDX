@@ -1,6 +1,6 @@
 plugins {
-    id 'io.franzbecker.gradle-lombok' version '1.11'
     id 'java'
+    id 'io.franzbecker.gradle-lombok' version '1.11'
     id "me.tatarka.retrolambda" version "3.7.0"
 }
 
@@ -20,7 +20,10 @@ eclipse.project {
     name = appName + "-core"
 }
 
+
 dependencies {
     compile 'junit:junit:4.12'
     compile 'org.mockito:mockito-core:2.13.0'
+    compile "org.hamcrest:hamcrest-all:1.3"
+
 }

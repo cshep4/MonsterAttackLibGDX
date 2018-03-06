@@ -1,12 +1,13 @@
 package com.cshep4.monsterattack.game.utils;
 
-import com.cshep4.monsterattack.GameScreen;
 import com.cshep4.monsterattack.game.character.Bomber;
 import com.cshep4.monsterattack.game.character.BomberProducer;
 import com.cshep4.monsterattack.game.character.Enemy;
 import com.cshep4.monsterattack.game.character.Mutant;
+import com.cshep4.monsterattack.game.character.RunningEnemy;
 import com.cshep4.monsterattack.game.character.Standard;
 import com.cshep4.monsterattack.game.character.StandardProducer;
+import com.cshep4.monsterattack.game.indicator.ScoreIndicator;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -16,46 +17,62 @@ import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
 import static com.cshep4.monsterattack.GameScreen.getScreenYMax;
 import static com.cshep4.monsterattack.game.constants.Constants.CHARACTER_HEIGHT_DIVIDER;
 import static com.cshep4.monsterattack.game.constants.Constants.MAX_LEVEL;
+import static com.cshep4.monsterattack.game.constants.Constants.STANDARD;
+import static com.cshep4.monsterattack.game.utils.Utils.getRandomNumber;
 
 @UtilityClass
 public class DifficultyUtils {
     public static boolean isMutationPossible(Mutant mutant) {
-        if (mutant.getLevel() < MAX_LEVEL) {
+        if (mutant.getLevel() >= MAX_LEVEL) {
             return false;
         }
 
         int difficultyLevel = getDifficulty();
 
+        boolean result;
+
         switch (difficultyLevel) {
             case 1 :
-                return false;
+                result = false;
+                break;
             case 2 :
-                return false;
+                result = false;
+                break;
             case 3 :
-                return mutant instanceof Standard && mutant.getLevel() <= 1;
+                result = mutant instanceof Standard && mutant.getLevel() <= 1;
+                break;
             case 4 :
-                return mutant.getLevel() <= 1;
+                result = mutant.getLevel() <= 1;
+                break;
             case 5 :
-                return mutant instanceof Bomber && mutant.getLevel() <= 2;
+                result = mutant instanceof Bomber && mutant.getLevel() <= 2;
+                break;
             case 6 :
-                return mutant.getLevel() <= 2;
+                result = mutant.getLevel() <= 2;
+                break;
             case 7 :
-                return false;
+                result = false;
+                break;
             case 8 :
-                return mutant instanceof Bomber && mutant.getLevel() <= 3;
+                result = mutant instanceof Bomber && mutant.getLevel() <= 3;
+                break;
             case 9 :
-                return mutant.getLevel() <= 3;
             case 10 :
-                return mutant.getLevel() <= 3;
+                result = mutant.getLevel() <= 3;
+                break;
             case 11 :
-                return false;
+                result = false;
+                break;
             default :
-                return false;
+                result = false;
+                break;
 
         }
+
+        return result;
     }
 
-    public static Enemy spawnEnemyBasedOnDifficulty() {
+    static Enemy spawnEnemyBasedOnDifficulty() {
         int maxY = (int) (getScreenYMax() - (getScreenXMax() / CHARACTER_HEIGHT_DIVIDER * 2)) + 1;
         int minY = (int) getScreenYMax() / CHARACTER_HEIGHT_DIVIDER;
 
@@ -64,33 +81,48 @@ public class DifficultyUtils {
 
         int difficultyLevel = getDifficulty();
 
+        Enemy enemy;
+
         switch (difficultyLevel) {
             case 1 :
-                return spawnDifficulty1(x, y);
+                enemy = spawnDifficulty1(x, y);
+                break;
             case 2 :
-                return spawnDifficulty2(x, y);
+                enemy = spawnDifficulty2(x, y);
+                break;
             case 3 :
-                return spawnDifficulty3(x, y);
+                enemy = spawnDifficulty3(x, y);
+                break;
             case 4 :
-                return spawnDifficulty4(x, y);
+                enemy = spawnDifficulty4(x, y);
+                break;
             case 5 :
-                return spawnDifficulty5(x, y);
+                enemy = spawnDifficulty5(x, y);
+                break;
             case 6 :
-                return spawnDifficulty6(x, y);
+                enemy = spawnDifficulty6(x, y);
+                break;
             case 7 :
-                return spawnDifficulty7(x, y);
+                enemy = spawnDifficulty7(x, y);
+                break;
             case 8 :
-                return spawnDifficulty8(x, y);
+                enemy = spawnDifficulty8(x, y);
+                break;
             case 9 :
-                return spawnDifficulty9(x, y);
+                enemy = spawnDifficulty9(x, y);
+                break;
             case 10 :
-                return spawnDifficulty10(x, y);
+                enemy = spawnDifficulty10(x, y);
+                break;
             case 11 :
-                return spawnDifficulty11(x, y);
+                enemy = spawnDifficulty11(x, y);
+                break;
             default :
-                return spawnDifficulty1(x, y);
-
+                enemy = spawnDifficulty1(x, y);
+                break;
         }
+
+        return enemy;
     }
 
     private Enemy spawnDifficulty1(float x, float y) {
@@ -98,173 +130,342 @@ public class DifficultyUtils {
     }
 
     private Enemy spawnDifficulty2(float x, float y) {
-        int option = getRandomOption(2);
+        int option = getRandomNumber(1, 2);
+
+        Enemy enemy;
+
         switch (option) {
-            case 1:
-                return Standard.create(x, y, 1);
+            case 1 :
+                enemy = Standard.create(x, y, 1);
+                break;
             case 2 :
-                return Bomber.create(x, y, 1);
+                enemy = Bomber.create(x, y, 1);
+                break;
             default:
-                return Standard.create(x, y, 1);
+                enemy = Standard.create(x, y, 1);
+                break;
         }
+
+        return enemy;
     }
 
     private Enemy spawnDifficulty3(float x, float y) {
-        int option = getRandomOption(4);
+        int option = getRandomNumber(1, 7);
+
+        Enemy enemy;
+
         switch (option) {
-            case 1:
-                return Standard.create(x, y, 1);
+            case 1 :
             case 2 :
-                return Bomber.create(x, y, 1);
+                enemy = Standard.create(x, y, 1);
+                break;
             case 3 :
-                return Standard.create(x, y, 2);
             case 4 :
-                return StandardProducer.create(x, y);
+                enemy = Bomber.create(x, y, 1);
+                break;
+            case 5 :
+            case 6 :
+                enemy = Standard.create(x, y, 2);
+                break;
+            case 7 :
+                enemy = StandardProducer.create(x, y);
+                break;
             default:
-                return Standard.create(x, y, 1);
+                enemy = Standard.create(x, y, 1);
+                break;
         }
+
+        return enemy;
     }
 
     private Enemy spawnDifficulty4(float x, float y) {
-        int option = getRandomOption(6);
+        int option = getRandomNumber(1, 10);
+
+        Enemy enemy;
+
         switch (option) {
-            case 1:
-                return Standard.create(x, y, 1);
+            case 1 :
             case 2 :
-                return Bomber.create(x, y, 1);
+                enemy = Standard.create(x, y, 1);
+                break;
             case 3 :
-                return Standard.create(x, y, 2);
             case 4 :
-                return Bomber.create(x, y, 2);
+                enemy = Bomber.create(x, y, 1);
+                break;
             case 5 :
-                return StandardProducer.create(x, y);
             case 6 :
-                return BomberProducer.create(x, y);
+                enemy = Standard.create(x, y, 2);
+                break;
+            case 7 :
+            case 8 :
+                enemy = Bomber.create(x, y, 2);
+                break;
+            case 9 :
+                enemy = StandardProducer.create(x, y);
+                break;
+            case 10 :
+                enemy = BomberProducer.create(x, y);
+                break;
             default:
-                return Standard.create(x, y, 1);
+                enemy = Standard.create(x, y, 1);
+                break;
         }
+
+        return enemy;
     }
 
     private Enemy spawnDifficulty5(float x, float y) {
-        int option = getRandomOption(4);
+        int option = getRandomNumber(1, 6);
+
+        Enemy enemy;
+
         switch (option) {
             case 1 :
-                return Bomber.create(x, y, 2);
             case 2 :
-                return Standard.create(x, y, 2);
+                enemy = Bomber.create(x, y, 2);
+                break;
             case 3 :
-                return StandardProducer.create(x, y);
             case 4 :
-                return BomberProducer.create(x, y);
+                enemy = Standard.create(x, y, 2);
+                break;
+            case 5 :
+                enemy = StandardProducer.create(x, y);
+                break;
+            case 6 :
+                enemy = BomberProducer.create(x, y);
+                break;
             default:
-                return Standard.create(x, y, 2);
+                enemy = Standard.create(x, y, 2);
+                break;
         }
+
+        return enemy;
     }
 
     private Enemy spawnDifficulty6(float x, float y) {
-        int option = getRandomOption(5);
+        int option = getRandomNumber(1, 8);
+
+        Enemy enemy;
+
         switch (option) {
-            case 1:
-                return Standard.create(x, y, 2);
+            case 1 :
             case 2 :
-                return Bomber.create(x, y, 2);
+                enemy = Standard.create(x, y, 2);
+                break;
             case 3 :
-                return Bomber.create(x, y, 3);
             case 4 :
-                return StandardProducer.create(x, y);
+                enemy = Bomber.create(x, y, 2);
+                break;
             case 5 :
-                return BomberProducer.create(x, y);
+            case 6 :
+                enemy = Bomber.create(x, y, 3);
+                break;
+            case 7 :
+                enemy = StandardProducer.create(x, y);
+                break;
+            case 8 :
+                enemy = BomberProducer.create(x, y);
+                break;
             default:
-                return Standard.create(x, y, 2);
+                enemy = Standard.create(x, y, 2);
+                break;
         }
+
+        return enemy;
     }
 
     private Enemy spawnDifficulty7(float x, float y) {
-        int option = getRandomOption(2);
+        int option = getRandomNumber(1, 2);
+
+        Enemy enemy;
+
         switch (option) {
-            case 1:
-                return Standard.create(x, y, 3);
+            case 1 :
+                enemy = Standard.create(x, y, 3);
+                break;
             case 2 :
-                return Bomber.create(x, y, 3);
+                enemy = Bomber.create(x, y, 3);
+                break;
             default:
-                return Standard.create(x, y, 3);
+                enemy = Standard.create(x, y, 3);
+                break;
         }
+
+        return enemy;
     }
 
     private Enemy spawnDifficulty8(float x, float y) {
-        int option = getRandomOption(5);
+        int option = getRandomNumber(1, 8);
+
+        Enemy enemy;
+
         switch (option) {
-            case 1:
-                return Standard.create(x, y, 3);
+            case 1 :
             case 2 :
-                return Bomber.create(x, y, 3);
+                enemy = Standard.create(x, y, 3);
+                break;
             case 3 :
-                return Standard.create(x, y, 2);
             case 4 :
-                return StandardProducer.create(x, y);
+                enemy = Bomber.create(x, y, 3);
+                break;
             case 5 :
-                return BomberProducer.create(x, y);
+            case 6 :
+                enemy = Standard.create(x, y, 2);
+                break;
+            case 7 :
+                enemy = StandardProducer.create(x, y);
+                break;
+            case 8 :
+                enemy = BomberProducer.create(x, y);
+                break;
             default:
-                return Standard.create(x, y, 3);
+                enemy = Standard.create(x, y, 3);
+                break;
         }
+
+        return enemy;
     }
 
     private Enemy spawnDifficulty9(float x, float y) {
-        int option = getRandomOption(5);
+        int option = getRandomNumber(1, 8);
+
+        Enemy enemy;
+
         switch (option) {
-            case 1:
-                return Standard.create(x, y, 3);
+            case 1 :
             case 2 :
-                return Bomber.create(x, y, 3);
+                enemy = Standard.create(x, y, 3);
+                break;
             case 3 :
-                return Bomber.create(x, y, 4);
             case 4 :
-                return StandardProducer.create(x, y);
+                enemy = Bomber.create(x, y, 3);
+                break;
             case 5 :
-                return BomberProducer.create(x, y);
+            case 6 :
+                enemy = Bomber.create(x, y, 4);
+                break;
+            case 7 :
+                enemy = StandardProducer.create(x, y);
+                break;
+            case 8 :
+                enemy = BomberProducer.create(x, y);
+                break;
             default:
-                return Standard.create(x, y, 3);
+                enemy = Standard.create(x, y, 3);
+                break;
         }
+
+        return enemy;
     }
 
     private Enemy spawnDifficulty10(float x, float y) {
-        int option = getRandomOption(4);
+        int option = getRandomNumber(1, 6);
+
+        Enemy enemy;
+
         switch (option) {
-            case 1:
-                return Standard.create(x, y, 3);
+            case 1 :
             case 2 :
-                return Bomber.create(x, y, 4);
+                enemy = Standard.create(x, y, 3);
+                break;
             case 3 :
-                return StandardProducer.create(x, y);
             case 4 :
-                return BomberProducer.create(x, y);
+                enemy = Bomber.create(x, y, 4);
+                break;
+            case 5 :
+                enemy = StandardProducer.create(x, y);
+                break;
+            case 6 :
+                enemy = BomberProducer.create(x, y);
+                break;
             default:
-                return Standard.create(x, y, 3);
+                enemy = Standard.create(x, y, 3);
+                break;
         }
+
+        return enemy;
     }
 
     private Enemy spawnDifficulty11(float x, float y) {
-        int option = getRandomOption(4);
+        int option = getRandomNumber(1, 6);
+
+        Enemy enemy;
+
         switch (option) {
-            case 1:
-                return Standard.create(x, y, 4);
+            case 1 :
             case 2 :
-                return Bomber.create(x, y, 4);
+                enemy = Standard.create(x, y, 4);
+                break;
             case 3 :
-                return StandardProducer.create(x, y);
             case 4 :
-                return BomberProducer.create(x, y);
+                enemy = Bomber.create(x, y, 4);
+                break;
+            case 5 :
+                enemy = StandardProducer.create(x, y);
+                break;
+            case 6 :
+                enemy = BomberProducer.create(x, y);
+                break;
             default:
-                return Standard.create(x, y, 4);
+                enemy = Standard.create(x, y, 4);
+                break;
         }
+
+        return enemy;
     }
 
-    private int getRandomOption(int numOptions) {
-        return ThreadLocalRandom.current().nextInt(1, numOptions + 1);
+    public static RunningEnemy produceEnemyBasedDifficulty(float x, float y, int enemyType) {
+        int difficultyLevel = getDifficulty();
+        int level;
+        switch (difficultyLevel) {
+            case 1 :
+            case 2 :
+            case 3 :
+                level = 1;
+                break;
+            case 4 :
+            case 5 :
+                level = getRandomNumber(1, 2);
+                break;
+            case 6 :
+                level = getRandomNumber(1, 3);
+                break;
+            case 7 :
+            case 8 :
+                level = getRandomNumber(2, 3);
+                break;
+            case 9 :
+                level = getRandomNumber(2, 4);
+                break;
+            case 10 :
+                level = getRandomNumber(3, 4);
+                break;
+            case 11 :
+                level = 4;
+                break;
+            default :
+                level = getRandomNumber(1, 4);
+                break;
+
+        }
+
+        return produceEnemy(x, y, level, enemyType);
+    }
+
+    private RunningEnemy produceEnemy(float x, float y, int level, int enemyType) {
+        RunningEnemy enemy;
+
+        if (enemyType == STANDARD) {
+            enemy = Standard.create(x, y, level);
+        } else {
+            enemy = Bomber.create(x, y, level);
+        }
+
+        return enemy;
     }
 
     private int getDifficulty() {
-        double difficulty = (double) GameScreen.getNumKills() / 5;
+        double difficulty = (double) ScoreIndicator.getNumKills() / 5;
         return difficulty < 11 ? (int) Math.ceil(difficulty) : 11;
     }
 }

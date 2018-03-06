@@ -3,13 +3,12 @@ package com.cshep4.monsterattack.game.utils;
 import com.badlogic.gdx.Gdx;
 import com.cshep4.monsterattack.game.character.Character;
 import com.cshep4.monsterattack.game.character.Player;
-import com.cshep4.monsterattack.game.factory.TextureFactory;
 
 import lombok.experimental.UtilityClass;
 
-import static com.cshep4.monsterattack.game.constants.Constants.CHARACTER_MOVE_LEFT;
-import static com.cshep4.monsterattack.game.constants.Constants.CHARACTER_MOVE_RIGHT;
 import static com.cshep4.monsterattack.game.constants.Constants.PLAYER_SPEED;
+import static com.cshep4.monsterattack.game.utils.SpriteUtils.getPlayerLeftSprite;
+import static com.cshep4.monsterattack.game.utils.SpriteUtils.getPlayerRightSprite;
 import static java.lang.Math.abs;
 import static java.lang.Math.sqrt;
 
@@ -50,9 +49,9 @@ public class MovementUtils {
         player.setY(player.getY() + yVelocity);
 
         if (xVelocity < 0) {
-            player.changeAnimation(TextureFactory.create(CHARACTER_MOVE_LEFT),6, 1);
+            player.changeAnimation(getPlayerLeftSprite(player.getRemainingShieldTime()),6, 1);
         } else {
-            player.changeAnimation(TextureFactory.create(CHARACTER_MOVE_RIGHT),6, 1);
+            player.changeAnimation(getPlayerRightSprite(player.getRemainingShieldTime()),6, 1);
         }
     }
 

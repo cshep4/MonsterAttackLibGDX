@@ -1,46 +1,29 @@
 package com.cshep4.monsterattack.game.core;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.cshep4.monsterattack.game.factory.AnimationFactory;
+import com.cshep4.monsterattack.game.wrapper.Animation;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 @Data
+@Accessors(chain = true)
 public abstract class GameObject {
     private Rectangle rectangle;
-    private Texture texture;
-    private Animation<TextureRegion> animation;
+    private Animation animation;
+    private AnimationFactory animationFactory = new AnimationFactory();
 
-    public GameObject(Rectangle rectangle, Texture texture, int frameCols, int frameRows) {
+    protected GameObject(Rectangle rectangle, String texture, int frameCols, int frameRows) {
         this.rectangle = rectangle;
-        this.texture = texture;
-        animation = null;
-
-        createAnimation(frameCols, frameRows);
+        animation = animationFactory.createAnimation(frameCols, frameRows, texture);
     }
 
-    private void createAnimation(int frameCols, int frameRows) {
-        int tileWidth = texture.getWidth() / frameCols;
-        int tileHeight = texture.getHeight() / frameRows;
-        TextureRegion[][] tmp = TextureRegion.split(texture, tileWidth, tileHeight);
-
-        TextureRegion[] frames = new TextureRegion[frameCols * frameRows];
-        int index = 0;
-        for (int i = 0; i < frameRows; i++) {
-            for (int j = 0; j < frameCols; j++) {
-                frames[index++] = tmp[i][j];
-            }
-        }
-
-        animation = new Animation<>(0.1f, frames);
-    }
-
-    public void changeAnimation(Texture texture, int frameCols, int frameRows) {
-        this.texture.dispose();
-        this.texture = texture;
-        createAnimation(frameCols, frameRows);
+    public void changeAnimation(String texture, int frameCols, int frameRows) {
+        animation.dispose();
+        animation = animationFactory.createAnimation(frameCols, frameRows, texture);
     }
 
     public float getMidX() {
@@ -55,32 +38,49 @@ public abstract class GameObject {
         return rectangle.x;
     }
 
-    public void setX(float x) {
+    public GameObject setX(float x) {
         rectangle.x = x;
+        return this;
     }
 
     public float getY() {
         return rectangle.y;
     }
 
-    public void setY(float y) {
+    public GameObject setY(float y) {
         rectangle.y = y;
+        return this;
     }
 
     public float getWidth () {
         return rectangle.width;
     }
 
-    public void setWidth (float width) {
+    public GameObject setWidth (float width) {
         rectangle.width = width;
+        return this;
+
     }
 
     public float getHeight () {
         return rectangle.height;
     }
 
-    public void setHeight (float height) {
+    public GameObject setHeight (float height) {
         rectangle.height = height;
+        return this;
+    }
+
+    public com.badlogic.gdx.graphics.g2d.Animation<TextureRegion> getAnimation() {
+        return animation.getAnimation();
+    }
+
+    public Texture getTexture() {
+        return animation.getTexture();
+    }
+
+    public void dispose() {
+        animation.dispose();
     }
 
 }

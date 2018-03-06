@@ -10,7 +10,6 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.cshep4.monsterattack.game.core.GameObject;
-import com.cshep4.monsterattack.game.factory.TextureFactory;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,12 +19,11 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNot.not;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class BomberProducerTest {
     private static final int FRAME_COLS = 1;
     private static final int FRAME_ROWS = 1;
@@ -67,7 +65,7 @@ public class BomberProducerTest {
         when(audio.newSound(any(FileHandle.class))).thenReturn(sound);
         when(sound.play(any(Float.class))).thenReturn(1L);
         when(files.internal(any(String.class))).thenReturn(new FileHandle(""));
-        TextureFactory.setTexture(texture);
+//        TextureFactory.setTexture(texture);
     }
 
     @Test

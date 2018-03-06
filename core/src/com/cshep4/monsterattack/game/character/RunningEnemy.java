@@ -1,7 +1,6 @@
 package com.cshep4.monsterattack.game.character;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.cshep4.monsterattack.game.ai.RunningAI;
 import com.cshep4.monsterattack.game.bullet.Bomb;
@@ -12,19 +11,21 @@ import java.util.function.Predicate;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
 import static com.cshep4.monsterattack.GameScreen.getScreenYMax;
 import static com.cshep4.monsterattack.game.constants.Constants.BOMB_SIZE_DIVIDER;
 import static com.cshep4.monsterattack.game.constants.Constants.BULLET_HEIGHT_DIVIDER;
 import static com.cshep4.monsterattack.game.constants.Constants.BULLET_WIDTH_DIVIDER;
+import static com.cshep4.monsterattack.game.constants.Constants.ENEMY;
 import static com.cshep4.monsterattack.game.constants.Constants.ENEMY_SPEED;
 import static com.cshep4.monsterattack.game.constants.Constants.SHOOT_DELAY;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
+@Accessors(chain = true)
 public abstract class RunningEnemy extends Mutant implements RunningAI {
-    private static final String RUNNING_AI = "RunningAI";
     protected boolean canShoot;
     protected boolean canDodge;
     protected boolean canShield;
@@ -35,7 +36,7 @@ public abstract class RunningEnemy extends Mutant implements RunningAI {
     private long shootTime = System.currentTimeMillis();
     protected int shieldHealth;
 
-    protected RunningEnemy(Rectangle rectangle, Texture texture, int frameCols, int frameRows) {
+    protected RunningEnemy(Rectangle rectangle, String texture, int frameCols, int frameRows) {
         super(rectangle, texture, frameCols, frameRows);
         xVel = -ENEMY_SPEED;
     }
@@ -51,26 +52,26 @@ public abstract class RunningEnemy extends Mutant implements RunningAI {
     }
 
     private Bullet shootBullet() {
-        Gdx.app.log(RUNNING_AI,"Shoot Bullet");
+        Gdx.app.log(getLogName(),"Shoot Bullet");
         float w = getWidth() / BULLET_WIDTH_DIVIDER;
         float h = getHeight() / BULLET_HEIGHT_DIVIDER;
         float x = getX()+(getWidth() /2);
         float y = getY()+(getHeight() /2);
-        return Bullet.create(this, x, y, w, h);
+        return Bullet.create(ENEMY, x, y, w, h);
     }
 
     private Bomb shootBomb() {
-        Gdx.app.log(RUNNING_AI,"Shoot Bomb!");
+        Gdx.app.log(getLogName(),"Shoot Bomb!");
         float w = (getWidth() / BOMB_SIZE_DIVIDER) * 4;
         float h = (getHeight() / BOMB_SIZE_DIVIDER) * 4;
         float x = getX() +(getWidth()/2)-w/2;
         float y = getY() +(getHeight()/2)-h/2;
-        return Bomb.create(x, y, w, h);
+        return Bomb.create(ENEMY, x, y, w, h);
     }
 
     protected void shield() {
         shieldAnimation();
-        Gdx.app.log(RUNNING_AI,"Shield");
+        Gdx.app.log(getLogName(),"Shield");
         xVel = 0;
         yVel = 0;
         shielding = true;
@@ -82,7 +83,7 @@ public abstract class RunningEnemy extends Mutant implements RunningAI {
             return;
         }
 
-        Gdx.app.log(RUNNING_AI,"Dodge");
+        Gdx.app.log(getLogName(),"Dodge");
         dodging = true;
 
         if (isEnemyRetreatingOffEndOfScreen()) {
@@ -247,7 +248,7 @@ public abstract class RunningEnemy extends Mutant implements RunningAI {
 
     @Override
     public void moveForward() {
-        Gdx.app.log(RUNNING_AI,"Move Forward");
+        Gdx.app.log(getLogName(),"Move Forward");
         xVel = -ENEMY_SPEED;
         changeAnimation(xVel);
 
@@ -266,8 +267,12 @@ public abstract class RunningEnemy extends Mutant implements RunningAI {
         //check if enemy gets to edge of screen, game over
         if (getX() <= 0) {
             Gdx.app.log("Death", "LET THROUGH! Level: " + level);
-            player.setHealth(player.getHealth()-1);
+            player.loseLifeRegardlessOfShield();
             kill();
         }
+    }
+
+    protected String getLogName() {
+        return getClass().getSimpleName() + getLevel();
     }
 }

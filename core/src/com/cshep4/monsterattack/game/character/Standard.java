@@ -1,21 +1,20 @@
 package com.cshep4.monsterattack.game.character;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
-import com.cshep4.monsterattack.game.factory.TextureFactory;
 import com.cshep4.monsterattack.game.utils.EnemyUtils;
 
 import lombok.EqualsAndHashCode;
 
 import static com.cshep4.monsterattack.game.constants.Constants.S4_SPRITE_SHIELD;
-import static com.cshep4.monsterattack.game.core.SoundWrapper.playMutateStandard;
-import static com.cshep4.monsterattack.game.utils.EnemyUtils.getStandardSpriteLeft;
-import static com.cshep4.monsterattack.game.utils.EnemyUtils.getStandardSpriteRight;
+import static com.cshep4.monsterattack.game.utils.SpriteUtils.getStandardSpriteLeft;
+import static com.cshep4.monsterattack.game.utils.SpriteUtils.getStandardSpriteRight;
+import static com.cshep4.monsterattack.game.utils.Utils.hasCollided;
+import static com.cshep4.monsterattack.game.wrapper.Sound.playMutateStandard;
 
 @EqualsAndHashCode(callSuper=true)
 public class Standard extends RunningEnemy {
-	private Standard(Rectangle rectangle, Texture texture, int frameCols, int frameRows, int level) {
+	private Standard(Rectangle rectangle, String texture, int frameCols, int frameRows, int level) {
 		super(rectangle, texture, frameCols, frameRows);
 		this.level = level;
 		EnemyUtils.setAbility(this);
@@ -26,11 +25,7 @@ public class Standard extends RunningEnemy {
 		int frameCols = 2;
 		int frameRows = 1;
 
-		String sprite = getStandardSpriteLeft(level);
-
-		Texture texture = TextureFactory.create(sprite);
-
-		return new Standard(rectangle, texture, frameCols, frameRows, level);
+		return new Standard(rectangle, getStandardSpriteLeft(level), frameCols, frameRows, level);
 	}
 
 	@Override
@@ -47,7 +42,7 @@ public class Standard extends RunningEnemy {
 	}
 
 	public void shieldAnimation() {
-		changeAnimation(TextureFactory.create(S4_SPRITE_SHIELD), 2, 1);
+		changeAnimation(S4_SPRITE_SHIELD, 2, 1);
 	}
 
 	@Override
@@ -65,9 +60,9 @@ public class Standard extends RunningEnemy {
         super.checkPlayerHasBeenKilled(player);
 
 		//check if player has collided, if so KILL!!!
-        if (getRectangle().overlaps(player.getRectangle())) {
-            Gdx.app.log("Death", "COLLIDED!");
-            player.setHealth(player.getHealth()-1);
+        if (hasCollided(this, player)) {
+            Gdx.app.log("Hit!", "COLLIDED!");
+            player.loseLife();
             kill();
         }
     }
@@ -83,6 +78,6 @@ public class Standard extends RunningEnemy {
 			textureFile = getStandardSpriteRight(level);
 		}
 
-		changeAnimation(TextureFactory.create(textureFile), 2, 1);
+		changeAnimation(textureFile, 2, 1);
 	}
 }

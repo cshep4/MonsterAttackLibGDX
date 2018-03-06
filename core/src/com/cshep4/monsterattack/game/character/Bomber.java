@@ -1,12 +1,10 @@
 package com.cshep4.monsterattack.game.character;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.cshep4.monsterattack.game.bullet.Bullet;
-import com.cshep4.monsterattack.game.core.SoundWrapper;
-import com.cshep4.monsterattack.game.factory.TextureFactory;
 import com.cshep4.monsterattack.game.utils.EnemyUtils;
+import com.cshep4.monsterattack.game.wrapper.Sound;
 
 import java.util.List;
 
@@ -16,18 +14,17 @@ import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
 import static com.cshep4.monsterattack.game.constants.Constants.CHARACTER_WIDTH_DIVIDER;
 import static com.cshep4.monsterattack.game.constants.Constants.ENEMY_SPEED;
 import static com.cshep4.monsterattack.game.constants.Constants.EXPLOSION;
-import static com.cshep4.monsterattack.game.core.SoundWrapper.playMutateBomb;
-import static com.cshep4.monsterattack.game.utils.EnemyUtils.getBomberSprite;
 import static com.cshep4.monsterattack.game.utils.MovementUtils.moveCharacterTowardsPoint;
+import static com.cshep4.monsterattack.game.utils.SpriteUtils.getBomberSprite;
+import static com.cshep4.monsterattack.game.utils.Utils.hasCollided;
+import static com.cshep4.monsterattack.game.wrapper.Sound.playMutateBomb;
 
 @EqualsAndHashCode(callSuper=true)
 public class Bomber extends RunningEnemy {
-	private static final String RUNNING_AI = "RunningAI";
-
 	private long explosionTime = 0;
 	private static final int EXPLOSION_DELAY = 500;
 		
-	private Bomber(Rectangle rectangle, Texture texture, int frameCols, int frameRows, int level) {
+	private Bomber(Rectangle rectangle, String texture, int frameCols, int frameRows, int level) {
 		super(rectangle, texture, frameCols, frameRows);
 		this.level = level;
 		EnemyUtils.setAbility(this);
@@ -40,18 +37,12 @@ public class Bomber extends RunningEnemy {
 		int frameCols = 7;
 		int frameRows = 1;
 
-		String sprite = getBomberSprite(level);
-
-		Texture texture = TextureFactory.create(sprite);
-
-		return new Bomber(rectangle, texture, frameCols, frameRows, level);
+		return new Bomber(rectangle, getBomberSprite(level), frameCols, frameRows, level);
 	}
 
 
 	public void update(Player player){
-		float playerX = player.getX();
-		float playerY = player.getY();
-		moveCharacterTowardsPoint(this, playerX, playerY);
+		moveCharacterTowardsPoint(this, player.getX(), player.getY());
 
 		if (isValidMutation()) {
 			mutate();
@@ -60,7 +51,7 @@ public class Bomber extends RunningEnemy {
 
 	@Override
 	public void mutate() {
-		Gdx.app.log("Mutate", level + "->" + (level +1));
+		Gdx.app.log("Mutate!", level + "->" + (level +1));
 		playMutateBomb();
 		level += 1;
 		EnemyUtils.setAbility(this);
@@ -103,7 +94,7 @@ public class Bomber extends RunningEnemy {
 		// Bomber specific - explode
 		update(player);
 		if (isPlayerInExplosionRange(player)) {
-			Gdx.app.log(RUNNING_AI, "Explode");
+			Gdx.app.log(getLogName(), "EXPLODE!");
 			explode(player);
 			explosionTime = System.currentTimeMillis();
 			xVel = 0;
@@ -127,31 +118,28 @@ public class Bomber extends RunningEnemy {
 	}
 
 	private void explode(Player player) {
-		SoundWrapper.playExplode();
+		Sound.playExplode();
 		setX(getX() - getWidth()/2);
 		setY(getY() - getHeight()/2);
 		setWidth((getScreenXMax() / CHARACTER_WIDTH_DIVIDER) * 2);
 		setHeight((getScreenXMax() / CHARACTER_WIDTH_DIVIDER) * 2);
-		changeAnimation(TextureFactory.create(EXPLOSION),1, 1);
-		Gdx.app.log("Death", "BOMBED!");
+		changeAnimation(EXPLOSION,1, 1);
+		Gdx.app.log("Death!", "BOMBED!");
 		player.kill();
 	}
 
 	private boolean isPlayerInExplosionRange(Player player) {
-		Rectangle explosionRange = new Rectangle();
+		float x = getX() - getWidth()/2;
+		float y = getY() - getHeight()/2;
+		float size = (getScreenXMax() / CHARACTER_WIDTH_DIVIDER) * 2;
 
-		explosionRange.setX(getX() - getWidth()/2);
-		explosionRange.setY(getY() - getHeight()/2);
-		explosionRange.setWidth((getScreenXMax() / CHARACTER_WIDTH_DIVIDER) * 2);
-		explosionRange.setHeight((getScreenXMax() / CHARACTER_WIDTH_DIVIDER) * 2);
+		Rectangle explosionRange = new Rectangle().setPosition(x,y).setSize(size);
 
-		return explosionRange.overlaps(player.getRectangle());
+		return hasCollided(explosionRange, player);
 	}
 
 	@Override
 	public void changeAnimation(float newXVel) {
-		String textureFile = getBomberSprite(level);
-
-		changeAnimation(TextureFactory.create(textureFile), 7, 1);
+		changeAnimation(getBomberSprite(level), 7, 1);
 	}
 }

@@ -1,9 +1,10 @@
 package com.cshep4.monsterattack;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.cshep4.monsterattack.game.core.SoundWrapper;
+import com.cshep4.monsterattack.game.wrapper.Sound;
 
 public class MonsterAttack extends Game {
 
@@ -17,9 +18,10 @@ public class MonsterAttack extends Game {
 
 	@Override
 	public void create () {
-
 		batch = new SpriteBatch();
 		font = new BitmapFont();
+		font.setColor(Color.BLACK);
+		Sound.loadSounds();
 
 		setScreen(new MainMenuScreen(this));
 	}
@@ -27,7 +29,8 @@ public class MonsterAttack extends Game {
 	@Override
 	public void dispose () {
 		batch.dispose();
-		SoundWrapper.dispose();
+		Sound.dispose();
 		screen.dispose();
+		font.dispose();
 	}
 }

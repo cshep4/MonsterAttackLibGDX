@@ -3,13 +3,13 @@ package com.cshep4.monsterattack.game.utils;
 import com.cshep4.monsterattack.game.character.Enemy;
 import com.cshep4.monsterattack.game.character.ProducerEnemy;
 import com.cshep4.monsterattack.game.character.RunningEnemy;
+import com.cshep4.monsterattack.game.pickup.BombCase;
 import com.cshep4.monsterattack.game.pickup.BulletCase;
 import com.cshep4.monsterattack.game.pickup.Life;
 import com.cshep4.monsterattack.game.pickup.PickupItem;
+import com.cshep4.monsterattack.game.pickup.Shield;
 
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 import lombok.experimental.UtilityClass;
 
@@ -22,6 +22,7 @@ import static com.cshep4.monsterattack.game.constants.Constants.PICKUP_SPAWN_DEL
 import static com.cshep4.monsterattack.game.constants.Constants.SPAWN_DELAY_MAX;
 import static com.cshep4.monsterattack.game.constants.Constants.SPAWN_DELAY_MIN;
 import static com.cshep4.monsterattack.game.utils.DifficultyUtils.spawnEnemyBasedOnDifficulty;
+import static com.cshep4.monsterattack.game.utils.Utils.getRandomNumber;
 import static java.lang.System.currentTimeMillis;
 
 @UtilityClass
@@ -52,9 +53,7 @@ public final class SpawnUtils {
     }
 
 	private boolean checkSpawnDelay() {
-        Random rand = new Random();
-        int delay = rand.nextInt(SPAWN_DELAY_MAX) + SPAWN_DELAY_MIN;
-
+        int delay = getRandomNumber(SPAWN_DELAY_MIN, SPAWN_DELAY_MAX);
         return currentTimeMillis() - enemySpawnTime > delay;
 	}
 
@@ -72,20 +71,39 @@ public final class SpawnUtils {
         int maxX = (int) (getScreenXMax() * 0.75);
         int minX = (int) getScreenXMax() / PICKUP_SIZE_DIVIDER;
 
-        Random rand = new Random();
-        int x = rand.nextInt(maxX) + minX;
-        int y = rand.nextInt(maxY) + minY;
+        int x = getRandomNumber(minX, maxX);
+        int y = getRandomNumber(minY, maxY);
         float size = getScreenXMax() / PICKUP_SIZE_DIVIDER;
 
-        if (rand.nextBoolean()) {
-            return Life.create(x, y, size, size);
-        } else {
-            return BulletCase.create(x, y, size, size);
+        int randomNumber = getRandomNumber(1, 6);
+
+        PickupItem pickup;
+
+        switch (randomNumber) {
+            case 1 :
+            case 2 :
+                pickup = Life.create(x, y, size, size);
+                break;
+            case 3 :
+            case 4 :
+                pickup = BulletCase.create(x, y, size, size);
+                break;
+            case 5 :
+                pickup = BombCase.create(x, y, size, size);
+                break;
+            case 6 :
+                pickup = Shield.create(x, y, size, size);
+                break;
+            default:
+                pickup = Life.create(x, y, size, size);
+                break;
         }
+
+        return pickup;
     }
 
     private boolean checkPickupSpawnDelay() {
-        int delay = ThreadLocalRandom.current().nextInt(PICKUP_SPAWN_DELAY_MIN, PICKUP_SPAWN_DELAY_MAX + 1);
+        int delay = getRandomNumber(PICKUP_SPAWN_DELAY_MIN, PICKUP_SPAWN_DELAY_MAX);
 
         return currentTimeMillis() - pickupSpawnTime > delay;
     }

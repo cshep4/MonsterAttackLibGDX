@@ -8,13 +8,11 @@ import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
-import com.cshep4.monsterattack.game.character.Enemy;
 import com.cshep4.monsterattack.game.character.Player;
 import com.cshep4.monsterattack.game.character.ProducerEnemy;
 import com.cshep4.monsterattack.game.character.RunningEnemy;
 import com.cshep4.monsterattack.game.character.Standard;
 import com.cshep4.monsterattack.game.character.StandardProducer;
-import com.cshep4.monsterattack.game.factory.TextureFactory;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -27,14 +25,17 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.cshep4.monsterattack.game.constants.Constants.BULLET_SPEED;
+import static com.cshep4.monsterattack.game.constants.Constants.ENEMY;
+import static com.cshep4.monsterattack.game.constants.Constants.PLAYER;
 import static junit.framework.TestCase.assertEquals;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class BulletTest {
     private static final float X_POS = 100;
     private static final float Y_POS = 100;
@@ -76,7 +77,7 @@ public class BulletTest {
         when(texture.getHeight()).thenReturn(100);
         doNothing().when(app).log(any(String.class), any(String.class));
         when(files.internal(any(String.class))).thenReturn(new FileHandle(""));
-        TextureFactory.setTexture(texture);
+//        TextureFactory.setTexture(texture);
 
         //Audio mocking
         Gdx.audio = audio;
@@ -89,7 +90,7 @@ public class BulletTest {
 
     @Test
     public void create_player() throws Exception {
-        Bullet bullet = Bullet.create(player, X_POS, Y_POS, WIDTH, HEIGHT);
+        Bullet bullet = Bullet.create(ENEMY, X_POS, Y_POS, WIDTH, HEIGHT);
 
         assertTrue(bullet instanceof Bullet);
         assertEquals(X_POS, bullet.getX());
@@ -101,7 +102,7 @@ public class BulletTest {
 
     @Test
     public void create_enemy() throws Exception {
-        Bullet bullet = Bullet.create(runningEnemy, X_POS, Y_POS, WIDTH, HEIGHT);
+        Bullet bullet = Bullet.create(ENEMY, X_POS, Y_POS, WIDTH, HEIGHT);
 
         assertTrue(bullet instanceof Bullet);
         assertEquals(X_POS, bullet.getX());
@@ -116,7 +117,7 @@ public class BulletTest {
         //bullet will update and move to this x position
         float xPos = X_POS + BULLET_SPEED;
 
-        Bullet bullet = Bullet.create(player, X_POS, Y_POS, WIDTH, HEIGHT);
+        Bullet bullet = Bullet.create(PLAYER, X_POS, Y_POS, WIDTH, HEIGHT);
         List<RunningEnemy> runningEnemies = Arrays.asList(Standard.create(xPos, Y_POS, 1));
         List<ProducerEnemy> producerEnemyList = Collections.emptyList();
 
@@ -131,7 +132,7 @@ public class BulletTest {
         //bullet will update and move to this x position
         float xPos = X_POS + BULLET_SPEED;
 
-        Bullet bullet = Bullet.create(player, X_POS, Y_POS, WIDTH, HEIGHT);
+        Bullet bullet = Bullet.create(PLAYER, X_POS, Y_POS, WIDTH, HEIGHT);
         List<RunningEnemy> runningEnemies = Collections.emptyList();
         List<ProducerEnemy> producerEnemyList = Arrays.asList(StandardProducer.create(xPos, Y_POS));
 
@@ -146,7 +147,7 @@ public class BulletTest {
         //bullet will update and move to this x position
         float xPos = X_POS + BULLET_SPEED;
 
-        Bullet bullet = Bullet.create(player, X_POS, Y_POS, WIDTH, HEIGHT);
+        Bullet bullet = Bullet.create(PLAYER, X_POS, Y_POS, WIDTH, HEIGHT);
         List<RunningEnemy> runningEnemies = Arrays.asList(Standard.create(1000000, 100000, 1));
         List<ProducerEnemy> producerEnemyList = Arrays.asList(StandardProducer.create(1000000, 100000));
 
@@ -161,7 +162,7 @@ public class BulletTest {
         //bullet will update and move to this x position
         float xPos = X_POS - BULLET_SPEED;
 
-        Bullet bullet = Bullet.create(runningEnemy, X_POS, Y_POS, WIDTH, HEIGHT);
+        Bullet bullet = Bullet.create(ENEMY, X_POS, Y_POS, WIDTH, HEIGHT);
         Player player = Player.create(xPos, Y_POS);
 
         boolean result = bullet.update(player);
@@ -175,7 +176,7 @@ public class BulletTest {
         //bullet will update and move to this x position
         float xPos = X_POS - BULLET_SPEED;
 
-        Bullet bullet = Bullet.create(runningEnemy, X_POS, Y_POS, WIDTH, HEIGHT);
+        Bullet bullet = Bullet.create(ENEMY, X_POS, Y_POS, WIDTH, HEIGHT);
         Player player = Player.create(1000000, 1000000);
 
         boolean result = bullet.update(player);
@@ -186,7 +187,7 @@ public class BulletTest {
 
     @Test
     public void testCollisionSound() throws Exception {
-        Bullet bullet = Bullet.create(player, X_POS, Y_POS, WIDTH, HEIGHT);
+        Bullet bullet = Bullet.create(PLAYER, X_POS, Y_POS, WIDTH, HEIGHT);
 
         bullet.collisionSound();
 

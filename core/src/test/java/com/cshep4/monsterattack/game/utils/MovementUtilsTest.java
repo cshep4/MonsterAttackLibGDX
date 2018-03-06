@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.cshep4.monsterattack.game.character.Character;
 import com.cshep4.monsterattack.game.character.Player;
-import com.cshep4.monsterattack.game.factory.TextureFactory;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -58,7 +57,7 @@ public class MovementUtilsTest {
         when(graphics.getDeltaTime()).thenReturn(1f);
         when(texture.getWidth()).thenReturn(100);
         when(texture.getHeight()).thenReturn(100);
-        TextureFactory.setTexture(texture);
+//        TextureFactory.setTexture(texture);
     }
 
     @Test

@@ -10,10 +10,12 @@ import static com.cshep4.monsterattack.game.core.State.PAUSE;
 import static com.cshep4.monsterattack.game.core.State.RESUME;
 import static com.cshep4.monsterattack.game.core.State.RUN;
 
-public class InputProcessing extends InputAdapter {
+public class InputProcessor extends InputAdapter {
     private GameScreen gameScreen;
+    private int movementPointer = -1;
+    private boolean justPaused = false;
 
-    public InputProcessing(GameScreen gameScreen) {
+    public InputProcessor(GameScreen gameScreen) {
         this.gameScreen = gameScreen;
     }
 
@@ -29,17 +31,14 @@ public class InputProcessing extends InputAdapter {
             return false;
         }
 
-
         if (isPauseButtonPressed(xPos, yPos)) {
             gameScreen.setState(PAUSE);
-            gameScreen.setJustPaused(true);
-        }
-        else if (isShootButtonPressed(xPos, yPos)) {
+            justPaused = true;
+        } else if (isShootButtonPressed(xPos, yPos)) {
             gameScreen.shoot();
-        }
-        else {
-            if (gameScreen.getPressDownPointer() == -1) {
-                gameScreen.setPressDownPointer(pointer);
+        } else {
+            if (movementPointer == -1) {
+                movementPointer = pointer;
                 gameScreen.setPlayerMoving(true);
             }
         }
@@ -57,15 +56,15 @@ public class InputProcessing extends InputAdapter {
 
     @Override
     public boolean touchUp(int x, int y, int pointer, int button) {
-        if (!gameScreen.isJustPaused() && gameScreen.getState() == PAUSE) {
+        if (!justPaused && gameScreen.getState() == PAUSE) {
             gameScreen.setState(RESUME);
         }
-        gameScreen.setJustPaused(false);
+        justPaused = false;
 
-        if (pointer == gameScreen.getPressDownPointer()) {
+        if (pointer == movementPointer) {
             gameScreen.setPlayerMoving(false);
             gameScreen.getPlayer().stand();
-            gameScreen.setPressDownPointer(-1);
+            movementPointer = -1;
         }
 
         return true;
@@ -79,9 +78,9 @@ public class InputProcessing extends InputAdapter {
         float xPos = xMultiplier * screenX;
         float yPos = yMultiplier * (gameScreen.getHeight() - screenY);
 
-        if (pointer == gameScreen.getPressDownPointer()) {
-            gameScreen.setDestinationX(xPos);
-            gameScreen.setDestinationY(yPos);
+        if (pointer == movementPointer) {
+            gameScreen.setPlayerDestinationX(xPos);
+            gameScreen.setPlayerDestinationY(yPos);
         }
         return true;
     }

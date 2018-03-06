@@ -4,9 +4,6 @@ public final class Constants {
 
 	private Constants() {}
 
-	public static final int LEFT = 0;
-	public static final int RIGHT = 1;
-
 	public static final int CHARACTER_WIDTH_DIVIDER = 14;
 	public static final int CHARACTER_HEIGHT_DIVIDER = 10;
 
@@ -41,27 +38,9 @@ public final class Constants {
 	public static final int MUTATE_DELAY_MIN = 2000;
 	public static final int MUTATE_DELAY_MAX = 10000;
 
-	public static final int MAX_ENEMIES = 1;
+	public static final int MAX_ENEMIES = 2;
 	public static final int MIN_LEVEL = 1;
 	public static final int MAX_LEVEL = 4;
-	
-	//sprite dividers
-	public static final int CHARACTER_IDLE_DIVIDER = 2;
-	public static final int CHARACTER_GOT_HIT_DIVIDER = 1;
-	public static final int CHARACTER_RUNNING_DIVIDER = 6;
-	public static final int S_1_GOT_HIT_DIVIDER = 1;
-	public static final int S_MOVE_DIVIDER = 2;
-	public static final int S_GOT_HIT_DIVIDER = 2;
-	public static final int S_SHIELD_DIVIDER = 2;
-	public static final int B_GOT_HIT_DIVIDER = 2;
-	public static final int B_MOVE_DIVIDER = 7;
-	public static final int S_P_IDLE_DIVIDER = 8;
-	public static final int S_P_PRODUCE_DIVIDER = 2;
-	public static final int B_P_IDLE_DIVIDER = 2;
-	public static final int B_P_PRODUCE_DIVIDER = 1;
-
-	//Define the frame rate
-	public static final float FRAME_RATE = 30;
 
 	// --------------------------------------Sprites
 	// Enemies
@@ -97,21 +76,24 @@ public final class Constants {
 	public static final String CHARACTER_MOVE_RIGHT = "character_running.png";
 	public static final String CHARACTER_MOVE_LEFT = "character_running1.png";
 	public static final String CHARACTER_HIT = "gothit.png";
+	public static final String CHARACTER_IDLE_SHIELD = "idle_shield.png";
+	public static final String CHARACTER_MOVE_RIGHT_SHIELD = "character_running_shield.png";
+	public static final String CHARACTER_MOVE_LEFT_SHIELD = "character_running_shield1.png";
 
 	// Misc.
 	public static final String BACKGROUND = "background_small.png";
 	public static final String PAUSE_BUTTON = "pause_button.png";
 	public static final String SHOOT_BUTTON = "shoot_button.png";
 	public static final String LIFE = "heart.png";
+	public static final String SHIELD = "shield.png";
 
 	// Bullet
 	public static final String PLAYER_BULLET = "bullet.png";
 	public static final String ENEMY_BULLET = "bullet1.png";
     public static final String PICKUP_BULLET = "bullet_pickup.png";
+    public static final String BOMB = "bomb.gif";
 
 	//Producer
-	public static final int STANDARD = 0;
-	public static final int BOMBER = 1;
 	public static final int BP_IDLE_COLS = 2;
 	public static final int SP_IDLE_COLS = 8;
 	public static final int BP_IDLE_ROWS = 1;
@@ -122,4 +104,11 @@ public final class Constants {
 	public static final int SP_PRODUCING_ROWS = 1;
 
 	public static final int BULLET_NUMBER = 30;
+	public static final int BOMB_NUMBER = 10;
+	public static final int SHIELD_TIME = 10;
+
+	public static final int STANDARD = 1000;
+    public static final int BOMBER = 1001;
+	public static final int PLAYER = 1002;
+	public static final int ENEMY = 1003;
 }

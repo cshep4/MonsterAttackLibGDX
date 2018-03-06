@@ -6,7 +6,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.cshep4.monsterattack.game.core.GameObject;
-import com.cshep4.monsterattack.game.factory.TextureFactory;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -15,12 +14,12 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import static junit.framework.TestCase.assertEquals;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class ShootButtonTest {
     private static final float X_POS = 100;
     private static final float Y_POS = 100;
@@ -46,7 +45,7 @@ public class ShootButtonTest {
 
         doNothing().when(app).log(any(String.class), any(String.class));
         when(files.internal(any(String.class))).thenReturn(new FileHandle(""));
-        TextureFactory.setTexture(texture);
+//        TextureFactory.setTexture(texture);
     }
 
     @Test
