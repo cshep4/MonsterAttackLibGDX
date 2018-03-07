@@ -14,16 +14,16 @@ import lombok.experimental.Accessors;
 public abstract class GameObject {
     private Rectangle rectangle;
     private Animation animation;
-    private AnimationFactory animationFactory = new AnimationFactory();
+
 
     protected GameObject(Rectangle rectangle, String texture, int frameCols, int frameRows) {
         this.rectangle = rectangle;
-        animation = animationFactory.createAnimation(frameCols, frameRows, texture);
+        animation = AnimationFactory.createAnimation(frameCols, frameRows, texture);
     }
 
     public void changeAnimation(String texture, int frameCols, int frameRows) {
         animation.dispose();
-        animation = animationFactory.createAnimation(frameCols, frameRows, texture);
+        animation = AnimationFactory.createAnimation(frameCols, frameRows, texture);
     }
 
     public float getMidX() {

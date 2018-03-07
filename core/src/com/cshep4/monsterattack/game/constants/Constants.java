@@ -27,6 +27,8 @@ public final class Constants {
 	public static final int SPAWN_DELAY_MIN = 1500;
 	public static final int SPAWN_DELAY_MAX = 2500;
 
+	public static final int EXPLOSION_DELAY = 500;
+
 	public static final int PICKUP_SPAWN_DELAY_MIN = 5000;
 	public static final int PICKUP_SPAWN_DELAY_MAX = 12500;
 

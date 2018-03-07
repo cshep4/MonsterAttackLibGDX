@@ -184,25 +184,25 @@ public class SpriteUtils {
 
     public static String getPlayerIdleSprite(int remainingShieldTime) {
         if (remainingShieldTime > 0) {
-            return CHARACTER_IDLE;
-        } else {
             return CHARACTER_IDLE_SHIELD;
+        } else {
+            return CHARACTER_IDLE;
         }
     }
 
     public static String getPlayerLeftSprite(int remainingShieldTime) {
         if (remainingShieldTime > 0) {
-            return CHARACTER_MOVE_LEFT;
-        } else {
             return CHARACTER_MOVE_LEFT_SHIELD;
+        } else {
+            return CHARACTER_MOVE_LEFT;
         }
     }
 
     public static String getPlayerRightSprite(int remainingShieldTime) {
         if (remainingShieldTime > 0) {
-            return CHARACTER_MOVE_RIGHT;
-        } else {
             return CHARACTER_MOVE_RIGHT_SHIELD;
+        } else {
+            return CHARACTER_MOVE_RIGHT;
         }
     }
 }

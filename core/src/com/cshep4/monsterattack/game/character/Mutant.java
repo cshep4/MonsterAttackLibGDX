@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Rectangle;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.experimental.Accessors;
 
 import static com.cshep4.monsterattack.game.constants.Constants.MUTATE_DELAY_MAX;
@@ -15,6 +16,7 @@ import static com.cshep4.monsterattack.game.utils.Utils.getRandomNumber;
 @Data
 @Accessors(chain = true)
 public abstract class Mutant extends Character {
+    @Getter
     private static long mutateTime = System.currentTimeMillis();
     protected int level;
 

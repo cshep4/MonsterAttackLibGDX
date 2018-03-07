@@ -10,6 +10,7 @@ import com.cshep4.monsterattack.game.factory.TextureFactory;
 import java.util.stream.IntStream;
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 import static com.cshep4.monsterattack.game.constants.Constants.INDICATOR_SIZE_DIVIDER;
 import static com.cshep4.monsterattack.game.constants.Constants.LIFE;
@@ -18,12 +19,10 @@ import static com.cshep4.monsterattack.game.constants.Constants.LIFE;
 public class LifeIndicator extends ScreenIndicator {
     private static final float SIZE = GameScreen.getScreenXMax() / INDICATOR_SIZE_DIVIDER;
 
-    private Texture lifeTexture;
-    private int instances;
+    private Texture lifeTexture = TextureFactory.create(LIFE);
 
-    public LifeIndicator(TextureFactory textureFactory) {
-        lifeTexture = textureFactory.create(LIFE);
-    }
+    @Getter
+    private int instances;
 
     @Override
     public void update(Player player) {

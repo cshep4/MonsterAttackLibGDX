@@ -128,13 +128,13 @@ public abstract class RunningEnemy extends Mutant implements RunningAI {
         } else {
             moveForward();
         }
-
         if (canStopDodging(playerBullets)) {
             dodging = false;
         }
         if (canStopShielding(playerBullets)) {
             shielding = false;
         }
+
 
         update();
     }

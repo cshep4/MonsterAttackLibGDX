@@ -20,7 +20,6 @@ import com.cshep4.monsterattack.game.core.GameObject;
 import com.cshep4.monsterattack.game.core.InputProcessor;
 import com.cshep4.monsterattack.game.core.State;
 import com.cshep4.monsterattack.game.factory.TextureFactory;
-import com.cshep4.monsterattack.game.factory.TextureFactoryImpl;
 import com.cshep4.monsterattack.game.indicator.BombIndicator;
 import com.cshep4.monsterattack.game.indicator.BulletIndicator;
 import com.cshep4.monsterattack.game.indicator.LifeIndicator;
@@ -43,6 +42,7 @@ import static com.cshep4.monsterattack.game.core.State.RESUME;
 import static com.cshep4.monsterattack.game.core.State.RUN;
 import static com.cshep4.monsterattack.game.utils.SpawnUtils.spawnEnemies;
 import static com.cshep4.monsterattack.game.utils.SpawnUtils.spawnPickups;
+import static com.cshep4.monsterattack.game.utils.Utils.getTextWidth;
 import static com.cshep4.monsterattack.game.utils.Utils.hasCollided;
 
 @Data
@@ -64,8 +64,7 @@ public class GameScreen implements Screen {
     private State state = RUN;
     private long gameOverTime = 0;
 
-    private TextureFactory textureFactory = new TextureFactoryImpl();
-    private Texture backgroundTexture = textureFactory.create(BACKGROUND);
+    private Texture backgroundTexture = TextureFactory.create(BACKGROUND);
     private Sprite backgroundSprite = new Sprite(backgroundTexture);
 
     private Player player = Player.create(PLAYER_START_X, PLAYER_START_Y);
@@ -82,10 +81,10 @@ public class GameScreen implements Screen {
     private float playerDestinationY;
     private boolean playerMoving;
 
-    private BulletIndicator bulletIndicator = new BulletIndicator(textureFactory);
-    private BombIndicator bombIndicator = new BombIndicator(textureFactory);
-    private LifeIndicator lifeIndicator = new LifeIndicator(textureFactory);
-    private ShieldIndicator shieldIndicator = new ShieldIndicator(textureFactory);
+    private BulletIndicator bulletIndicator = new BulletIndicator();
+    private BombIndicator bombIndicator = new BombIndicator();
+    private LifeIndicator lifeIndicator = new LifeIndicator();
+    private ShieldIndicator shieldIndicator = new ShieldIndicator();
     private ScoreIndicator scoreIndicator = new ScoreIndicator();
     private PausedIndicator pausedIndicator;
 
@@ -259,8 +258,12 @@ public class GameScreen implements Screen {
         spawnPickups(pickups);
 
         bulletIndicator.update(player);
-        bombIndicator.update(player, bulletIndicator.getLayout().width);
-        shieldIndicator.update(player, bulletIndicator.getLayout().width, bombIndicator.getLayout().width);
+
+        float bulletIndicatorWidth = getTextWidth(game.font, bulletIndicator.getText());
+        bombIndicator.update(player, bulletIndicatorWidth);
+
+        float bombIndicatorWidth = getTextWidth(game.font, bombIndicator.getText());
+        shieldIndicator.update(player, bulletIndicatorWidth, bombIndicatorWidth);
         lifeIndicator.update(player);
         scoreIndicator.update();
     }

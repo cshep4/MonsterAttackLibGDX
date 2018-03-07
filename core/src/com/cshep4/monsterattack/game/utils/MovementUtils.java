@@ -18,6 +18,10 @@ public class MovementUtils {
         float dirX = destinationX - character.getX();
         float dirY = destinationY - character.getY();
 
+        if (dirX == 0 && dirY == 0) {
+            return;
+        }
+
         //normalise direction
         double hypotenuse = sqrt(dirX*dirX + dirY*dirY);
         dirX /= hypotenuse;

@@ -1,79 +1,44 @@
 package com.cshep4.monsterattack.game.character;
 
-import com.badlogic.gdx.Application;
-import com.badlogic.gdx.Audio;
-import com.badlogic.gdx.Files;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Graphics;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Rectangle;
 import com.cshep4.monsterattack.game.core.GameObject;
+import com.cshep4.monsterattack.game.factory.AnimationFactory;
+import com.cshep4.monsterattack.game.wrapper.Animation;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
-@RunWith(MockitoJUnitRunner.Silent.class)
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(AnimationFactory.class)
 public class BomberProducerTest {
-    private static final int FRAME_COLS = 1;
-    private static final int FRAME_ROWS = 1;
-    private static final float X = 100;
-    private static final float Y = 100;
+    private static final float X_POS = 100;
+    private static final float Y_POS = 100;
 
     @Mock
-    private Texture texture;
-
-    @Mock
-    private Rectangle rectangle;
-
-    @Mock
-    private Application app;
-
-    @Mock
-    private Audio audio;
-
-    @Mock
-    private Graphics graphics;
-
-    @Mock
-    private Sound sound;
-
-    @Mock
-    private Files files;
+    private Animation animationWrapper;
 
     @Before
     public void init() {
-        when(texture.getWidth()).thenReturn(100);
-        when(texture.getHeight()).thenReturn(100);
-        Gdx.app = app;
-        Gdx.audio = audio;
-        Gdx.files = files;
-        Gdx.graphics = graphics;
-
-        when(graphics.getDeltaTime()).thenReturn(1f);
-        doNothing().when(app).log(any(String.class), any(String.class));
-        when(audio.newSound(any(FileHandle.class))).thenReturn(sound);
-        when(sound.play(any(Float.class))).thenReturn(1L);
-        when(files.internal(any(String.class))).thenReturn(new FileHandle(""));
-//        TextureFactory.setTexture(texture);
+        mockStatic(AnimationFactory.class);
+        when(AnimationFactory.createAnimation(any(Integer.class), any(Integer.class), any(String.class))).thenReturn(animationWrapper);
     }
 
     @Test
     public void create() {
-        GameObject bomberProducer = BomberProducer.create(X,Y);
+        GameObject bomberProducer = BomberProducer.create(X_POS, Y_POS);
 
-        assertThat(bomberProducer instanceof BomberProducer, is(true));
-        assertThat(bomberProducer.getX(), is(X));
-        assertThat(bomberProducer.getY(), is(Y));
+        assertThat(bomberProducer, instanceOf(BomberProducer.class));
+        assertThat(bomberProducer.getX(), is(X_POS));
+        assertThat(bomberProducer.getY(), is(Y_POS));
     }
 }

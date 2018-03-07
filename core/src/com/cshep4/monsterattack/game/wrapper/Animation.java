@@ -4,11 +4,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Value;
+import lombok.Data;
 
-@Value
-@Getter
+@Data
 @AllArgsConstructor
 public class Animation {
     private Texture texture;

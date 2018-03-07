@@ -1,25 +1,25 @@
 package com.cshep4.monsterattack.game.button;
 
-import com.badlogic.gdx.Application;
-import com.badlogic.gdx.Files;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Texture;
 import com.cshep4.monsterattack.game.core.GameObject;
+import com.cshep4.monsterattack.game.factory.AnimationFactory;
+import com.cshep4.monsterattack.game.wrapper.Animation;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
-import static junit.framework.TestCase.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
-@RunWith(MockitoJUnitRunner.Silent.class)
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(AnimationFactory.class)
 public class ShootButtonTest {
     private static final float X_POS = 100;
     private static final float Y_POS = 100;
@@ -27,36 +27,22 @@ public class ShootButtonTest {
     private static final float HEIGHT = 100;
 
     @Mock
-    private Texture texture;
-
-    @Mock
-    private Application app;
-
-
-    @Mock
-    private Files files;
+    private Animation animationWrapper;
 
     @Before
     public void init() {
-        when(texture.getWidth()).thenReturn(100);
-        when(texture.getHeight()).thenReturn(100);
-        Gdx.app = app;
-        Gdx.files = files;
-
-        doNothing().when(app).log(any(String.class), any(String.class));
-        when(files.internal(any(String.class))).thenReturn(new FileHandle(""));
-//        TextureFactory.setTexture(texture);
+        mockStatic(AnimationFactory.class);
+        when(AnimationFactory.createAnimation(any(Integer.class), any(Integer.class), any(String.class))).thenReturn(animationWrapper);
     }
 
     @Test
     public void create() throws Exception {
         GameObject shootButton = ShootButton.create(X_POS, Y_POS, WIDTH, HEIGHT);
 
-        assertTrue(shootButton instanceof ShootButton);
-        assertEquals(X_POS, shootButton.getX());
-        assertEquals(Y_POS, shootButton.getY());
-        assertEquals(WIDTH, shootButton.getWidth());
-        assertEquals(HEIGHT, shootButton.getHeight());
+        assertThat(shootButton, instanceOf(ShootButton.class));
+        assertThat(shootButton.getX(), is(X_POS));
+        assertThat(shootButton.getY(), is(Y_POS));
+        assertThat(shootButton.getWidth(), is(WIDTH));
+        assertThat(shootButton.getHeight(), is(HEIGHT));
     }
-
 }

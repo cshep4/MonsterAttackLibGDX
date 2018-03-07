@@ -1,10 +1,10 @@
 package com.cshep4.monsterattack.game.indicator;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.cshep4.monsterattack.GameScreen;
 import com.cshep4.monsterattack.game.character.Player;
+import com.cshep4.monsterattack.game.utils.Utils;
 
 import lombok.EqualsAndHashCode;
 
@@ -20,9 +20,9 @@ public class PausedIndicator extends ScreenIndicator {
         this.gameScreen = gameScreen;
         text = "PAUSED";
 
-        GlyphLayout layout = new GlyphLayout(font, text);
-        x = (GameScreen.getScreenXMax() - layout.width) / 2;
-        y = (GameScreen.getScreenYMax() - layout.height) / 2;
+        float textWidth = Utils.getTextWidth(font, text);
+        x = (GameScreen.getScreenXMax() - textWidth) / 2;
+        y = (GameScreen.getScreenYMax() - textWidth) / 2;
     }
 
     @Override

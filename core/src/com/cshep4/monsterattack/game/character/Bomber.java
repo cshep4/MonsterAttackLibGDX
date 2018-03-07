@@ -9,11 +9,14 @@ import com.cshep4.monsterattack.game.wrapper.Sound;
 import java.util.List;
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
 import static com.cshep4.monsterattack.game.constants.Constants.CHARACTER_WIDTH_DIVIDER;
 import static com.cshep4.monsterattack.game.constants.Constants.ENEMY_SPEED;
 import static com.cshep4.monsterattack.game.constants.Constants.EXPLOSION;
+import static com.cshep4.monsterattack.game.constants.Constants.EXPLOSION_DELAY;
 import static com.cshep4.monsterattack.game.utils.MovementUtils.moveCharacterTowardsPoint;
 import static com.cshep4.monsterattack.game.utils.SpriteUtils.getBomberSprite;
 import static com.cshep4.monsterattack.game.utils.Utils.hasCollided;
@@ -21,8 +24,8 @@ import static com.cshep4.monsterattack.game.wrapper.Sound.playMutateBomb;
 
 @EqualsAndHashCode(callSuper=true)
 public class Bomber extends RunningEnemy {
+	@Getter @Setter
 	private long explosionTime = 0;
-	private static final int EXPLOSION_DELAY = 500;
 		
 	private Bomber(Rectangle rectangle, String texture, int frameCols, int frameRows, int level) {
 		super(rectangle, texture, frameCols, frameRows);
@@ -74,22 +77,7 @@ public class Bomber extends RunningEnemy {
 	}
 
 	private void decisionTreeProcessing(Player player, List<Bullet> playerBullets, List<Bullet> enemyBullets) {
-		if (isAbleToShield() && isBulletClose(playerBullets)) {
-			shield();
-		}
-		else if (canDodge && isEnemyInLineOfBullet(playerBullets)) {
-			dodge();
-		}
-		else if (canShoot && isPlayerInLineOfSight(player) && checkShootDelay()) {
-			enemyBullets.add(shoot());
-		}
-
-		if (canStopDodging(playerBullets)) {
-			dodging = false;
-		}
-		if (canStopShielding(playerBullets)) {
-			shielding = false;
-		}
+		super.decisionTree(player, playerBullets, enemyBullets);
 
 		// Bomber specific - explode
 		update(player);
@@ -136,6 +124,16 @@ public class Bomber extends RunningEnemy {
 		Rectangle explosionRange = new Rectangle().setPosition(x,y).setSize(size);
 
 		return hasCollided(explosionRange, player);
+	}
+
+	@Override
+	public void moveForward() {
+		//does nothing as movement is controlled differently for bombers
+	}
+
+	@Override
+	public void update(){
+		//does nothing as movement is controlled differently for bombers
 	}
 
 	@Override

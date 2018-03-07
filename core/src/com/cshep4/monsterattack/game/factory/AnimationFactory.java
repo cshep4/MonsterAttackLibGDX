@@ -7,10 +7,10 @@ import com.cshep4.monsterattack.game.wrapper.Animation;
 import java.util.Arrays;
 
 public class AnimationFactory {
-    private static final TextureFactory TEXTURE_FACTORY = new TextureFactoryImpl();
+    private AnimationFactory() {}
 
-    public Animation createAnimation(int frameCols, int frameRows, String sprite) {
-        Texture texture = TEXTURE_FACTORY.create(sprite);
+    public static Animation createAnimation(int frameCols, int frameRows, String sprite) {
+        Texture texture = TextureFactory.create(sprite);
 
         if (null == texture) {
             return null;

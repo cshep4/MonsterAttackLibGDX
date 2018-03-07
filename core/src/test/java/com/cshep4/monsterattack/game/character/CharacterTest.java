@@ -1,62 +1,59 @@
 package com.cshep4.monsterattack.game.character;
 
 import com.badlogic.gdx.Application;
-import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Texture;
+import com.cshep4.monsterattack.game.factory.AnimationFactory;
+import com.cshep4.monsterattack.game.wrapper.Animation;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
+import static com.cshep4.monsterattack.game.constants.Constants.ENEMY_SPEED;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(AnimationFactory.class)
 public class CharacterTest {
     private static final float X_POS = 100;
     private static final float Y_POS = 100;
 
     @Mock
-    private Texture texture;
-
+    private Animation animationWrapper;
     @Mock
     private Application app;
-
-    @Mock
-    private Files files;
 
     @Mock
     private Graphics graphics;
 
     @Before
     public void init() {
-        when(texture.getWidth()).thenReturn(100);
-        when(texture.getHeight()).thenReturn(100);
         Gdx.app = app;
-        Gdx.files = files;
         Gdx.graphics = graphics;
-
         when(graphics.getDeltaTime()).thenReturn(1f);
-        when(files.internal(any(String.class))).thenReturn(new FileHandle(""));
-//        TextureFactory.setTexture(texture);
+
+        mockStatic(AnimationFactory.class);
+        when(AnimationFactory.createAnimation(any(Integer.class), any(Integer.class), any(String.class))).thenReturn(animationWrapper);
     }
 
     @Test
     public void update_changesCharacterPositionBasedOnVelocity() {
-        Character character = Bomber.create(X_POS, Y_POS, 1);
+        Character character = Standard.create(X_POS, Y_POS, 1);
 
         character.update();
 
-        assertThat(character.getX(), is(not(X_POS)));
-        assertThat(character.getY(), is(not(Y_POS)));
+        float expectedX = X_POS - ENEMY_SPEED;
+
+        assertThat(character.getX(), is(expectedX));
+        assertThat(character.getY(), is(Y_POS));
     }
 
     @Test
@@ -72,10 +69,28 @@ public class CharacterTest {
     public void loseLife_decrementsHealth() {
         Character character = Bomber.create(X_POS, Y_POS, 1);
 
-        int beforeHealth = character.getHealth();
+        int expectedHealth = character.getHealth() - 1;
 
         character.loseLife();
 
-        assertThat(character.getHealth(), is(beforeHealth-1));
+        assertThat(character.getHealth(), is(expectedHealth));
+    }
+
+    @Test
+    public void getXVelByDeltaTime_returnsXVelBasedOnDeltaTime() {
+        Character character = Standard.create(X_POS, Y_POS, 1);
+
+        float xVel = character.getXVelByDeltaTime();
+
+        assertThat(character.getXVel(), is(xVel));
+    }
+
+    @Test
+    public void getYVelByDeltaTime_returnsYVelBasedOnDeltaTime() {
+        Character character = Standard.create(X_POS, Y_POS, 1);
+
+        float yVel = character.getYVelByDeltaTime();
+
+        assertThat(character.getYVel(), is(yVel));
     }
 }

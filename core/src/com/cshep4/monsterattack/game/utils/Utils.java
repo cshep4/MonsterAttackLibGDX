@@ -1,5 +1,7 @@
 package com.cshep4.monsterattack.game.utils;
 
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Rectangle;
 import com.cshep4.monsterattack.game.core.GameObject;
 
@@ -19,5 +21,9 @@ public class Utils {
 
     public static boolean hasCollided(Rectangle obj1, GameObject obj2) {
         return obj1.overlaps(obj2.getRectangle());
+    }
+
+    public static float getTextWidth(BitmapFont font, String text) {
+        return new GlyphLayout(font, text).width;
     }
 }

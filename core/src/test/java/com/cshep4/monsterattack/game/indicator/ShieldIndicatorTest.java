@@ -10,7 +10,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
 import static com.cshep4.monsterattack.game.constants.Constants.INDICATOR_SIZE_DIVIDER;
@@ -21,8 +22,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(TextureFactory.class)
 public class ShieldIndicatorTest {
     private static final float INDICATOR_SPRITE_SIZE = getScreenXMax() / INDICATOR_SIZE_DIVIDER;
     private static final float INDICATOR_SEPARATOR = INDICATOR_SPRITE_SIZE / 2;
@@ -32,9 +35,6 @@ public class ShieldIndicatorTest {
     private static final int LAYOUT_WIDTH = 100;
 
     private ShieldIndicator shieldIndicator;
-
-    @Mock
-    private TextureFactory textureFactory;
 
     @Mock
     private SpriteBatch batch;
@@ -50,8 +50,10 @@ public class ShieldIndicatorTest {
 
     @Before
     public void init() {
-        when(textureFactory.create(any(String.class))).thenReturn(shieldTexture);
-        shieldIndicator = new ShieldIndicator(textureFactory);
+        mockStatic(TextureFactory.class);
+        when(TextureFactory.create(any(String.class))).thenReturn(shieldTexture);
+
+        shieldIndicator = new ShieldIndicator();
     }
 
     @Test(expected = UnsupportedOperationException.class)

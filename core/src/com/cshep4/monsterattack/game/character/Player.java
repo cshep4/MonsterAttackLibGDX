@@ -7,6 +7,7 @@ import com.cshep4.monsterattack.game.bullet.Bullet;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
 import static com.cshep4.monsterattack.GameScreen.getScreenYMax;
@@ -21,6 +22,7 @@ import static com.cshep4.monsterattack.game.utils.SpriteUtils.getPlayerIdleSprit
 
 @EqualsAndHashCode(callSuper = true)
 @Data
+@Accessors(chain = true)
 public class Player extends Character {
 	private static final float PERIOD = 1f;
 

@@ -25,8 +25,8 @@ public class ShieldIndicator extends ScreenIndicator {
     private float y = 0;
     private int shieldTime = 0;
 
-    public ShieldIndicator(TextureFactory textureFactory) {
-        shieldTexture = textureFactory.create(SHIELD);
+    public ShieldIndicator() {
+        shieldTexture = TextureFactory.create(SHIELD);
     }
 
     @Override

@@ -2,7 +2,6 @@ package com.cshep4.monsterattack.game.indicator;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.cshep4.monsterattack.game.character.Player;
 import com.cshep4.monsterattack.game.factory.TextureFactory;
@@ -21,15 +20,10 @@ public class BombIndicator extends ScreenIndicator {
     private static final float BOMB_SIZE = getScreenXMax() / INDICATOR_SIZE_DIVIDER;
     private static final float INDICATOR_SEPARATOR = BOMB_SIZE / 2;
 
-    private Texture bombTexture;
+    private Texture bombTexture = TextureFactory.create(BOMB);
     private float x = 0;
     private float y = 0;
     private int bombNumber = 0;
-    private GlyphLayout layout = new GlyphLayout();
-
-    public BombIndicator(TextureFactory textureFactory) {
-        bombTexture = textureFactory.create(BOMB);
-    }
 
     @Override
     public void update(Player player) {
@@ -49,8 +43,6 @@ public class BombIndicator extends ScreenIndicator {
     public void draw(SpriteBatch batch, BitmapFont font) {
         if (bombNumber > 0) {
             batch.draw(bombTexture, x, y, BOMB_SIZE, BOMB_SIZE);
-
-            layout.setText(font, text);
             font.draw(batch, text, BOMB_SIZE + x, BOMB_SIZE);
         }
     }

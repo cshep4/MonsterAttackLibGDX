@@ -1,7 +1,6 @@
 package com.cshep4.monsterattack.game.indicator;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.cshep4.monsterattack.game.character.Player;
 
@@ -10,6 +9,7 @@ import lombok.Getter;
 
 import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
 import static com.cshep4.monsterattack.GameScreen.getScreenYMax;
+import static com.cshep4.monsterattack.game.utils.Utils.getTextWidth;
 
 @EqualsAndHashCode(callSuper=true)
 public class ScoreIndicator extends ScreenIndicator {
@@ -27,11 +27,11 @@ public class ScoreIndicator extends ScreenIndicator {
 
     @Override
     public void draw(SpriteBatch batch, BitmapFont font) {
-        final GlyphLayout layout = new GlyphLayout(font, text);
-        final float x = (getScreenXMax() - layout.width) / 2;
+        final float textWidth = getTextWidth(font, text);
+        final float x = (getScreenXMax() - textWidth) / 2;
         final float y = getScreenYMax();
 
-        font.draw(batch, layout, x, y);
+        font.draw(batch, text, x, y);
     }
 
     @Override
