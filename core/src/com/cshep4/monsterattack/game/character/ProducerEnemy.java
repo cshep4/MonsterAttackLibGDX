@@ -7,6 +7,7 @@ import com.cshep4.monsterattack.game.ai.ProducerAI;
 import java.util.List;
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
 import static com.cshep4.monsterattack.game.constants.Constants.BOMBER;
@@ -26,6 +27,7 @@ import static com.cshep4.monsterattack.game.utils.Utils.getRandomNumber;
 import static com.cshep4.monsterattack.game.utils.Utils.hasCollided;
 
 @EqualsAndHashCode(callSuper=true)
+@Getter
 public abstract class ProducerEnemy extends Character implements ProducerAI {
     private final String logName = getClass().getSimpleName();
     private long spawnTime = System.currentTimeMillis();

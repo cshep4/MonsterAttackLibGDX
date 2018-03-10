@@ -4,12 +4,15 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.cshep4.monsterattack.GameScreen;
 
+import lombok.Getter;
+
 import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
 import static com.cshep4.monsterattack.GameScreen.getScreenYMax;
 import static com.cshep4.monsterattack.game.core.State.PAUSE;
 import static com.cshep4.monsterattack.game.core.State.RESUME;
 import static com.cshep4.monsterattack.game.core.State.RUN;
 
+@Getter
 public class InputProcessor extends InputAdapter {
     private GameScreen gameScreen;
     private int movementPointer = -1;

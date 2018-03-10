@@ -19,6 +19,7 @@ import com.cshep4.monsterattack.game.character.RunningEnemy;
 import com.cshep4.monsterattack.game.core.GameObject;
 import com.cshep4.monsterattack.game.core.InputProcessor;
 import com.cshep4.monsterattack.game.core.State;
+import com.cshep4.monsterattack.game.factory.CameraFactory;
 import com.cshep4.monsterattack.game.factory.TextureFactory;
 import com.cshep4.monsterattack.game.indicator.BombIndicator;
 import com.cshep4.monsterattack.game.indicator.BulletIndicator;
@@ -95,8 +96,7 @@ public class GameScreen implements Screen {
         height = Gdx.graphics.getHeight();
         width = Gdx.graphics.getWidth();
         setScreenYMax(width, height);
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, screenXMax, screenYMax);
+        camera = CameraFactory.create(false, screenXMax, screenYMax);
 
         // create buttons
         float buttonSize = screenXMax / BUTTON_SIZE_DIVIDER;
