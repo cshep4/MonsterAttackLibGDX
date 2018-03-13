@@ -32,7 +32,7 @@ public class PausedIndicator extends ScreenIndicator {
 
     @Override
     public void draw(SpriteBatch batch, BitmapFont font) {
-        if (gameScreen.getState() == PAUSE) {
+        if (gameScreen.getState().equals(PAUSE)) {
             font.draw(batch, text, x, y);
         }
     }

@@ -9,8 +9,6 @@ import com.cshep4.monsterattack.game.character.Standard;
 import com.cshep4.monsterattack.game.character.StandardProducer;
 import com.cshep4.monsterattack.game.indicator.ScoreIndicator;
 
-import java.util.concurrent.ThreadLocalRandom;
-
 import lombok.experimental.UtilityClass;
 
 import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
@@ -73,11 +71,11 @@ public class DifficultyUtils {
     }
 
     static Enemy spawnEnemyBasedOnDifficulty() {
-        int maxY = (int) (getScreenYMax() - (getScreenXMax() / CHARACTER_HEIGHT_DIVIDER * 2)) + 1;
+        int maxY = (int) (getScreenYMax() - (getScreenXMax() / CHARACTER_HEIGHT_DIVIDER * 2));
         int minY = (int) getScreenYMax() / CHARACTER_HEIGHT_DIVIDER;
 
         float x = getScreenXMax();
-        float y = ThreadLocalRandom.current().nextInt(minY, maxY);
+        float y = getRandomNumber(minY, maxY);
 
         int difficultyLevel = getDifficulty();
 
@@ -466,6 +464,11 @@ public class DifficultyUtils {
 
     private int getDifficulty() {
         double difficulty = (double) ScoreIndicator.getNumKills() / 5;
+
+        if (difficulty == 0) {
+            difficulty = 1;
+        }
+
         return difficulty < 11 ? (int) Math.ceil(difficulty) : 11;
     }
 }

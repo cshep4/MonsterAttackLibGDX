@@ -30,7 +30,7 @@ public class InputProcessor extends InputAdapter {
         float xPos = xMultiplier * x;
         float yPos = yMultiplier * (gameScreen.getHeight() - y);
 
-        if (gameScreen.getState() != RUN) {
+        if (!gameScreen.getState().equals(RUN)) {
             return false;
         }
 
@@ -59,7 +59,7 @@ public class InputProcessor extends InputAdapter {
 
     @Override
     public boolean touchUp(int x, int y, int pointer, int button) {
-        if (!justPaused && gameScreen.getState() == PAUSE) {
+        if (!justPaused && gameScreen.getState().equals(PAUSE)) {
             gameScreen.setState(RESUME);
         }
         justPaused = false;

@@ -172,8 +172,8 @@ public class BomberTest {
         assertThat(bomber.getHealth(), is(2));
     }
 
-    @Test
-    public void shieldAnimation() {
+    @Test(expected = UnsupportedOperationException.class)
+    public void shieldAnimation_causesException() {
         Bomber bomber = Bomber.create(X_POS, Y_POS, LEVEL);
         bomber.shieldAnimation();
     }

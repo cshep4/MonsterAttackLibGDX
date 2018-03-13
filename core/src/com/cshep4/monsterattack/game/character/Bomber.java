@@ -64,7 +64,7 @@ public class Bomber extends RunningEnemy {
 
 	@Override
 	public void shieldAnimation() {
-		// Shield not implemented for Bombers yet
+		throw new UnsupportedOperationException();
 	}
 
 	@Override

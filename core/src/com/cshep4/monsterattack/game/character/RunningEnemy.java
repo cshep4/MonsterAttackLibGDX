@@ -77,6 +77,7 @@ public abstract class RunningEnemy extends Mutant implements RunningAI {
         shielding = true;
     }
 
+    //not private as other enemies apart from Standard may use this in future with different implemenation
     protected void dodge() {
         // if already dodging then continue doing so
         if (dodging) {
@@ -87,15 +88,25 @@ public abstract class RunningEnemy extends Mutant implements RunningAI {
         dodging = true;
 
         if (isEnemyRetreatingOffEndOfScreen()) {
-            changeAnimation(ENEMY_SPEED);
+            xVel = -ENEMY_SPEED;
+        } else {
             xVel = ENEMY_SPEED;
         }
+        changeAnimation(xVel);
 
         if (isBulletLowToEnemy()) {
             enemyRetreatUpwards();
         } else {
             enemyRetreatDownwards();
         }
+    }
+
+    private boolean isEnemyRetreatingOffEndOfScreen() {
+        return xVel == ENEMY_SPEED && getScreenXMax() < getX() + getWidth();
+    }
+
+    private boolean isBulletLowToEnemy() {
+        return getMidY() < bulletY;
     }
 
     private void enemyRetreatUpwards() {
@@ -135,7 +146,6 @@ public abstract class RunningEnemy extends Mutant implements RunningAI {
             shielding = false;
         }
 
-
         update();
     }
 
@@ -149,11 +159,11 @@ public abstract class RunningEnemy extends Mutant implements RunningAI {
         }
     }
 
-    protected boolean canStopDodging(List<Bullet> playerBullets) {
+    private boolean canStopDodging(List<Bullet> playerBullets) {
         return dodging && !isEnemyInLineOfBullet(playerBullets);
     }
 
-    protected boolean canStopShielding(List<Bullet> playerBullets) {
+    private boolean canStopShielding(List<Bullet> playerBullets) {
         return shielding && !isBulletClose(playerBullets);
     }
 
@@ -194,7 +204,7 @@ public abstract class RunningEnemy extends Mutant implements RunningAI {
         float bulletRight = bullet.getX() + bullet.getWidth();
         float left = getX() + getWidth();
 
-        if 	(bulletTop > bottom && bulletBottom < top && bulletRight < left) {
+        if (bulletTop > bottom && bulletBottom < top && bulletRight < left) {
             bulletY = bullet.getY();
             return true;
         }
@@ -222,16 +232,8 @@ public abstract class RunningEnemy extends Mutant implements RunningAI {
         checkPlayerHasBeenKilled(player);
     }
 
-    protected boolean isAbleToShield() {
+    private boolean isAbleToShield() {
         return canShield && shieldHealth > 0;
-    }
-
-    private boolean isBulletLowToEnemy() {
-        return getMidY() < bulletY;
-    }
-
-    private boolean isEnemyRetreatingOffEndOfScreen() {
-        return xVel != ENEMY_SPEED && getX() + getWidth() < getScreenXMax();
     }
 
     public abstract void changeAnimation(float newXVel);
@@ -272,7 +274,7 @@ public abstract class RunningEnemy extends Mutant implements RunningAI {
         }
     }
 
-    protected String getLogName() {
+    String getLogName() {
         return getClass().getSimpleName() + getLevel();
     }
 }

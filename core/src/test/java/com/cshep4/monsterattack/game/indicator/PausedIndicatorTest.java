@@ -24,6 +24,7 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Utils.class)
 public class PausedIndicatorTest {
+    private static final int NUM_LIVES = 10;
     private static final float TEXT_WIDTH = 10f;
 
     private PausedIndicator pausedIndicator;

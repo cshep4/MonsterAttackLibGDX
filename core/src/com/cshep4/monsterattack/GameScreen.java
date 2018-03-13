@@ -5,7 +5,6 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.cshep4.monsterattack.game.bullet.Bomb;
@@ -45,6 +44,7 @@ import static com.cshep4.monsterattack.game.utils.SpawnUtils.spawnEnemies;
 import static com.cshep4.monsterattack.game.utils.SpawnUtils.spawnPickups;
 import static com.cshep4.monsterattack.game.utils.Utils.getTextWidth;
 import static com.cshep4.monsterattack.game.utils.Utils.hasCollided;
+import static java.util.Objects.requireNonNull;
 
 @Data
 public class GameScreen implements Screen {
@@ -65,8 +65,7 @@ public class GameScreen implements Screen {
     private State state = RUN;
     private long gameOverTime = 0;
 
-    private Texture backgroundTexture = TextureFactory.create(BACKGROUND);
-    private Sprite backgroundSprite = new Sprite(backgroundTexture);
+    private Sprite backgroundSprite = new Sprite(requireNonNull(TextureFactory.create(BACKGROUND)));
 
     private Player player = Player.create(PLAYER_START_X, PLAYER_START_Y);
     private List<RunningEnemy> runningEnemies = new ArrayList<>();
@@ -232,7 +231,7 @@ public class GameScreen implements Screen {
     }
 
     private void updateStateTime() {
-        if (state == RUN) {
+        if (state.equals(RUN)) {
             stateTime += Gdx.graphics.getDeltaTime(); // Accumulate elapsed animation time
         }
     }

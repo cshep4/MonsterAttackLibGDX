@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.cshep4.monsterattack.game.factory.CameraFactory;
 
 
 public class MainMenuScreen implements Screen {
@@ -22,8 +23,7 @@ public class MainMenuScreen implements Screen {
         float width = Gdx.graphics.getWidth();
         float ratio = width / height;
         screenYMax = screenXMax / ratio;
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, screenXMax, screenYMax);
+        camera = CameraFactory.create(false, screenXMax, screenYMax);
         //------------------------------------------------------------------------------------------
 
     }
