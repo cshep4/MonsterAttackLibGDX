@@ -2,7 +2,9 @@ package com.cshep4.monsterattack.game.utils;
 
 import com.cshep4.monsterattack.game.character.Bomber;
 import com.cshep4.monsterattack.game.character.Standard;
+import com.cshep4.monsterattack.game.character.StandardProducer;
 import com.cshep4.monsterattack.game.factory.AnimationFactory;
+import com.cshep4.monsterattack.game.indicator.ScoreIndicator;
 import com.cshep4.monsterattack.game.wrapper.Animation;
 
 import org.junit.Before;
@@ -13,6 +15,7 @@ import org.mockito.Mockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import static com.cshep4.monsterattack.game.utils.EnemyUtils.enemyKilled;
 import static com.cshep4.monsterattack.game.utils.EnemyUtils.setAbility;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -144,5 +147,29 @@ public class EnemyUtilsTest {
         assertThat(standard.isCanDodge(), is(true));
         assertThat(standard.isCanShield(), is(true));
         assertThat(standard.isCanShootBombs(), is(false));
+    }
+
+    @Test
+    public void enemyKilled_returnsTrueAndIncrementsKillsWhenEnemyDead() {
+        Standard standard = Standard.create(0,0,1);
+        standard.setHealth(0);
+        ScoreIndicator.resetKills();
+
+        boolean result = enemyKilled(standard);
+
+        assertThat(result, is(true));
+        assertThat(ScoreIndicator.getNumKills(), is(1));
+    }
+
+    @Test
+    public void enemyKilled_returnsFalseWhenEnemyNotDead() {
+        StandardProducer standardProducer = StandardProducer.create(0,0);
+        standardProducer.setHealth(1);
+        ScoreIndicator.resetKills();
+
+        boolean result = enemyKilled(standardProducer);
+
+        assertThat(result, is(false));
+        assertThat(ScoreIndicator.getNumKills(), is(0));
     }
 }

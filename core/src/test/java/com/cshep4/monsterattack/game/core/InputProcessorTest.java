@@ -148,10 +148,9 @@ public class InputProcessorTest {
 
     @Test
     public void touchDown_playerStartsMoving() {
-        boolean result = inputProcessor.touchDown(0,0,POINTER,0);
+        boolean result = inputProcessor.touchDown(0,0, POINTER,0);
 
         assertThat(inputProcessor.getMovementPointer(), is(POINTER));
-        assertThat(gameScreen.isPlayerMoving(), is(true));
         assertThat(result, is(true));
     }
 
@@ -188,12 +187,15 @@ public class InputProcessorTest {
         inputProcessor.touchDown(0,0,POINTER,0);
 
         assertThat(inputProcessor.getMovementPointer(), is(POINTER));
-        assertThat(gameScreen.isPlayerMoving(), is(true));
+
+        float expectedDestinationX = gameScreen.getPlayer().getX();
+        float expectedDestinationY = gameScreen.getPlayer().getY();
 
         boolean result = inputProcessor.touchUp(0,0, POINTER,0);
 
         assertThat(inputProcessor.getMovementPointer(), is(-1));
-        assertThat(gameScreen.isPlayerMoving(), is(false));
+        assertThat(gameScreen.getPlayer().getX(), is(expectedDestinationX));
+        assertThat(gameScreen.getPlayer().getY(), is(expectedDestinationY));
         assertThat(result, is(true));
     }
 
@@ -203,14 +205,13 @@ public class InputProcessorTest {
         boolean result = inputProcessor.touchUp(0,0, POINTER + 1,0);
 
         assertThat(inputProcessor.getMovementPointer(), is(POINTER));
-        assertThat(gameScreen.isPlayerMoving(), is(true));
         assertThat(result, is(true));
     }
 
     @Test
     public void touchDragged_setPlayerDestinationIfSameTouch() {
-        gameScreen.setPlayerDestinationX(0);
-        gameScreen.setPlayerDestinationY(0);
+        gameScreen.getPlayer().setDestinationX(0);
+        gameScreen.getPlayer().setDestinationY(0);
 
         int x = (int) (DESTINATION_X / xMultiplier);
         int y = (int) (gameScreen.getHeight() - (DESTINATION_Y / yMultiplier));
@@ -221,21 +222,21 @@ public class InputProcessorTest {
         float expectedDestinationX = x * xMultiplier;
         float expectedDestinationY = yMultiplier * (gameScreen.getHeight() - y);
 
-        assertThat(gameScreen.getPlayerDestinationX(), is(expectedDestinationX));
-        assertThat(gameScreen.getPlayerDestinationY(), is(expectedDestinationY));
+        assertThat(gameScreen.getPlayer().getDestinationX(), is(expectedDestinationX));
+        assertThat(gameScreen.getPlayer().getDestinationY(), is(expectedDestinationY));
         assertThat(result, is(true));
     }
 
     @Test
     public void touchDragged_doNothingIfNotSameTouch() {
-        gameScreen.setPlayerDestinationX(0);
-        gameScreen.setPlayerDestinationY(0);
+        gameScreen.getPlayer().setDestinationX(0);
+        gameScreen.getPlayer().setDestinationY(0);
 
         inputProcessor.touchDown(DESTINATION_X, DESTINATION_Y, POINTER,0);
         boolean result = inputProcessor.touchDragged(DESTINATION_X, DESTINATION_Y, POINTER + 1);
 
-        assertThat(gameScreen.getPlayerDestinationX(), is(0f));
-        assertThat(gameScreen.getPlayerDestinationY(), is(0f));
+        assertThat(gameScreen.getPlayer().getDestinationX(), is(0f));
+        assertThat(gameScreen.getPlayer().getDestinationY(), is(0f));
         assertThat(result, is(true));
     }
 }

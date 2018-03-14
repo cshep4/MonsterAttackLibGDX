@@ -96,21 +96,13 @@ public class PlayerTest {
     }
 
     @Test
-    public void update_updatesXAndYPositions() {
-        player.setXVel(SPEED).setYVel(SPEED);
-
-        player.update();
-
-        float expectedX = X_START_POS + SPEED;
-        float expectedY = Y_START_POS + SPEED;
-
-        assertThat(player.getX(), is(expectedX));
-        assertThat(player.getY(), is(expectedY));
-    }
-
-    @Test
     public void update_stopsPlayerLeavingTopOrRightOfScreen() {
-        player.setXVel(SPEED).setYVel(SPEED).setX(HIGHER_THAN_SCREEN_DIMS).setY(HIGHER_THAN_SCREEN_DIMS);
+        player.setDestinationX(HIGHER_THAN_SCREEN_DIMS+100)
+                .setDestinationY(HIGHER_THAN_SCREEN_DIMS+100)
+                .setXVel(SPEED)
+                .setYVel(SPEED)
+                .setX(HIGHER_THAN_SCREEN_DIMS)
+                .setY(HIGHER_THAN_SCREEN_DIMS);
 
         player.update();
 
@@ -120,7 +112,12 @@ public class PlayerTest {
 
     @Test
     public void update_stopsPlayerLeavingBottomOrLeftOfScreen() {
-        player.setXVel(-SPEED).setYVel(-SPEED).setX(LOWER_THAN_SCREEN_DIMS).setY(LOWER_THAN_SCREEN_DIMS);
+        player.setDestinationX(LOWER_THAN_SCREEN_DIMS-100)
+                .setDestinationY(LOWER_THAN_SCREEN_DIMS-100)
+                .setXVel(-SPEED)
+                .setYVel(-SPEED)
+                .setX(LOWER_THAN_SCREEN_DIMS)
+                .setY(LOWER_THAN_SCREEN_DIMS);
 
         player.update();
 
@@ -199,11 +196,14 @@ public class PlayerTest {
     }
 
     @Test
-    public void move_movesTowardsPoint() {
+    public void update_movesTowardsPoint() {
         final float startDifferenceX = player.getX() - X_END_POS;
         final float startDifferenceY = player.getRectangle().getY() - Y_END_POS;
 
-        player.move(X_END_POS, Y_END_POS);
+        player.setDestinationX(X_END_POS);
+        player.setDestinationY(Y_END_POS);
+
+        player.update();
 
         final float endDifferenceX = player.getRectangle().getX() - X_END_POS;
         final float endDifferenceY = player.getRectangle().getY() - Y_END_POS;
@@ -224,7 +224,10 @@ public class PlayerTest {
     }
 
     @Test
-    public void shoot_createsInstanceOfBulletAndDecrementsNumberOfBullets() {
+    public void shoot_createsInstanceOfBulletAndDecrementsNumberOfBulletsWhenPlayerHasBullets() {
+        player.setNumberOfBullets(5);
+        player.setNumberOfBombs(0);
+
         int expectedBullets = player.getNumberOfBullets() - 1;
         int expectedBombs = player.getNumberOfBombs();
 
@@ -245,18 +248,21 @@ public class PlayerTest {
     }
 
     @Test
-    public void shootBomb_createsInstanceOfBombAndDecrementsNumberOfBombs() {
+    public void shoot_createsInstanceOfBombAndDecrementsNumberOfBombsWhenPlayerHasBombs() {
+        player.setNumberOfBullets(5);
+        player.setNumberOfBombs(5);
+
         int expectedBullets = player.getNumberOfBullets();
         int expectedBombs = player.getNumberOfBombs() - 1;
 
-        Bomb bomb = player.shootBomb();
+        Bullet bomb = player.shoot();
 
         float expectedX = player.getMidX();
         float expectedY = player.getMidY();
         float expectedWidth = (player.getWidth() / BOMB_SIZE_DIVIDER) * 4;
         float expectedHeight = (player.getHeight() / BOMB_SIZE_DIVIDER) * 4;
 
-        assertThat(bomb, instanceOf(Bullet.class));
+        assertThat(bomb, instanceOf(Bomb.class));
         assertThat(bomb.getX(), is(expectedX));
         assertThat(bomb.getY(), is(expectedY));
         assertThat(bomb.getWidth(), is(expectedWidth));

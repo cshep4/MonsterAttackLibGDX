@@ -23,8 +23,8 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.cshep4.monsterattack.game.constants.Constants.BULLET_SPEED;
-import static com.cshep4.monsterattack.game.constants.Constants.ENEMY;
-import static com.cshep4.monsterattack.game.constants.Constants.PLAYER;
+import static com.cshep4.monsterattack.game.core.CharacterType.ENEMY;
+import static com.cshep4.monsterattack.game.core.CharacterType.PLAYER;
 import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;

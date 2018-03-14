@@ -17,17 +17,15 @@ import org.mockito.Mock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import static com.cshep4.monsterattack.game.constants.Constants.CHARACTER_MOVE_LEFT;
-import static com.cshep4.monsterattack.game.constants.Constants.CHARACTER_MOVE_RIGHT;
 import static com.cshep4.monsterattack.game.constants.Constants.PLAYER_SPEED;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.lessThan;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
-import static org.powermock.api.mockito.PowerMockito.verifyStatic;
 
 
 @RunWith(PowerMockRunner.class)
@@ -35,10 +33,10 @@ import static org.powermock.api.mockito.PowerMockito.verifyStatic;
 public class MovementUtilsTest {
     private static final float START_X = 100;
     private static final float START_Y = 100;
-    private static final float DESTINATION_X = 400;
-    private static final float DESTINATION_Y = 400;
-    private static final float START_DIFFERENCE_X = 300;
-    private static final float START_DIFFERENCE_Y = 300;
+    private static final int DESTINATION_X = 400;
+    private static final int DESTINATION_Y = 400;
+    private static final float START_DIFFERENCE_X = DESTINATION_X - START_X;
+    private static final float START_DIFFERENCE_Y = DESTINATION_Y - START_Y;
 
     @Mock
     private Animation animationWrapper;
@@ -85,17 +83,22 @@ public class MovementUtilsTest {
         Player player = Player.create(START_X, START_Y);
         player.setXVel(PLAYER_SPEED);
         player.setYVel(PLAYER_SPEED);
+        player.setDestinationX(DESTINATION_X);
+        player.setDestinationY(DESTINATION_Y);
 
-        MovementUtils.movePlayerTowardsPoint(player, DESTINATION_X, DESTINATION_Y);
+        MovementUtils.movePlayerTowardsPoint(player);
 
-        final float endDifferenceX = DESTINATION_X - player.getX();
-        final float endDifferenceY = DESTINATION_Y - player.getY();
+//        final float endDifferenceX = DESTINATION_X - player.getX();
+//        final float endDifferenceY = DESTINATION_Y - player.getY();
 
-        assertThat(endDifferenceX, lessThan(START_DIFFERENCE_X));
-        assertThat(endDifferenceY, lessThan(START_DIFFERENCE_Y));
+//        assertThat(endDifferenceX, lessThan(START_DIFFERENCE_X));
+//        assertThat(endDifferenceY, lessThan(START_DIFFERENCE_Y));
 
-        verifyStatic(AnimationFactory.class);
-        AnimationFactory.createAnimation(6, 1, CHARACTER_MOVE_RIGHT);
+        assertThat(player.getXVel(), greaterThan(0f));
+        assertThat(player.getYVel(), greaterThan(0f));
+
+//        verifyStatic(AnimationFactory.class);
+//        AnimationFactory.createAnimation(6, 1, CHARACTER_MOVE_RIGHT);
     }
 
     @Test
@@ -103,17 +106,22 @@ public class MovementUtilsTest {
         Player player = Player.create(DESTINATION_X, DESTINATION_Y);
         player.setXVel(PLAYER_SPEED);
         player.setYVel(PLAYER_SPEED);
+        player.setDestinationX(START_X);
+        player.setDestinationY(START_Y);
 
-        MovementUtils.movePlayerTowardsPoint(player, START_X, START_Y);
+        MovementUtils.movePlayerTowardsPoint(player);
 
-        final float endDifferenceX = DESTINATION_X - player.getX();
-        final float endDifferenceY = DESTINATION_Y - player.getY();
+//        final float endDifferenceX = DESTINATION_X - player.getX();
+//        final float endDifferenceY = DESTINATION_Y - player.getY();
 
-        assertThat(endDifferenceX, lessThan(START_DIFFERENCE_X));
-        assertThat(endDifferenceY, lessThan(START_DIFFERENCE_Y));
+//        assertThat(endDifferenceX, lessThan(START_DIFFERENCE_X));
+//        assertThat(endDifferenceY, lessThan(START_DIFFERENCE_Y));
 
-        verifyStatic(AnimationFactory.class);
-        AnimationFactory.createAnimation(6, 1, CHARACTER_MOVE_LEFT);
+        assertThat(player.getXVel(), lessThan(0f));
+        assertThat(player.getYVel(), lessThan(0f));
+
+//        verifyStatic(AnimationFactory.class);
+//        AnimationFactory.createAnimation(6, 1, CHARACTER_MOVE_LEFT);
     }
 
     @Test
@@ -121,13 +129,15 @@ public class MovementUtilsTest {
         Player player = Player.create(START_X, START_Y);
         player.setXVel(PLAYER_SPEED);
         player.setYVel(PLAYER_SPEED);
+        float destinationX = player.getMidX();// + player.getWidth()/2;
+        float destinationY = player.getMidY();// + player.getHeight()/2;
 
-        float desinationX = START_X + player.getWidth()/2;
-        float desinationY = START_Y + player.getHeight()/2;
+        player.setDestinationX(destinationX);
+        player.setDestinationY(destinationY);
 
-        MovementUtils.movePlayerTowardsPoint(player, desinationX, desinationY);
+        MovementUtils.movePlayerTowardsPoint(player);
 
-        assertThat(player.getX(), is(START_X));
-        assertThat(player.getY(), is(START_Y));
+        assertThat(player.getXVel(), is(0f));
+        assertThat(player.getYVel(), is(0f));
     }
 }

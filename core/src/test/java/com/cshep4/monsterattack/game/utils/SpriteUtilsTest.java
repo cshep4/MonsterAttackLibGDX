@@ -24,6 +24,7 @@ import static com.cshep4.monsterattack.game.constants.Constants.CHARACTER_MOVE_L
 import static com.cshep4.monsterattack.game.constants.Constants.CHARACTER_MOVE_LEFT_SHIELD;
 import static com.cshep4.monsterattack.game.constants.Constants.CHARACTER_MOVE_RIGHT;
 import static com.cshep4.monsterattack.game.constants.Constants.CHARACTER_MOVE_RIGHT_SHIELD;
+import static com.cshep4.monsterattack.game.constants.Constants.PLAYER_SPEED;
 import static com.cshep4.monsterattack.game.constants.Constants.S1_SPRITE_MOVE_LEFT;
 import static com.cshep4.monsterattack.game.constants.Constants.S1_SPRITE_MOVE_RIGHT;
 import static com.cshep4.monsterattack.game.constants.Constants.S2_SPRITE_MOVE_LEFT;
@@ -42,6 +43,7 @@ import static com.cshep4.monsterattack.game.utils.SpriteUtils.getBomberSprite;
 import static com.cshep4.monsterattack.game.utils.SpriteUtils.getPlayerIdleSprite;
 import static com.cshep4.monsterattack.game.utils.SpriteUtils.getPlayerLeftSprite;
 import static com.cshep4.monsterattack.game.utils.SpriteUtils.getPlayerRightSprite;
+import static com.cshep4.monsterattack.game.utils.SpriteUtils.getPlayerRunningSprite;
 import static com.cshep4.monsterattack.game.utils.SpriteUtils.getProducerIdleCols;
 import static com.cshep4.monsterattack.game.utils.SpriteUtils.getProducerIdleRows;
 import static com.cshep4.monsterattack.game.utils.SpriteUtils.getProducerIdleSprite;
@@ -269,5 +271,19 @@ public class SpriteUtilsTest {
         String sprite = getPlayerRightSprite(1);
 
         assertThat(sprite, is(CHARACTER_MOVE_RIGHT_SHIELD));
+    }
+
+    @Test
+    public void getPlayerRunningSprite_returnsLeftSprite() {
+        String result = getPlayerRunningSprite(-PLAYER_SPEED, 0);
+
+        assertThat(result, is(CHARACTER_MOVE_LEFT));
+    }
+
+    @Test
+    public void getPlayerRunningSprite_returnsRightSprite() {
+        String result = getPlayerRunningSprite(PLAYER_SPEED, 0);
+
+        assertThat(result, is(CHARACTER_MOVE_RIGHT));
     }
 }

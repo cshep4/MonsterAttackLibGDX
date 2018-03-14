@@ -23,9 +23,9 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
 import static com.cshep4.monsterattack.GameScreen.getScreenYMax;
-import static com.cshep4.monsterattack.game.constants.Constants.BOMBER;
 import static com.cshep4.monsterattack.game.constants.Constants.MAX_LEVEL;
-import static com.cshep4.monsterattack.game.constants.Constants.STANDARD;
+import static com.cshep4.monsterattack.game.core.EnemyType.BOMBER;
+import static com.cshep4.monsterattack.game.core.EnemyType.STANDARD;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.greaterThan;

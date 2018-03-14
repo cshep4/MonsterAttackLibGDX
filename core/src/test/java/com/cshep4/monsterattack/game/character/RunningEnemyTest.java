@@ -28,8 +28,8 @@ import static com.cshep4.monsterattack.game.constants.Constants.BULLET_HEIGHT_DI
 import static com.cshep4.monsterattack.game.constants.Constants.BULLET_SPEED;
 import static com.cshep4.monsterattack.game.constants.Constants.BULLET_WIDTH_DIVIDER;
 import static com.cshep4.monsterattack.game.constants.Constants.ENEMY_SPEED;
-import static com.cshep4.monsterattack.game.constants.Constants.PLAYER;
 import static com.cshep4.monsterattack.game.constants.Constants.SHOOT_DELAY;
+import static com.cshep4.monsterattack.game.core.CharacterType.PLAYER;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.instanceOf;
