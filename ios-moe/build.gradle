@@ -31,7 +31,7 @@ task copyNatives << {
     }
 }
 
-sourceSets.main.java.srcDirs = [ "src/" ]
+sourceSets.main.java.srcDirs = [ "src/main/java" ]
 
 // Setup Multi-OS Engine
 moe {
@@ -44,6 +44,8 @@ moe {
     remoteBuild {
         resources = [ file("../android/assets") ]
     }
+    targetCompatibility = 1.8
+    sourceCompatibility = 1.8
 }
 
 

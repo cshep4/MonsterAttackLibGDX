@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
 import static com.cshep4.monsterattack.game.constants.Constants.BP_IDLE_COLS;
 import static com.cshep4.monsterattack.game.constants.Constants.BP_IDLE_ROWS;
 import static com.cshep4.monsterattack.game.constants.Constants.BP_SPRITE_IDLE;
@@ -31,6 +30,7 @@ import static com.cshep4.monsterattack.game.constants.Constants.SP_PRODUCING_COL
 import static com.cshep4.monsterattack.game.constants.Constants.SP_PRODUCING_ROWS;
 import static com.cshep4.monsterattack.game.constants.Constants.SP_SPRITE_IDLE;
 import static com.cshep4.monsterattack.game.constants.Constants.SP_SPRITE_PRODUCE;
+import static com.cshep4.monsterattack.game.utils.Utils.getScreenXMax;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;

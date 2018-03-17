@@ -12,8 +12,8 @@ import org.mockito.Mock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
-import static com.cshep4.monsterattack.GameScreen.getScreenYMax;
+import static com.cshep4.monsterattack.game.utils.Utils.getScreenXMax;
+import static com.cshep4.monsterattack.game.utils.Utils.getScreenYMax;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;

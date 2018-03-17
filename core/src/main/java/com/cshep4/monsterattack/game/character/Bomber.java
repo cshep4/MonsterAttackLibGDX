@@ -12,13 +12,13 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
 import static com.cshep4.monsterattack.game.constants.Constants.CHARACTER_WIDTH_DIVIDER;
 import static com.cshep4.monsterattack.game.constants.Constants.ENEMY_SPEED;
 import static com.cshep4.monsterattack.game.constants.Constants.EXPLOSION;
 import static com.cshep4.monsterattack.game.constants.Constants.EXPLOSION_DELAY;
 import static com.cshep4.monsterattack.game.utils.MovementUtils.moveCharacterTowardsPoint;
 import static com.cshep4.monsterattack.game.utils.SpriteUtils.getBomberSprite;
+import static com.cshep4.monsterattack.game.utils.Utils.getScreenXMax;
 import static com.cshep4.monsterattack.game.utils.Utils.hasCollided;
 import static com.cshep4.monsterattack.game.wrapper.Sound.playMutateBomb;
 

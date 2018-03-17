@@ -3,10 +3,10 @@ package com.cshep4.monsterattack.game.character;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
-import com.cshep4.monsterattack.GameScreen;
 import com.cshep4.monsterattack.game.bullet.Bomb;
 import com.cshep4.monsterattack.game.bullet.Bullet;
 import com.cshep4.monsterattack.game.factory.AnimationFactory;
+import com.cshep4.monsterattack.game.utils.Utils;
 import com.cshep4.monsterattack.game.wrapper.Animation;
 import com.cshep4.monsterattack.game.wrapper.Sound;
 
@@ -28,6 +28,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
@@ -36,7 +37,7 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.verifyStatic;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({AnimationFactory.class, Sound.class, GameScreen.class})
+@PrepareForTest({AnimationFactory.class, Sound.class, Utils.class})
 public class PlayerTest {
     private static final float X_START_POS = 10;
     private static final float Y_START_POS = 10;
@@ -70,9 +71,9 @@ public class PlayerTest {
         mockStatic(AnimationFactory.class);
         when(AnimationFactory.createAnimation(any(Integer.class), any(Integer.class), any(String.class))).thenReturn(animationWrapper);
 
-        mockStatic(GameScreen.class);
-        when(GameScreen.getScreenXMax()).thenReturn(SCREEN_DIMS);
-        when(GameScreen.getScreenYMax()).thenReturn(SCREEN_DIMS);
+        mockStatic(Utils.class);
+        when(Utils.getScreenXMax()).thenReturn(SCREEN_DIMS);
+        when(Utils.getScreenYMax()).thenReturn(SCREEN_DIMS);
 
         Gdx.graphics = graphics;
         when(graphics.getDeltaTime()).thenReturn(1f);
@@ -269,6 +270,16 @@ public class PlayerTest {
         assertThat(bomb.getHeight(), is(expectedHeight));
         assertThat(player.getNumberOfBullets(), is(expectedBullets));
         assertThat(player.getNumberOfBombs(), is(expectedBombs));
+    }
+
+    @Test
+    public void shoot_returnsNullWhenPlayerHasNoBulletsOrBombs() {
+        player.setNumberOfBullets(0);
+        player.setNumberOfBombs(0);
+
+        Bullet bomb = player.shoot();
+
+        assertThat(bomb, is(nullValue()));
     }
 
     @Test

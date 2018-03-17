@@ -1,4 +1,4 @@
-package com.cshep4.monsterattack.game.core;
+package com.cshep4.monsterattack.game.input;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
@@ -7,19 +7,19 @@ import com.cshep4.monsterattack.game.bullet.Bullet;
 
 import lombok.Getter;
 
-import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
-import static com.cshep4.monsterattack.GameScreen.getScreenYMax;
 import static com.cshep4.monsterattack.game.core.State.PAUSE;
 import static com.cshep4.monsterattack.game.core.State.RESUME;
 import static com.cshep4.monsterattack.game.core.State.RUN;
+import static com.cshep4.monsterattack.game.utils.Utils.getScreenXMax;
+import static com.cshep4.monsterattack.game.utils.Utils.getScreenYMax;
 
 @Getter
-public class InputProcessor extends InputAdapter {
+public class GameInputProcessor extends InputAdapter {
     private GameScreen gameScreen;
     private int movementPointer = -1;
     private boolean justPaused = false;
 
-    public InputProcessor(GameScreen gameScreen) {
+    public GameInputProcessor(GameScreen gameScreen) {
         this.gameScreen = gameScreen;
     }
 
@@ -43,7 +43,6 @@ public class InputProcessor extends InputAdapter {
         } else {
             if (movementPointer == -1) {
                 movementPointer = pointer;
-//                gameScreen.setPlayerMoving(true);
             }
         }
 
@@ -74,7 +73,6 @@ public class InputProcessor extends InputAdapter {
         justPaused = false;
 
         if (pointer == movementPointer) {
-//            gameScreen.setPlayerMoving(false);
             gameScreen.getPlayer().setDestinationX(gameScreen.getPlayer().getMidX());
             gameScreen.getPlayer().setDestinationY(gameScreen.getPlayer().getMidY());
             gameScreen.getPlayer().stand();

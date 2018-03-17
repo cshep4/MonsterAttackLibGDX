@@ -8,9 +8,9 @@ import com.cshep4.monsterattack.game.factory.TextureFactory;
 
 import lombok.EqualsAndHashCode;
 
-import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
 import static com.cshep4.monsterattack.game.constants.Constants.INDICATOR_SIZE_DIVIDER;
 import static com.cshep4.monsterattack.game.constants.Constants.PICKUP_BULLET;
+import static com.cshep4.monsterattack.game.utils.Utils.getScreenXMax;
 import static java.lang.String.valueOf;
 
 @EqualsAndHashCode(callSuper=true)

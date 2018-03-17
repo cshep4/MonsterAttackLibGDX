@@ -1,4 +1,4 @@
-package com.cshep4.monsterattack.game.core;
+package com.cshep4.monsterattack.game.input;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
@@ -24,12 +24,13 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.ArrayList;
 
-import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
-import static com.cshep4.monsterattack.GameScreen.getScreenYMax;
 import static com.cshep4.monsterattack.game.constants.Constants.BUTTON_SIZE_DIVIDER;
+import static com.cshep4.monsterattack.game.constants.Constants.SCREEN_X_MAX;
 import static com.cshep4.monsterattack.game.core.State.PAUSE;
 import static com.cshep4.monsterattack.game.core.State.RESUME;
 import static com.cshep4.monsterattack.game.core.State.RUN;
+import static com.cshep4.monsterattack.game.utils.Utils.getScreenXMax;
+import static com.cshep4.monsterattack.game.utils.Utils.getScreenYMax;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
@@ -39,7 +40,7 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({AnimationFactory.class, TextureFactory.class, CameraFactory.class, Utils.class})
-public class InputProcessorTest {
+public class GameInputProcessorTest {
     private static final float TEXT_WIDTH = 10f;
     private static final int NUM_BULLETS = 10;
     private static final int POINTER = 999;
@@ -67,7 +68,7 @@ public class InputProcessorTest {
     @Mock
     private Input input;
 
-    private InputProcessor inputProcessor;
+    private GameInputProcessor gameInputProcessor;
     private GameScreen gameScreen;
     private float xMultiplier;
     private float yMultiplier;
@@ -82,6 +83,8 @@ public class InputProcessorTest {
         when(CameraFactory.create(any(Boolean.class), any(Float.class), any(Float.class))).thenReturn(camera);
         mockStatic(Utils.class);
         when(Utils.getTextWidth(any(BitmapFont.class), any(String.class))).thenReturn(TEXT_WIDTH);
+        when(Utils.getScreenXMax()).thenReturn(SCREEN_X_MAX);
+        when(Utils.getScreenYMax()).thenReturn(SCREEN_X_MAX);
 
         Gdx.graphics = graphics;
         when(graphics.getDeltaTime()).thenReturn(1f);
@@ -93,7 +96,7 @@ public class InputProcessorTest {
         Gdx.input = input;
 
         gameScreen = new GameScreen(game);
-        inputProcessor = new InputProcessor(gameScreen);
+        gameInputProcessor = new GameInputProcessor(gameScreen);
 
         xMultiplier = getScreenXMax() / Gdx.graphics.getWidth();
         yMultiplier = getScreenYMax() / Gdx.graphics.getHeight();
@@ -103,7 +106,7 @@ public class InputProcessorTest {
     public void touchDown_returnsFalseWhenGameIsNotInRunState() {
         gameScreen.setState(PAUSE);
 
-        boolean result = inputProcessor.touchDown(0,0,POINTER,0);
+        boolean result = gameInputProcessor.touchDown(0,0,POINTER,0);
 
         assertThat(result, is(false));
     }
@@ -119,7 +122,7 @@ public class InputProcessorTest {
         int x = (int) (pauseButtonX / xMultiplier);
         int y = (int) (gameScreen.getHeight() - (pauseButtonY / yMultiplier));
 
-        boolean result = inputProcessor.touchDown(x,y,POINTER,0);
+        boolean result = gameInputProcessor.touchDown(x,y,POINTER,0);
 
         assertThat(gameScreen.getState(), is(PAUSE));
         assertThat(result, is(true));
@@ -137,7 +140,7 @@ public class InputProcessorTest {
         int x = (int) (pauseButtonX / xMultiplier);
         int y = (int) (gameScreen.getHeight() - (pauseButtonY / yMultiplier));
 
-        boolean result = inputProcessor.touchDown(x,y,POINTER,0);
+        boolean result = gameInputProcessor.touchDown(x,y,POINTER,0);
 
         int expectedBullets = NUM_BULLETS - 1;
 
@@ -148,9 +151,9 @@ public class InputProcessorTest {
 
     @Test
     public void touchDown_playerStartsMoving() {
-        boolean result = inputProcessor.touchDown(0,0, POINTER,0);
+        boolean result = gameInputProcessor.touchDown(0,0, POINTER,0);
 
-        assertThat(inputProcessor.getMovementPointer(), is(POINTER));
+        assertThat(gameInputProcessor.getMovementPointer(), is(POINTER));
         assertThat(result, is(true));
     }
 
@@ -158,7 +161,7 @@ public class InputProcessorTest {
     public void touchUp_resumesGameIfPaused() {
         gameScreen.setState(PAUSE);
 
-        boolean result = inputProcessor.touchUp(0,0,POINTER,0);
+        boolean result = gameInputProcessor.touchUp(0,0,POINTER,0);
 
         assertThat(gameScreen.getState(), is(RESUME));
         assertThat(result, is(true));
@@ -174,9 +177,9 @@ public class InputProcessorTest {
         int y = (int) (gameScreen.getHeight() - (pauseButtonY / yMultiplier));
 
         // press pause button
-        inputProcessor.touchDown(x,y,POINTER,0);
+        gameInputProcessor.touchDown(x,y,POINTER,0);
         // take finger off pause button
-        boolean result = inputProcessor.touchUp(x, y, POINTER,0);
+        boolean result = gameInputProcessor.touchUp(x, y, POINTER,0);
 
         assertThat(gameScreen.getState(), is(PAUSE));
         assertThat(result, is(true));
@@ -184,16 +187,16 @@ public class InputProcessorTest {
 
     @Test
     public void touchUp_stopPlayerMovingIfSameTouch() {
-        inputProcessor.touchDown(0,0,POINTER,0);
+        gameInputProcessor.touchDown(0,0,POINTER,0);
 
-        assertThat(inputProcessor.getMovementPointer(), is(POINTER));
+        assertThat(gameInputProcessor.getMovementPointer(), is(POINTER));
 
         float expectedDestinationX = gameScreen.getPlayer().getX();
         float expectedDestinationY = gameScreen.getPlayer().getY();
 
-        boolean result = inputProcessor.touchUp(0,0, POINTER,0);
+        boolean result = gameInputProcessor.touchUp(0,0, POINTER,0);
 
-        assertThat(inputProcessor.getMovementPointer(), is(-1));
+        assertThat(gameInputProcessor.getMovementPointer(), is(-1));
         assertThat(gameScreen.getPlayer().getX(), is(expectedDestinationX));
         assertThat(gameScreen.getPlayer().getY(), is(expectedDestinationY));
         assertThat(result, is(true));
@@ -201,10 +204,10 @@ public class InputProcessorTest {
 
     @Test
     public void touchUp_doNothingIfNotSameTouch() {
-        inputProcessor.touchDown(0,0, POINTER,0);
-        boolean result = inputProcessor.touchUp(0,0, POINTER + 1,0);
+        gameInputProcessor.touchDown(0,0, POINTER,0);
+        boolean result = gameInputProcessor.touchUp(0,0, POINTER + 1,0);
 
-        assertThat(inputProcessor.getMovementPointer(), is(POINTER));
+        assertThat(gameInputProcessor.getMovementPointer(), is(POINTER));
         assertThat(result, is(true));
     }
 
@@ -216,8 +219,8 @@ public class InputProcessorTest {
         int x = (int) (DESTINATION_X / xMultiplier);
         int y = (int) (gameScreen.getHeight() - (DESTINATION_Y / yMultiplier));
 
-        inputProcessor.touchDown(x, y, POINTER,0);
-        boolean result = inputProcessor.touchDragged(x, y, POINTER);
+        gameInputProcessor.touchDown(x, y, POINTER,0);
+        boolean result = gameInputProcessor.touchDragged(x, y, POINTER);
 
         float expectedDestinationX = x * xMultiplier;
         float expectedDestinationY = yMultiplier * (gameScreen.getHeight() - y);
@@ -232,8 +235,8 @@ public class InputProcessorTest {
         gameScreen.getPlayer().setDestinationX(0);
         gameScreen.getPlayer().setDestinationY(0);
 
-        inputProcessor.touchDown(DESTINATION_X, DESTINATION_Y, POINTER,0);
-        boolean result = inputProcessor.touchDragged(DESTINATION_X, DESTINATION_Y, POINTER + 1);
+        gameInputProcessor.touchDown(DESTINATION_X, DESTINATION_Y, POINTER,0);
+        boolean result = gameInputProcessor.touchDragged(DESTINATION_X, DESTINATION_Y, POINTER + 1);
 
         assertThat(gameScreen.getPlayer().getDestinationX(), is(0f));
         assertThat(gameScreen.getPlayer().getDestinationY(), is(0f));

@@ -13,14 +13,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
-import static com.cshep4.monsterattack.GameScreen.getScreenYMax;
 import static com.cshep4.monsterattack.game.constants.Constants.BOMB_SIZE_DIVIDER;
 import static com.cshep4.monsterattack.game.constants.Constants.BULLET_HEIGHT_DIVIDER;
 import static com.cshep4.monsterattack.game.constants.Constants.BULLET_WIDTH_DIVIDER;
 import static com.cshep4.monsterattack.game.constants.Constants.ENEMY_SPEED;
 import static com.cshep4.monsterattack.game.constants.Constants.SHOOT_DELAY;
 import static com.cshep4.monsterattack.game.core.CharacterType.ENEMY;
+import static com.cshep4.monsterattack.game.utils.Utils.getScreenXMax;
+import static com.cshep4.monsterattack.game.utils.Utils.getScreenYMax;
 
 @EqualsAndHashCode(callSuper = true)
 @Data

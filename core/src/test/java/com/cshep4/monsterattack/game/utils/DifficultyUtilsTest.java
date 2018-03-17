@@ -1,6 +1,5 @@
 package com.cshep4.monsterattack.game.utils;
 
-import com.cshep4.monsterattack.GameScreen;
 import com.cshep4.monsterattack.game.character.Bomber;
 import com.cshep4.monsterattack.game.character.BomberProducer;
 import com.cshep4.monsterattack.game.character.Character;
@@ -21,11 +20,14 @@ import org.mockito.Mockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
-import static com.cshep4.monsterattack.GameScreen.getScreenYMax;
+import java.util.Random;
+
+import static com.cshep4.monsterattack.game.constants.Constants.CHARACTER_HEIGHT_DIVIDER;
 import static com.cshep4.monsterattack.game.constants.Constants.MAX_LEVEL;
 import static com.cshep4.monsterattack.game.core.EnemyType.BOMBER;
 import static com.cshep4.monsterattack.game.core.EnemyType.STANDARD;
+import static com.cshep4.monsterattack.game.utils.Utils.getScreenXMax;
+import static com.cshep4.monsterattack.game.utils.Utils.getScreenYMax;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.greaterThan;
@@ -37,7 +39,7 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({AnimationFactory.class, GameScreen.class})
+@PrepareForTest({AnimationFactory.class, Utils.class})
 public class DifficultyUtilsTest {
     private static final float ZERO = 0;
     private static final float SCREEN_DIMS = 450;
@@ -60,9 +62,13 @@ public class DifficultyUtilsTest {
     public void init() {
         ScoreIndicator.resetKills();
 
-        mockStatic(GameScreen.class);
-        Mockito.when(GameScreen.getScreenXMax()).thenReturn(SCREEN_DIMS);
-        Mockito.when(GameScreen.getScreenYMax()).thenReturn(SCREEN_DIMS);
+        mockStatic(Utils.class);
+        Mockito.when(Utils.getScreenXMax()).thenReturn(SCREEN_DIMS);
+        Mockito.when(Utils.getScreenYMax()).thenReturn(SCREEN_DIMS);
+
+        int maxY = (int) (getScreenYMax() - (getScreenXMax() / CHARACTER_HEIGHT_DIVIDER * 2));
+        int minY = (int) getScreenYMax() / CHARACTER_HEIGHT_DIVIDER;
+        when(Utils.getRandomNumber(minY, maxY)).thenReturn(new Random().nextInt((maxY + 1) - minY) + minY);
 
         mockStatic(AnimationFactory.class);
         Mockito.when(AnimationFactory.createAnimation(any(Integer.class), any(Integer.class), any(String.class))).thenReturn(animationWrapper);
@@ -501,6 +507,11 @@ public class DifficultyUtilsTest {
     @Test
     public void produceEnemyBasedDifficulty_difficulty4To5() {
         setKills(16);
+
+        int max = 2;
+        int min = 1;
+        when(Utils.getRandomNumber(min, max)).thenReturn(new Random().nextInt((max + 1) - min) + min);
+
         RunningEnemy runningEnemy = DifficultyUtils.produceEnemyBasedDifficulty(X_POS, Y_POS, STANDARD);
 
         assertThat(runningEnemy.getX(), is(X_POS));
@@ -521,6 +532,11 @@ public class DifficultyUtilsTest {
     @Test
     public void produceEnemyBasedDifficulty_difficulty6() {
         setKills(26);
+
+        int max = 3;
+        int min = 1;
+        when(Utils.getRandomNumber(min, max)).thenReturn(new Random().nextInt((max + 1) - min) + min);
+
         RunningEnemy runningEnemy = DifficultyUtils.produceEnemyBasedDifficulty(X_POS, Y_POS, STANDARD);
 
         assertThat(runningEnemy.getX(), is(X_POS));
@@ -532,6 +548,11 @@ public class DifficultyUtilsTest {
     @Test
     public void produceEnemyBasedDifficulty_difficulty7To8() {
         setKills(31);
+
+        int max = 3;
+        int min = 2;
+        when(Utils.getRandomNumber(min, max)).thenReturn(new Random().nextInt((max + 1) - min) + min);
+
         RunningEnemy runningEnemy = DifficultyUtils.produceEnemyBasedDifficulty(X_POS, Y_POS, STANDARD);
 
         assertThat(runningEnemy.getX(), is(X_POS));
@@ -552,6 +573,11 @@ public class DifficultyUtilsTest {
     @Test
     public void produceEnemyBasedDifficulty_difficulty9() {
         setKills(41);
+
+        int max = 4;
+        int min = 2;
+        when(Utils.getRandomNumber(min, max)).thenReturn(new Random().nextInt((max + 1) - min) + min);
+
         RunningEnemy runningEnemy = DifficultyUtils.produceEnemyBasedDifficulty(X_POS, Y_POS, STANDARD);
 
         assertThat(runningEnemy.getX(), is(X_POS));
@@ -563,6 +589,11 @@ public class DifficultyUtilsTest {
     @Test
     public void produceEnemyBasedDifficulty_difficulty10() {
         setKills(46);
+
+        int max = 4;
+        int min = 3;
+        when(Utils.getRandomNumber(min, max)).thenReturn(new Random().nextInt((max + 1) - min) + min);
+
         RunningEnemy runningEnemy = DifficultyUtils.produceEnemyBasedDifficulty(X_POS, Y_POS, BOMBER);
 
         assertThat(runningEnemy.getX(), is(X_POS));

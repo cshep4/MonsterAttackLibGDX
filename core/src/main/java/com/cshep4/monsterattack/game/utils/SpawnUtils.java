@@ -10,8 +10,6 @@ import com.cshep4.monsterattack.game.pickup.Shield;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
 
-import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
-import static com.cshep4.monsterattack.GameScreen.getScreenYMax;
 import static com.cshep4.monsterattack.game.constants.Constants.MAX_ENEMIES;
 import static com.cshep4.monsterattack.game.constants.Constants.PICKUP_SIZE_DIVIDER;
 import static com.cshep4.monsterattack.game.constants.Constants.PICKUP_SPAWN_DELAY_MAX;
@@ -20,6 +18,8 @@ import static com.cshep4.monsterattack.game.constants.Constants.SPAWN_DELAY_MAX;
 import static com.cshep4.monsterattack.game.constants.Constants.SPAWN_DELAY_MIN;
 import static com.cshep4.monsterattack.game.utils.DifficultyUtils.spawnEnemyBasedOnDifficulty;
 import static com.cshep4.monsterattack.game.utils.Utils.getRandomNumber;
+import static com.cshep4.monsterattack.game.utils.Utils.getScreenXMax;
+import static com.cshep4.monsterattack.game.utils.Utils.getScreenYMax;
 import static java.lang.System.currentTimeMillis;
 
 @UtilityClass

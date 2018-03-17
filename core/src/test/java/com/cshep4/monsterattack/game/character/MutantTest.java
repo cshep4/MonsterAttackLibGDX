@@ -14,7 +14,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.lang.reflect.Field;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -78,14 +77,5 @@ public class MutantTest {
         boolean result = mutant.isValidMutation();
 
         assertThat(result, is(false));
-    }
-
-    @Test
-    public void updateMutateTime_updatesMutateTimeToCurrentTime() {
-        long beforeTime = Mutant.getMutateTime();
-
-        Mutant.updateMutateTime();
-
-        assertThat(Mutant.getMutateTime(), greaterThan(beforeTime));
     }
 }

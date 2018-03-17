@@ -46,6 +46,7 @@ public class PausedIndicatorTest {
     public void init() {
         mockStatic(Utils.class);
         when(Utils.getTextWidth(any(BitmapFont.class), any(String.class))).thenReturn(TEXT_WIDTH);
+        when(Utils.getTextHeight(any(BitmapFont.class), any(String.class))).thenReturn(TEXT_WIDTH);
 
         pausedIndicator = new PausedIndicator(font, gameScreen);
     }

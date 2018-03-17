@@ -1,8 +1,9 @@
 package com.cshep4.monsterattack.game.constants;
 
 public final class Constants {
+    private Constants() {}
 
-	private Constants() {}
+	public static final float SCREEN_X_MAX = 450;
 
 	public static final int CHARACTER_WIDTH_DIVIDER = 14;
 	public static final int CHARACTER_HEIGHT_DIVIDER = 10;
@@ -32,7 +33,7 @@ public final class Constants {
 	public static final int PICKUP_SPAWN_DELAY_MIN = 5000;
 	public static final int PICKUP_SPAWN_DELAY_MAX = 12500;
 
-    public static final int PICKUP_DURATION = 5000;
+	public static final int PICKUP_DURATION = 5000;
 
 	public static final int PRODCUER_SPAWN_DELAY_MIN = 1500;
 	public static final int PRODCUER_SPAWN_DELAY_MAX = 2500;
@@ -45,8 +46,8 @@ public final class Constants {
 	public static final int MAX_LEVEL = 4;
 
 	// --------------------------------------Sprites
-	// Enemies
 	public static final String SP_SPRITE_IDLE = "sp_idle.png";
+	// Enemies
 	public static final String BP_SPRITE_IDLE = "bp_idle.png";
 	public static final String S1_SPRITE_MOVE_LEFT = "s1_move.png";
 	public static final String S2_SPRITE_MOVE_LEFT = "s2_move.png";
@@ -92,8 +93,8 @@ public final class Constants {
 	// Bullet
 	public static final String PLAYER_BULLET = "bullet.png";
 	public static final String ENEMY_BULLET = "bullet1.png";
-    public static final String PICKUP_BULLET = "bullet_pickup.png";
-    public static final String BOMB = "bomb.gif";
+	public static final String PICKUP_BULLET = "bullet_pickup.png";
+	public static final String BOMB = "bomb.gif";
 
 	//Producer
 	public static final int BP_IDLE_COLS = 2;
@@ -108,4 +109,8 @@ public final class Constants {
 	public static final int BULLET_NUMBER = 30;
 	public static final int BOMB_NUMBER = 10;
 	public static final int SHIELD_TIME = 10;
+
+	public static final int PLAYER_START_X = 50;
+	public static final int PLAYER_START_Y = 50;
+	public static final int GAME_OVER_DELAY = 1000;
 }

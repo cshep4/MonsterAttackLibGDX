@@ -3,61 +3,38 @@ package com.cshep4.monsterattack;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.cshep4.monsterattack.game.factory.CameraFactory;
+import com.badlogic.gdx.graphics.Texture;
+import com.cshep4.monsterattack.game.factory.TextureFactory;
+import com.cshep4.monsterattack.game.stage.MainMenuStage;
+
+import static com.cshep4.monsterattack.game.constants.Constants.BACKGROUND;
 
 
 public class MainMenuScreen implements Screen {
-
-    private final MonsterAttack game;
-    private float screenXMax = 450;
-    private float screenYMax = 0;
-    private OrthographicCamera camera;
+    private MainMenuStage stage;
+    private Texture background = TextureFactory.create(BACKGROUND);
+    private static final float WIDTH = Gdx.graphics.getWidth();
+    private static final float HEIGHT = Gdx.graphics.getHeight();
 
     public MainMenuScreen(final MonsterAttack game) {
-        this.game = game;
-
-        // create the camera and make sure it looks the same across all devices---------------------
-        float height = Gdx.graphics.getHeight();
-        float width = Gdx.graphics.getWidth();
-        float ratio = width / height;
-        screenYMax = screenXMax / ratio;
-        camera = CameraFactory.create(false, screenXMax, screenYMax);
-        //------------------------------------------------------------------------------------------
-
+        stage = new MainMenuStage(game);
     }
+
     @Override
     public void render(float delta) {
-
-        // background color-------------------------------------------------------------------------
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        //------------------------------------------------------------------------------------------
 
-        if (Gdx.input.isTouched()) {
-            game.setScreen(new GameScreen(game));
-        }
+        stage.act();
 
+        stage.getBatch().begin();
+        stage.getBatch().draw(background, 0, 0, WIDTH, HEIGHT);
+        stage.getBatch().end();
 
-
-        camera.update();
-        game.batch.setProjectionMatrix(camera.combined);
-
-        game.batch.begin();
-
-        // get text layout height and width and place it in the middle of the screen----------------
-        String mainMenuString = "Main Menu";
-        GlyphLayout mainMenuLayout = new GlyphLayout(game.font, mainMenuString);
-        float mainMenuTextWidth = mainMenuLayout.width;
-        float mainMenuTextHeight = mainMenuLayout.height;
-        game.font.draw(game.batch, mainMenuString, screenXMax / 2 - (mainMenuTextWidth / 2),
-                screenYMax / 2 - (mainMenuTextHeight / 2));
-        //------------------------------------------------------------------------------------------
-
-        game.batch.end();
+        stage.draw();
 
     }
+
     @Override
     public void resize(int width, int height) {
         // not implemented
@@ -65,7 +42,8 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void show() {
-        // not implemented
+        stage.setup();
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
@@ -80,7 +58,7 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void dispose() {
-        // not implemented
+        stage.dispose();
     }
 
     @Override

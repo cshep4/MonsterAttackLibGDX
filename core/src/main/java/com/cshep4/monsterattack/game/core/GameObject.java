@@ -82,5 +82,4 @@ public abstract class GameObject {
     public void dispose() {
         animation.dispose();
     }
-
 }

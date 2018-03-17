@@ -2,6 +2,8 @@ package com.cshep4.monsterattack.game.utils;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Rectangle;
+import com.cshep4.monsterattack.game.bullet.Bomb;
+import com.cshep4.monsterattack.game.bullet.Bullet;
 import com.cshep4.monsterattack.game.character.Player;
 import com.cshep4.monsterattack.game.core.GameObject;
 import com.cshep4.monsterattack.game.factory.AnimationFactory;
@@ -15,6 +17,8 @@ import org.mockito.Mockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import static com.cshep4.monsterattack.game.core.CharacterType.PLAYER;
+import static com.cshep4.monsterattack.game.utils.Utils.HAS_BULLET_SHOT_BOMB;
 import static com.cshep4.monsterattack.game.utils.Utils.hasCollided;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
@@ -85,6 +89,36 @@ public class UtilsTest {
         GameObject obj2 = Player.create(150, 150);
 
         boolean result = hasCollided(obj1, obj2);
+
+        assertThat(result, is(false));
+    }
+
+    @Test
+    public void hasBulletShotBomb_returnsTrueWhenBombCollides() {
+        Bullet bullet = Bullet.create(PLAYER, 10, 10, 10, 10);
+        Bomb bomb = Bomb.create(PLAYER, 10, 10, 10, 10);
+
+        boolean result = HAS_BULLET_SHOT_BOMB.test(bullet, bomb);
+
+        assertThat(result, is(true));
+    }
+
+    @Test
+    public void hasBulletShotBomb_returnsFalseWhenTwoBulletsCollides() {
+        Bullet bullet1 = Bullet.create(PLAYER, 10, 10, 10, 10);
+        Bullet bullet2 = Bullet.create(PLAYER, 10, 10, 10, 10);
+
+        boolean result = HAS_BULLET_SHOT_BOMB.test(bullet1, bullet2);
+
+        assertThat(result, is(false));
+    }
+
+    @Test
+    public void hasBulletShotBomb_returnsFalseWhenNoCollision() {
+        Bullet bullet = Bullet.create(PLAYER, 10, 10, 10, 10);
+        Bomb bomb = Bomb.create(PLAYER, 100, 100, 100, 100);
+
+        boolean result = HAS_BULLET_SHOT_BOMB.test(bullet, bomb);
 
         assertThat(result, is(false));
     }

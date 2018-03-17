@@ -1,6 +1,5 @@
 package com.cshep4.monsterattack.game.utils;
 
-import com.cshep4.monsterattack.GameScreen;
 import com.cshep4.monsterattack.game.character.Enemy;
 import com.cshep4.monsterattack.game.factory.AnimationFactory;
 import com.cshep4.monsterattack.game.pickup.PickupItem;
@@ -30,9 +29,10 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
+import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({AnimationFactory.class, GameScreen.class})
+@PrepareForTest({AnimationFactory.class, Utils.class})
 public class SpawnUtilsTest {
     private static final float SCREEN_DIMS = 450;
 
@@ -44,9 +44,9 @@ public class SpawnUtilsTest {
         mockStatic(AnimationFactory.class);
         Mockito.when(AnimationFactory.createAnimation(any(Integer.class), any(Integer.class), any(String.class))).thenReturn(animationWrapper);
 
-        mockStatic(GameScreen.class);
-        Mockito.when(GameScreen.getScreenXMax()).thenReturn(SCREEN_DIMS);
-        Mockito.when(GameScreen.getScreenYMax()).thenReturn(SCREEN_DIMS);
+        mockStatic(Utils.class);
+        Mockito.when(Utils.getScreenXMax()).thenReturn(SCREEN_DIMS);
+        Mockito.when(Utils.getScreenYMax()).thenReturn(SCREEN_DIMS);
     }
 
     @Test
@@ -104,6 +104,8 @@ public class SpawnUtilsTest {
         f.set(SpawnUtils.class, spawnTime);
         f.setAccessible(false);
 
+        when(Utils.getRandomNumber(any(Integer.class), any(Integer.class))).thenReturn(1);
+
         PickupItem pickup = spawnPickup();
 
         assertThat(pickup, is(notNullValue()));
@@ -120,7 +122,10 @@ public class SpawnUtilsTest {
         f.set(SpawnUtils.class, spawnTime);
         f.setAccessible(false);
 
+        when(Utils.getRandomNumber(any(Integer.class), any(Integer.class))).thenReturn(1);
+
         PickupItem pickup = spawnPickup();
+
         assertThat(pickup, is(nullValue()));
         assertThat(SpawnUtils.getPickupSpawnTime(), is(spawnTime));
     }

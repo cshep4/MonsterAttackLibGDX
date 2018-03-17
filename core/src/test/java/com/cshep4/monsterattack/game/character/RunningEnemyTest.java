@@ -3,10 +3,10 @@ package com.cshep4.monsterattack.game.character;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
-import com.cshep4.monsterattack.GameScreen;
 import com.cshep4.monsterattack.game.bullet.Bomb;
 import com.cshep4.monsterattack.game.bullet.Bullet;
 import com.cshep4.monsterattack.game.factory.AnimationFactory;
+import com.cshep4.monsterattack.game.utils.Utils;
 import com.cshep4.monsterattack.game.wrapper.Animation;
 import com.cshep4.monsterattack.game.wrapper.Sound;
 
@@ -21,8 +21,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
-import static com.cshep4.monsterattack.GameScreen.getScreenYMax;
 import static com.cshep4.monsterattack.game.constants.Constants.BOMB_SIZE_DIVIDER;
 import static com.cshep4.monsterattack.game.constants.Constants.BULLET_HEIGHT_DIVIDER;
 import static com.cshep4.monsterattack.game.constants.Constants.BULLET_SPEED;
@@ -30,6 +28,8 @@ import static com.cshep4.monsterattack.game.constants.Constants.BULLET_WIDTH_DIV
 import static com.cshep4.monsterattack.game.constants.Constants.ENEMY_SPEED;
 import static com.cshep4.monsterattack.game.constants.Constants.SHOOT_DELAY;
 import static com.cshep4.monsterattack.game.core.CharacterType.PLAYER;
+import static com.cshep4.monsterattack.game.utils.Utils.getScreenXMax;
+import static com.cshep4.monsterattack.game.utils.Utils.getScreenYMax;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.instanceOf;
@@ -40,7 +40,7 @@ import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({AnimationFactory.class, Sound.class, GameScreen.class})
+@PrepareForTest({AnimationFactory.class, Sound.class, Utils.class})
 public class RunningEnemyTest {
     private static final float X_POS = 200;
     private static final float Y_POS = 200;
@@ -69,9 +69,9 @@ public class RunningEnemyTest {
         mockStatic(Sound.class);
         mockStatic(AnimationFactory.class);
         when(AnimationFactory.createAnimation(any(Integer.class), any(Integer.class), any(String.class))).thenReturn(animationWrapper);
-        mockStatic(GameScreen.class);
-        when(GameScreen.getScreenXMax()).thenReturn(SCREEN_DIMS);
-        when(GameScreen.getScreenYMax()).thenReturn(SCREEN_DIMS);
+        mockStatic(Utils.class);
+        when(Utils.getScreenXMax()).thenReturn(SCREEN_DIMS);
+        when(Utils.getScreenYMax()).thenReturn(SCREEN_DIMS);
 
         Gdx.graphics = graphics;
         when(graphics.getDeltaTime()).thenReturn(1f);
@@ -593,9 +593,10 @@ public class RunningEnemyTest {
     public void update_callsDecisionTreeThenChecksPlayerDeath() {
         Standard standard = Standard.create(X_POS, Y_POS, LEVEL_1);
 
-        //set up player for collision to test that enemy has moved forward then collided, checking player death
         float playerX = standard.getX() - ENEMY_SPEED;
         float playerY = standard.getY();
+
+        when(Utils.hasCollided(any(RunningEnemy.class), any(Player.class))).thenReturn(true);
 
         Player player = Player.create(playerX, playerY);
 

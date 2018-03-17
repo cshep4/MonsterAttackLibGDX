@@ -25,7 +25,7 @@ public class MovementUtils {
         dirX /= hypotenuse;
         dirY /= hypotenuse;
 
-        character.setX(character.getX() + (dirX*(character.getXVel()* Gdx.graphics.getDeltaTime())));
+        character.setX(character.getX() + (dirX*(character.getXVel()*Gdx.graphics.getDeltaTime())));
         character.setY(character.getY() + (dirY*(character.getYVel()*Gdx.graphics.getDeltaTime())));
     }
 

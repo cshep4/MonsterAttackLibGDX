@@ -9,8 +9,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
-import static com.cshep4.monsterattack.GameScreen.getScreenYMax;
 import static com.cshep4.monsterattack.game.constants.Constants.BOMB_SIZE_DIVIDER;
 import static com.cshep4.monsterattack.game.constants.Constants.BULLET_HEIGHT_DIVIDER;
 import static com.cshep4.monsterattack.game.constants.Constants.BULLET_NUMBER;
@@ -20,6 +18,8 @@ import static com.cshep4.monsterattack.game.core.CharacterType.PLAYER;
 import static com.cshep4.monsterattack.game.utils.MovementUtils.movePlayerTowardsPoint;
 import static com.cshep4.monsterattack.game.utils.SpriteUtils.getPlayerIdleSprite;
 import static com.cshep4.monsterattack.game.utils.SpriteUtils.getPlayerRunningSprite;
+import static com.cshep4.monsterattack.game.utils.Utils.getScreenXMax;
+import static com.cshep4.monsterattack.game.utils.Utils.getScreenYMax;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -59,8 +59,6 @@ public class Player extends Character {
 
 		stopPlayerLeavingTheScreen();
 
-//		setX(getX() + getXVelByDeltaTime());
-//		setY(getY() + getYVelByDeltaTime());
 		setX(getX() + xVel);
 		setY(getY() + yVel);
 

@@ -12,12 +12,12 @@ import com.cshep4.monsterattack.game.indicator.ScoreIndicator;
 
 import lombok.experimental.UtilityClass;
 
-import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
-import static com.cshep4.monsterattack.GameScreen.getScreenYMax;
 import static com.cshep4.monsterattack.game.constants.Constants.CHARACTER_HEIGHT_DIVIDER;
 import static com.cshep4.monsterattack.game.constants.Constants.MAX_LEVEL;
 import static com.cshep4.monsterattack.game.core.EnemyType.STANDARD;
 import static com.cshep4.monsterattack.game.utils.Utils.getRandomNumber;
+import static com.cshep4.monsterattack.game.utils.Utils.getScreenXMax;
+import static com.cshep4.monsterattack.game.utils.Utils.getScreenYMax;
 
 @UtilityClass
 public class DifficultyUtils {

@@ -1,5 +1,7 @@
 package com.cshep4.monsterattack.game.indicator;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -40,12 +42,19 @@ public class LifeIndicatorTest {
     @Mock
     private Player player;
 
+    @Mock
+    private Graphics graphics;
+
     @Before
     public void init() {
         mockStatic(TextureFactory.class);
         when(TextureFactory.create(any(String.class))).thenReturn(lifeTexture);
 
         lifeIndicator = new LifeIndicator();
+
+        Gdx.graphics = graphics;
+        when(graphics.getHeight()).thenReturn(100);
+        when(graphics.getWidth()).thenReturn(100);
     }
 
     @Test

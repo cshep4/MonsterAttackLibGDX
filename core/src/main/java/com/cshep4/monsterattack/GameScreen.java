@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.cshep4.monsterattack.game.bullet.Bomb;
 import com.cshep4.monsterattack.game.bullet.Bullet;
 import com.cshep4.monsterattack.game.button.PauseButton;
 import com.cshep4.monsterattack.game.button.ShootButton;
@@ -16,7 +15,6 @@ import com.cshep4.monsterattack.game.character.Player;
 import com.cshep4.monsterattack.game.character.ProducerEnemy;
 import com.cshep4.monsterattack.game.character.RunningEnemy;
 import com.cshep4.monsterattack.game.core.GameObject;
-import com.cshep4.monsterattack.game.core.InputProcessor;
 import com.cshep4.monsterattack.game.core.State;
 import com.cshep4.monsterattack.game.factory.CameraFactory;
 import com.cshep4.monsterattack.game.factory.TextureFactory;
@@ -26,46 +24,45 @@ import com.cshep4.monsterattack.game.indicator.LifeIndicator;
 import com.cshep4.monsterattack.game.indicator.PausedIndicator;
 import com.cshep4.monsterattack.game.indicator.ScoreIndicator;
 import com.cshep4.monsterattack.game.indicator.ShieldIndicator;
+import com.cshep4.monsterattack.game.input.GameInputProcessor;
 import com.cshep4.monsterattack.game.pickup.PickupItem;
 import com.cshep4.monsterattack.game.utils.EnemyUtils;
 import com.cshep4.monsterattack.game.wrapper.Sound;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import static com.cshep4.monsterattack.game.constants.Constants.BACKGROUND;
 import static com.cshep4.monsterattack.game.constants.Constants.BUTTON_SIZE_DIVIDER;
+import static com.cshep4.monsterattack.game.constants.Constants.PLAYER_START_X;
+import static com.cshep4.monsterattack.game.constants.Constants.PLAYER_START_Y;
 import static com.cshep4.monsterattack.game.core.State.GAME_OVER;
 import static com.cshep4.monsterattack.game.core.State.PAUSE;
 import static com.cshep4.monsterattack.game.core.State.RESUME;
 import static com.cshep4.monsterattack.game.core.State.RUN;
 import static com.cshep4.monsterattack.game.utils.SpawnUtils.spawnEnemy;
 import static com.cshep4.monsterattack.game.utils.SpawnUtils.spawnPickup;
+import static com.cshep4.monsterattack.game.utils.Utils.HAS_BULLET_SHOT_BOMB;
+import static com.cshep4.monsterattack.game.utils.Utils.getScreenXMax;
+import static com.cshep4.monsterattack.game.utils.Utils.getScreenYMax;
 import static com.cshep4.monsterattack.game.utils.Utils.getTextWidth;
-import static com.cshep4.monsterattack.game.utils.Utils.hasCollided;
 import static java.util.Objects.requireNonNull;
 
 @Getter
 @Setter
 public class GameScreen implements Screen {
-    private static final int PLAYER_START_X = 50;
-    private static final int PLAYER_START_Y = 50;
-    private static final int GAME_OVER_DELAY = 1000;
-
     private final MonsterAttack game;
-    private final InputAdapter inputProcessor = new InputProcessor(this);
-    private static float screenXMax = 450;
-    private static float screenYMax;
+    private final InputAdapter inputProcessor = new GameInputProcessor(this);
     private OrthographicCamera camera;
     private float width;
     private float height;
 
     // A variable for tracking elapsed time for the animation
     private State state = RUN;
-    private long gameOverTime = 0;
 
     private Sprite backgroundSprite = new Sprite(requireNonNull(TextureFactory.create(BACKGROUND)));
 
@@ -76,17 +73,14 @@ public class GameScreen implements Screen {
     private List<Bullet> enemyBullets = new ArrayList<>();
     private List<PickupItem> pickups = new ArrayList<>();
 
-    private ShootButton shootButton;
-    private PauseButton pauseButton;
-
-//    private boolean playerMoving;
-
     private BulletIndicator bulletIndicator = new BulletIndicator();
     private BombIndicator bombIndicator = new BombIndicator();
     private LifeIndicator lifeIndicator = new LifeIndicator();
     private ShieldIndicator shieldIndicator = new ShieldIndicator();
     private ScoreIndicator scoreIndicator = new ScoreIndicator();
     private PausedIndicator pausedIndicator;
+    private ShootButton shootButton;
+    private PauseButton pauseButton;
 
     public GameScreen(final MonsterAttack game) {
         this.game = game;
@@ -94,38 +88,32 @@ public class GameScreen implements Screen {
         // create the camera and make sure it looks the same across all devices
         height = Gdx.graphics.getHeight();
         width = Gdx.graphics.getWidth();
-        setScreenYMax(width, height);
-        camera = CameraFactory.create(false, screenXMax, screenYMax);
+        camera = CameraFactory.create(false, getScreenXMax(), getScreenYMax());
 
         // create buttons
-        float buttonSize = screenXMax / BUTTON_SIZE_DIVIDER;
-        float buttonX = screenXMax - buttonSize;
+        float buttonSize = getScreenXMax() / BUTTON_SIZE_DIVIDER;
+        float buttonX = getScreenXMax() - buttonSize;
         float shootButtonY = 0;
-        float pauseButtonY = screenYMax - buttonSize;
+        float pauseButtonY = getScreenYMax() - buttonSize;
         shootButton = ShootButton.create(buttonX, shootButtonY, buttonSize, buttonSize);
         pauseButton = PauseButton.create(buttonX, pauseButtonY, buttonSize, buttonSize);
 
-        // reset number of kills
-        setupNewGame();
+        ScoreIndicator.resetKills();
         pausedIndicator = new PausedIndicator(game.font, this);
 
         // setup input processor
         Gdx.input.setInputProcessor(inputProcessor);
     }
 
-    private static void setupNewGame() {
-        ScoreIndicator.resetKills();
-    }
-
     @Override
     public void render(float delta) {
+        state.updateStateTime(delta); // update time in animation state
+
         draw();
 
         if (isGameOver()) {
             state = GAME_OVER;
-            if (gameOverTime == 0) {
-                gameOverTime = System.currentTimeMillis();
-            }
+            state.setGameOverTime();
         }
 
         switch (state)
@@ -134,21 +122,138 @@ public class GameScreen implements Screen {
                 updateEverything();
                 break;
             case PAUSE:
-                // do nothing
+                // wait for input
                 break;
             case RESUME:
                 state = RUN;
                 break;
             case GAME_OVER:
-                if (System.currentTimeMillis() - gameOverTime > GAME_OVER_DELAY) {
-                    game.setScreen(new GameOverScreen(game));
-                    dispose();
-                }
+                handleGameOver();
                 break;
             default:
                 state = RUN;
                 break;
         }
+    }
+
+    private void handleGameOver() {
+        if (state.hasGameOverDelayPassed()) {
+            game.setScreen(new GameOverScreen(game));
+            dispose();
+        }
+    }
+
+    private void draw() {
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // clear the screen
+
+        camera.update();
+        game.batch.setProjectionMatrix(camera.combined);
+
+        game.batch.begin();
+
+        drawEverything();
+
+        game.batch.end();
+    }
+
+    private void drawEverything(){
+        backgroundSprite.draw(game.batch);
+
+        drawObject(player);
+
+        runningEnemies.forEach(this::drawObject);
+        producerEnemies.forEach(this::drawObject);
+
+        enemyBullets.forEach(this::drawObject);
+        playerBullets.forEach(this::drawObject);
+
+        pickups.forEach(this::drawObject);
+
+        drawObject(shootButton);
+        drawObject(pauseButton);
+        lifeIndicator.draw(game.batch);
+        bulletIndicator.draw(game.batch, game.font);
+        bombIndicator.draw(game.batch, game.font);
+        shieldIndicator.draw(game.batch, game.font);
+        scoreIndicator.draw(game.batch, game.font);
+        pausedIndicator.draw(game.batch, game.font);
+    }
+
+    private void drawObject(GameObject obj) {
+        // Get current frame of animation for the current stateTime
+        TextureRegion currentFrame = obj.getAnimation().getKeyFrame(state.getStateTime(), true);
+        game.batch.draw(currentFrame, obj.getX(), obj.getY(), obj.getWidth(), obj.getHeight());
+    }
+
+    private void updateEverything(){
+        player.update();
+
+        runningEnemies.forEach(e -> e.update(player, playerBullets, enemyBullets));
+        producerEnemies.forEach(e -> e.update(player, runningEnemies));
+
+        updateBullets();
+
+        pickups.removeIf(p -> p.isPickedUp(player) || p.hasExpired());
+
+        runningEnemies.removeIf(EnemyUtils::enemyKilled);
+        producerEnemies.removeIf(EnemyUtils::enemyKilled);
+
+        spawnEnemies();
+        spawnPickups();
+
+        bulletIndicator.update(player);
+        lifeIndicator.update(player);
+        scoreIndicator.update();
+
+        float bulletIndicatorWidth = getTextWidth(game.font, bulletIndicator.getText());
+        bombIndicator.update(player, bulletIndicatorWidth);
+
+        float bombIndicatorWidth = getTextWidth(game.font, bombIndicator.getText());
+        shieldIndicator.update(player, bulletIndicatorWidth, bombIndicatorWidth);
+    }
+
+    private void updateBullets() {
+        playerBullets.removeIf(b -> b.update(runningEnemies, producerEnemies) || hasBulletLeftScreen(b));
+        enemyBullets.removeIf(b -> b.update(player) || hasBulletLeftScreen(b));
+
+        // remove bomb if it collides with bullet
+        if (playerBullets.removeIf(hasPlayerShotBomb)) {
+            Sound.playExplode();
+        }
+    }
+
+    private Predicate<Bullet> hasPlayerShotBomb = playerBullet -> enemyBullets.removeIf(enemyBullet -> HAS_BULLET_SHOT_BOMB.test(playerBullet, enemyBullet));
+
+    private void spawnEnemies() {
+        int enemyNumber = runningEnemies.size() + producerEnemies.size();
+
+        Enemy enemy = spawnEnemy(enemyNumber);
+
+        if (enemy == null) {
+            return;
+        }
+
+        if (enemy instanceof ProducerEnemy) {
+            producerEnemies.add((ProducerEnemy) enemy);
+        } else {
+            runningEnemies.add((RunningEnemy) enemy);
+        }
+    }
+
+    private void spawnPickups() {
+        PickupItem pickup = spawnPickup();
+
+        if (pickup != null) {
+            pickups.add(pickup);
+        }
+    }
+
+    private boolean hasBulletLeftScreen(Bullet bullet) {
+        return bullet.getX() > getScreenXMax() || bullet.getX() + bullet.getWidth() < 0;
+    }
+
+    private boolean isGameOver() {
+        return player.getHealth() <= 0;
     }
 
     @Override
@@ -190,131 +295,4 @@ public class GameScreen implements Screen {
         pauseButton.dispose();
     }
 
-    private void draw() {
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // This cryptic line clears the screen.
-
-        if (state.equals(RUN)) {
-            state.updateStateTime(); // update time in animation state
-        }
-
-        game.batch.begin();
-
-        backgroundSprite.draw(game.batch);
-
-        drawEverything();
-
-        game.batch.end();
-    }
-
-    private void drawEverything(){
-        drawObject(player);
-
-        runningEnemies.forEach(this::drawObject);
-        producerEnemies.forEach(this::drawObject);
-
-        enemyBullets.forEach(this::drawObject);
-        playerBullets.forEach(this::drawObject);
-
-        pickups.forEach(this::drawObject);
-
-        drawObject(shootButton);
-        drawObject(pauseButton);
-        lifeIndicator.draw(game.batch);
-        bulletIndicator.draw(game.batch, game.font);
-        bombIndicator.draw(game.batch, game.font);
-        shieldIndicator.draw(game.batch, game.font);
-        scoreIndicator.draw(game.batch, game.font);
-        pausedIndicator.draw(game.batch, game.font);
-    }
-
-    private void drawObject(GameObject obj) {
-        // Get current frame of animation for the current stateTime
-        TextureRegion currentFrame = obj.getAnimation().getKeyFrame(state.getStateTime(), true);
-        game.batch.draw(currentFrame, obj.getX(), obj.getY(), obj.getWidth(), obj.getHeight());
-    }
-
-    private void updateEverything(){
-//        if (playerMoving) {
-//            player.move();
-//        }
-        player.update();
-
-        runningEnemies.forEach(e -> e.update(player, playerBullets, enemyBullets));
-        producerEnemies.forEach(e -> e.update(player, runningEnemies));
-
-        updateBullets();
-
-        pickups.removeIf(p -> p.isPickedUp(player) || p.hasExpired());
-
-        runningEnemies.removeIf(EnemyUtils::enemyKilled);
-        producerEnemies.removeIf(EnemyUtils::enemyKilled);
-
-        spawnEnemies();
-        spawnPickups();
-
-        bulletIndicator.update(player);
-
-        float bulletIndicatorWidth = getTextWidth(game.font, bulletIndicator.getText());
-        bombIndicator.update(player, bulletIndicatorWidth);
-
-        float bombIndicatorWidth = getTextWidth(game.font, bombIndicator.getText());
-        shieldIndicator.update(player, bulletIndicatorWidth, bombIndicatorWidth);
-        lifeIndicator.update(player);
-        scoreIndicator.update();
-    }
-
-    private void spawnEnemies() {
-        int enemyNumber = runningEnemies.size() + producerEnemies.size();
-
-        Enemy enemy = spawnEnemy(enemyNumber);
-
-        if (enemy == null) {
-            return;
-        }
-
-        if (enemy instanceof ProducerEnemy) {
-            producerEnemies.add((ProducerEnemy) enemy);
-        } else {
-            runningEnemies.add((RunningEnemy) enemy);
-        }
-    }
-
-    private void spawnPickups() {
-        PickupItem pickup = spawnPickup();
-
-        if (pickup != null) {
-            pickups.add(pickup);
-        }
-    }
-
-    private void updateBullets() {
-        playerBullets.removeIf(b -> b.update(runningEnemies, producerEnemies) || hasBulletLeftScreen(b));
-        enemyBullets.removeIf(b -> b.update(player) || hasBulletLeftScreen(b));
-
-        // remove bomb if it collides with bullet
-        if (playerBullets.removeIf(pb -> enemyBullets.removeIf(eb -> eb instanceof Bomb && hasCollided(eb, pb)))) {
-            Sound.playExplode();
-        }
-    }
-
-    private boolean hasBulletLeftScreen(Bullet bullet) {
-        return bullet.getX() > screenXMax || bullet.getX() + bullet.getWidth() < 0;
-    }
-
-    private boolean isGameOver() {
-        return player.getHealth() <= 0;
-    }
-
-    public static float getScreenXMax() {
-        return screenXMax;
-    }
-
-    public static float getScreenYMax() {
-        return screenYMax;
-    }
-
-    private static void setScreenYMax(float width, float height) {
-        float ratio = width / height;
-        screenYMax = screenXMax / ratio;
-    }
 }

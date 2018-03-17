@@ -10,7 +10,6 @@ import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
-import static com.cshep4.monsterattack.GameScreen.getScreenXMax;
 import static com.cshep4.monsterattack.game.constants.Constants.CHARACTER_WIDTH_DIVIDER;
 import static com.cshep4.monsterattack.game.constants.Constants.ENEMY_SPEED;
 import static com.cshep4.monsterattack.game.constants.Constants.PRODCUER_SPAWN_DELAY_MAX;
@@ -25,6 +24,7 @@ import static com.cshep4.monsterattack.game.utils.SpriteUtils.getProducerProduci
 import static com.cshep4.monsterattack.game.utils.SpriteUtils.getProducerProducingRows;
 import static com.cshep4.monsterattack.game.utils.SpriteUtils.getProducerProducingSprite;
 import static com.cshep4.monsterattack.game.utils.Utils.getRandomNumber;
+import static com.cshep4.monsterattack.game.utils.Utils.getScreenXMax;
 import static com.cshep4.monsterattack.game.utils.Utils.hasCollided;
 
 @EqualsAndHashCode(callSuper=true)
