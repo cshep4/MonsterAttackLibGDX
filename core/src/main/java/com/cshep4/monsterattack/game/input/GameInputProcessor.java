@@ -3,10 +3,12 @@ package com.cshep4.monsterattack.game.input;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.cshep4.monsterattack.GameScreen;
+import com.cshep4.monsterattack.MainMenuScreen;
 import com.cshep4.monsterattack.game.bullet.Bullet;
 
 import lombok.Getter;
 
+import static com.badlogic.gdx.Input.Keys.BACK;
 import static com.cshep4.monsterattack.game.core.State.PAUSE;
 import static com.cshep4.monsterattack.game.core.State.RESUME;
 import static com.cshep4.monsterattack.game.core.State.RUN;
@@ -96,5 +98,13 @@ public class GameInputProcessor extends InputAdapter {
         }
 
         return true;
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        if(keycode == BACK){
+            gameScreen.getGame().setScreen(new MainMenuScreen(gameScreen.getGame()));
+        }
+        return false;
     }
 }

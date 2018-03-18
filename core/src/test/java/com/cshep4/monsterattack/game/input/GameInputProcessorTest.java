@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.cshep4.monsterattack.GameScreen;
+import com.cshep4.monsterattack.MainMenuScreen;
 import com.cshep4.monsterattack.MonsterAttack;
 import com.cshep4.monsterattack.game.factory.AnimationFactory;
 import com.cshep4.monsterattack.game.factory.CameraFactory;
@@ -24,6 +25,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.ArrayList;
 
+import static com.badlogic.gdx.Input.Keys.BACK;
 import static com.cshep4.monsterattack.game.constants.Constants.BUTTON_SIZE_DIVIDER;
 import static com.cshep4.monsterattack.game.constants.Constants.SCREEN_X_MAX;
 import static com.cshep4.monsterattack.game.core.State.PAUSE;
@@ -32,14 +34,17 @@ import static com.cshep4.monsterattack.game.core.State.RUN;
 import static com.cshep4.monsterattack.game.utils.Utils.getScreenXMax;
 import static com.cshep4.monsterattack.game.utils.Utils.getScreenYMax;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
+import static org.powermock.api.mockito.PowerMockito.mock;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
+import static org.powermock.api.mockito.PowerMockito.whenNew;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({AnimationFactory.class, TextureFactory.class, CameraFactory.class, Utils.class})
+@PrepareForTest({AnimationFactory.class, TextureFactory.class, CameraFactory.class, Utils.class, GameInputProcessor.class})
 public class GameInputProcessorTest {
     private static final float TEXT_WIDTH = 10f;
     private static final int NUM_BULLETS = 10;
@@ -59,7 +64,6 @@ public class GameInputProcessorTest {
     @Mock
     private Application app;
 
-    @Mock
     private MonsterAttack game;
 
     @Mock
@@ -95,6 +99,7 @@ public class GameInputProcessorTest {
 
         Gdx.input = input;
 
+        game = new MonsterAttack();
         gameScreen = new GameScreen(game);
         gameInputProcessor = new GameInputProcessor(gameScreen);
 
@@ -241,5 +246,15 @@ public class GameInputProcessorTest {
         assertThat(gameScreen.getPlayer().getDestinationX(), is(0f));
         assertThat(gameScreen.getPlayer().getDestinationY(), is(0f));
         assertThat(result, is(true));
+    }
+
+    @Test
+    public void keyDown_backButtonReturnsToMainMenu() throws Exception {
+        MainMenuScreen mainMenuScreen = mock(MainMenuScreen.class);
+        whenNew(MainMenuScreen.class).withArguments(game).thenReturn(mainMenuScreen);
+
+        gameInputProcessor.keyDown(BACK);
+
+        assertThat(game.getScreen(), instanceOf(MainMenuScreen.class));
     }
 }

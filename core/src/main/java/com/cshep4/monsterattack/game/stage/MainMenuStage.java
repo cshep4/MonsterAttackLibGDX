@@ -50,7 +50,7 @@ public class MainMenuStage extends Stage {
         playButton.setHeight(height);
 
         float x = WIDTH / 2 - playButton.getWidth() / 2;
-        float y = HEIGHT / 2 - playButton.getHeight() / 2;
+        float y = (float) (HEIGHT / 2 - (playButton.getHeight() * 0.33));
         playButton.setPosition(x, y);
 
         PlayButtonListener playButtonListener = new PlayButtonListener(game);
@@ -70,7 +70,7 @@ public class MainMenuStage extends Stage {
         optionsButton.setHeight(height);
 
         float x = WIDTH / 2 - optionsButton.getWidth() / 2;
-        float y = HEIGHT / 4 - optionsButton.getHeight() / 2;
+        float y = (float) (HEIGHT / 4 - (optionsButton.getHeight() * 0.66));
         optionsButton.setPosition(x, y);
 
         OptionsButtonListener optionsButtonListener = new OptionsButtonListener(game);
