@@ -17,10 +17,11 @@ import static com.cshep4.monsterattack.game.constants.Constants.SCREEN_X_MAX;
 
 @UtilityClass
 public class Utils {
+    private static final Random RANDOM = new Random();
     public static final BiPredicate<Bullet, Bullet> HAS_BULLET_SHOT_BOMB = (bullet1, bullet2) -> (bullet1 instanceof Bomb || bullet2 instanceof Bomb) && hasCollided(bullet2, bullet1);
 
     public static int getRandomNumber(int min, int max) {
-        return new Random().nextInt((max + 1) - min) + min;
+        return RANDOM.nextInt((max + 1) - min) + min;
     }
 
     public static boolean hasCollided(GameObject obj1, GameObject obj2) {
