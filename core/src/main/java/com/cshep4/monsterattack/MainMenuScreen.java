@@ -11,10 +11,11 @@ import static com.cshep4.monsterattack.game.constants.Constants.BACKGROUND;
 
 
 public class MainMenuScreen implements Screen {
-    private MainMenuStage stage;
-    private Texture background = TextureFactory.create(BACKGROUND);
     private static final float WIDTH = Gdx.graphics.getWidth();
     private static final float HEIGHT = Gdx.graphics.getHeight();
+
+    private Texture background = TextureFactory.create(BACKGROUND);
+    private MainMenuStage stage;
 
     public MainMenuScreen(final MonsterAttack game) {
         stage = new MainMenuStage(game);
